@@ -28,7 +28,7 @@
   function logo(cle, alt) {
     var l = (CFG.logos || {})[cle] || {}, badge = esc(l.badge || cle.slice(0, 3).toUpperCase());
     if (!l.fichier) return '<span class="slogo"><b>' + badge + '</b></span>';
-    return '<span class="slogo img" data-badge="' + badge + '"><img src="' + esc(l.fichier) + '" alt="' + esc(alt) + '" loading="lazy"></span>';
+    return '<span class="slogo img l-' + esc(cle) + '" data-badge="' + badge + '"><img src="' + esc(l.fichier) + '" alt="' + esc(alt) + '" loading="lazy"></span>';
   }
   function tuile(o) {
     if (o.liens) { /* tuile à plusieurs liens (ex. deux concours) */
@@ -62,7 +62,7 @@
     Array.prototype.forEach.call(document.querySelectorAll(".slogo img"), function (img) {
       img.addEventListener("error", function () { var s = img.parentNode; s.className = "slogo"; s.innerHTML = "<b>" + esc(s.getAttribute("data-badge")) + "</b>"; });
     });
-    var ren = $('[data-ref="T-01"] .slogo'); if (ren) { ren.className = "slogo"; ren.innerHTML = '<b>A→B</b>'; }
+    var ren = $('[data-ref="T-01"] .slogo'); if (ren) { ren.className = "slogo svg"; ren.innerHTML = '<svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 34h10l18-18-10-10L8 24z"/><path d="M22 10l10 10M8 40h32"/><path d="M30 38h6" stroke-dasharray="2 3"/></svg>'; }
   }
 
   /* ---------- rail ---------- */
@@ -143,6 +143,7 @@
     var s = SEQ.filter(function (x) { return x.id === seq; })[0] || EN_COURS;
     ETAT.seq = s.id; ETAT.onglet = onglet || ETAT.onglet || "activites";
     rendreRail(s.id); rendrePanneau(s, ETAT.onglet);
+    var on = $("#rail a.on"); if (on && on.scrollIntoView && window.matchMedia && window.matchMedia("(max-width:1000px)").matches) { try { on.scrollIntoView({ block: "nearest", inline: "center" }); } catch (e) { } }
     var h = "#" + s.id + "/" + ETAT.onglet;
     if (pousser && location.hash !== h) { try { history.replaceState(null, "", h); } catch (e) { location.hash = h; } }
   }

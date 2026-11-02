@@ -112,12 +112,19 @@ section.bloc{padding:34px 0 10px}
 .tile.off:hover{transform:none;border-color:var(--line2)}
 .tile.multi .liens{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .tile.multi:hover{transform:none}
-.tag .ico{height:14px;width:auto;background:#fff;border-radius:2px;padding:1px}
+.tag .ico{height:14px;width:auto}
 .tile .ext{position:absolute;left:0;bottom:0;border-right:1px solid var(--line);border-top:1px solid var(--line);font:10px var(--mono);padding:2px 6px;color:var(--muted);letter-spacing:.06em}
 /* logo de service : image si présente, sinon badge texte */
-.slogo{height:56px;min-width:56px;max-width:190px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);background:rgba(255,255,255,.04);border-radius:3px;padding:0 10px;width:max-content}
-.slogo.img{background:#fff;border-color:#fff}
-.slogo img{height:42px;width:auto;max-width:168px;object-fit:contain;display:block}
+.slogo{height:56px;display:flex;align-items:center;justify-content:flex-start;width:max-content;max-width:100%}
+.slogo img{height:44px;width:auto;max-width:190px;object-fit:contain;display:block;
+  filter:drop-shadow(0 0 1px rgba(255,255,255,.9)) drop-shadow(0 0 6px rgba(92,200,236,.55)) drop-shadow(0 0 14px rgba(92,200,236,.25));
+  transition:filter .25s ease}
+.tile:hover .slogo img,.tile:focus-visible .slogo img{filter:drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 8px rgba(92,200,236,.8)) drop-shadow(0 0 20px rgba(92,200,236,.45))}
+/* wordmarks à texte noir : liseré blanc un peu plus fort */
+.slogo.l-tinkercad img,.slogo.l-algorea img{filter:drop-shadow(0 0 1.5px rgba(255,255,255,1)) drop-shadow(0 0 1px rgba(255,255,255,.9)) drop-shadow(0 0 7px rgba(92,200,236,.6)) drop-shadow(0 0 14px rgba(92,200,236,.25))}
+.tile:hover .slogo.l-tinkercad img,.tile:hover .slogo.l-algorea img{filter:drop-shadow(0 0 1.5px rgba(255,255,255,1)) drop-shadow(0 0 1px rgba(255,255,255,1)) drop-shadow(0 0 9px rgba(92,200,236,.85)) drop-shadow(0 0 20px rgba(92,200,236,.45))}
+@media (prefers-reduced-motion:reduce){.slogo img{transition:none}}
+.slogo.svg{color:var(--cyan);filter:drop-shadow(0 0 6px rgba(92,200,236,.45))}
 .slogo b{font:600 13px var(--mono);letter-spacing:.04em;color:var(--cyan)}
 
 /* ===== Séquences ===== */

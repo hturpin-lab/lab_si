@@ -25,23 +25,23 @@ window.SI_SEQUENCES = [
     ],
     seances: [
       { n: 1, date: "2026-10-27", titre: "Formes d'énergie et stockage", activites: [
-        { id: "act_types_energie", titre: "Activité — Formes d'énergie", sous: "Chaîne de puissance, convertisseurs", duree: "40 min", ligne: "", pdf: "docs/Act_Types_Energie.pdf", drive: "" },
-        { id: "td_solaire", titre: "TD Solaire", sous: "Pompage autonome : panneau, batteries, autonomie", duree: "", ligne: "", pdf: "docs/TD_Solaire.pdf", drive: "" },
-        { id: "td4_stocker", titre: "TD 4 — Stocker l'énergie", sous: "Batteries, capacité, énergie massique", duree: "", ligne: "", pdf: "docs/TD4_Stocker_Energie.pdf", drive: "" }
+        { id: "act_types_energie", titre: "Activité — Formes d'énergie", sous: "Chaîne de puissance, convertisseurs", duree: "40 min", ligne: "activites/act_types_energie.html", pdf: "docs/Act_Types_Energie.pdf", drive: "" },
+        { id: "td_solaire", titre: "TD Solaire", sous: "Pompage autonome : panneau, batteries, autonomie", duree: "", ligne: "activites/td_solaire.html", pdf: "docs/TD_Solaire.pdf", drive: "" },
+        { id: "td4_stocker", titre: "TD 4 — Stocker l'énergie", sous: "Batteries, capacité, énergie massique", duree: "", ligne: "activites/td4_stocker.html", pdf: "docs/TD4_Stocker_Energie.pdf", drive: "" }
       ] },
       { n: 2, date: "2026-10-29", titre: "Pertes par effet Joule", activites: [
         { id: "tp_joule", titre: "TP — Pertes par effet Joule", sous: "Simulation Tinkercad + classeur Calc", duree: "60 min", ligne: "activites/tp_joule.html", pdf: "docs/TP_Joule.pdf", drive: "",
           ressources: [{ titre: "Classeur TP_Joule_mesures.ods", fichier: "docs/TP_Joule_mesures.ods" }] },
-        { id: "exo_centrale_pv", titre: "Exercice — Centrale photovoltaïque", sous: "Porette de Nérone : puissance, pertes, rendement", duree: "", ligne: "", pdf: "docs/Exercice_Centrale_PV.pdf", drive: "" }
+        { id: "exo_centrale_pv", titre: "Exercice — Centrale photovoltaïque", sous: "Porette de Nérone : puissance, pertes, rendement", duree: "", ligne: "activites/exo_centrale_pv.html", pdf: "docs/Exercice_Centrale_PV.pdf", drive: "" }
       ] },
       { n: 3, date: "2026-11-03", titre: "Perceuse-visseuse : de la batterie au foret", activites: [
         { id: "td_perceuse", titre: "TD Perceuse-visseuse", sous: "Puissance, rendement, vitesse, couple, pertes Joule", duree: "55 min", ligne: "activites/td_perceuse.html", pdf: "docs/TD_Perceuse.pdf", drive: "" }
       ] },
       { n: 4, date: "2026-11-05", titre: "Transmettre le mouvement : rapport de réduction", activites: [
         { id: "td_servomoteur", titre: "TD Servomoteur", sous: "Train d'engrenages en cascade d'une voiture RC", duree: "25 min", ligne: "activites/td_servomoteur.html", pdf: "docs/TD_Servomoteur.pdf", drive: "" },
-        { id: "td_perceuse_transmission", titre: "TD Perceuse — Transmission", sous: "Motoréducteur à deux étages", duree: "", ligne: "", pdf: "docs/TD_Perceuse_Transmission.pdf", drive: "",
+        { id: "td_perceuse_transmission", titre: "TD Perceuse — Transmission", sous: "Motoréducteur à deux étages", duree: "", ligne: "activites/td_perceuse_transmission.html", pdf: "docs/TD_Perceuse_Transmission.pdf", drive: "",
           ressources: [{ titre: "Partie C (PDF)", fichier: "docs/TD_Perceuse_Transmission_PartieC.pdf" }] },
-        { id: "td2_transmission", titre: "TD 2 — Transmission", sous: "Rovio, télescope, Velux : trains d'engrenages", duree: "", ligne: "", pdf: "docs/TD2_Transmission.pdf", drive: "" }
+        { id: "td2_transmission", titre: "TD 2 — Transmission", sous: "Rovio, télescope, Velux : trains d'engrenages", duree: "", ligne: "activites/td2_transmission.html", pdf: "docs/TD2_Transmission.pdf", drive: "" }
       ] },
       { n: 5, date: "2026-11-10", titre: "Chaînes de puissance de robots", activites: [
         { id: "td_rovio", titre: "TD ROVIO", sous: "Robot mobile : chaîne de puissance", duree: "", ligne: "", pdf: "docs/TD_ROVIO.pdf", drive: "" },

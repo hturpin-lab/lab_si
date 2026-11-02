@@ -63,7 +63,7 @@
     return h + "</table></div>";
   }
   function bFigure(b) {
-    var img = b.svg ? b.svg : '<img class="fig-img" src="' + esc(b.src) + '" alt="' + esc(b.alt || "") + '"' + (b.largeur ? ' style="max-width:' + esc(b.largeur) + '"' : "") + ">";
+    var img = b.svg ? b.svg : '<img class="fig-img" src="' + esc(b.src) + '" alt="' + esc(b.alt || "") + '"' + (b.largeur ? ' style="width:min(100%,' + esc(b.largeur) + ')"' : "") + ">";
     return '<figure' + (b.id ? ' id="' + esc(b.id) + '"' : "") + ">" + img + (b.legende ? "<figcaption>" + fmt(b.legende) + "</figcaption>" : "") + "</figure>";
   }
   function bLigne(b) { return '<div class="fig-ligne' + (b.inv ? " inv" : "") + '">' + b.blocs.map(function (x) { return "<div>" + rendre(x) + "</div>"; }).join("") + "</div>"; }
