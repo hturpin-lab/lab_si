@@ -18,7 +18,7 @@ function nomFichier(){
   return (n||"NOM")+"_"+(p||"Prenom")+"_TD_Perceuse";
 }
 var stylePied=document.createElement("style");document.head.appendChild(stylePied);
-function majPiedImp(){var el=(($("#e_nom")||{value:""}).value.trim().toUpperCase()+" "+($("#e_prenom")||{value:""}).value.trim()).trim();var t=("TD_Perceuse · © Henri Turpin · Lycée Jean-Claude Fruteau"+(el?" · "+el:"")).replace(/\\/g,"\\\\").replace(/"/g,'\\"');stylePied.textContent='@page{@bottom-center{content:"'+t+'";font-family:"IBM Plex Sans",Arial,sans-serif;font-size:7.5pt;color:#56677A}}';}
+function majPiedImp(){var el=(($("#e_nom")||{value:""}).value.trim().toUpperCase()+" "+($("#e_prenom")||{value:""}).value.trim()).trim();var t=("TD_Perceuse · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau"+(el?" · "+el:"")).replace(/\\/g,"\\\\").replace(/"/g,'\\"');stylePied.textContent='@page{@bottom-center{content:"'+t+'";font-family:"IBM Plex Sans",Arial,sans-serif;font-size:7.5pt;color:#56677A}}';}
 function majTitre(){document.title=nomFichier();majPiedImp();}
 
 /* ---- miroirs pour l'impression ---- */

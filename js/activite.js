@@ -179,7 +179,7 @@
       '<label class="ce"><span>Date</span><input type="date" id="e_date" class="rep-e" data-eleve="date" aria-label="Date"></label></div></div></section>' +
       '<p class="version-imprimee print-only">Version des questions : <b id="vlib">type bac</b></p>';
     var rendreSec = '<section class="encadre rendre no-print" id="rendre"><h2>Rendre mon travail</h2>' + RENDRE + '<p class="petit">Garde aussi une copie modifiable : bouton <b>Enregistrer mon travail (.json)</b> (pour reprendre plus tard avec <b>Reprendre un travail</b>).</p></section>';
-    var pied = '<footer class="pied-imp print-only"><span>' + (NUAGE ? "Dépôt de la classe : " + esc(NUAGE) : "") + "</span><span>" + esc(A.fichier) + " · © Henri Turpin · Lycée Jean-Claude Fruteau · Sciences de l'Ingénieur</span></footer>";
+    var pied = '<footer class="pied-imp print-only"><span>' + (NUAGE ? "Dépôt de la classe : " + esc(NUAGE) : "") + "</span><span>" + esc(A.fichier) + " · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau · Sciences de l'Ingénieur</span></footer>";
 
     document.body.innerHTML =
       '<header class="barre no-print"><div class="barre-in">' +
@@ -333,7 +333,7 @@
   var stylePied = document.createElement("style"); document.head.appendChild(stylePied);
   function majPiedImp() {
     var el = ($("#e_nom").value.trim().toUpperCase() + " " + $("#e_prenom").value.trim()).trim();
-    var t = (A.fichier + " · © Henri Turpin · Lycée Jean-Claude Fruteau" + (el ? " · " + el : "")).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    var t = (A.fichier + " · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau" + (el ? " · " + el : "")).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
     stylePied.textContent = '@page{@bottom-center{content:"' + t + '";font-family:"IBM Plex Sans",Arial,sans-serif;font-size:7.5pt;color:#56677A}}';
   }
 

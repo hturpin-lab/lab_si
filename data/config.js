@@ -43,7 +43,7 @@ window.SI_CONFIG = {
   },
 
   /* Pied de page */
-  auteur: "Henri Turpin",
+  auteur: "Henri Turpin et Julie Turpin",
   lycee: "Lycée Jean-Claude Fruteau",
   maj: "2 novembre 2026"
 };
