@@ -167,6 +167,8 @@ section.bloc{padding:34px 0 10px}
 .tag.ligne{border-color:var(--accent);color:var(--accent)}
 .tag.ligne:hover{background:var(--accent);color:#13263F}
 .tag.off{opacity:.55;cursor:default;border-style:dashed}
+.tag .ico{height:15px;width:auto;flex:none;display:block}
+.act .liens .tag{align-self:flex-start}
 .liste{display:grid;gap:10px}
 .doc{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);padding:12px 14px;background:rgba(20,42,71,.55)}
 .doc h4{margin:0;font-family:var(--texte);font-size:15px;font-weight:600}
