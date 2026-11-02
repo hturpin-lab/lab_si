@@ -3,49 +3,123 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
-<meta name="description" content="Outil pour nommer correctement un document à rendre : NOM_Prenom_Activite.pdf.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="description" content="Renommer ses fichiers avant de les rendre (NOM_Prenom_Activite) : un fichier est téléchargé renommé, plusieurs sont regroupés dans un ZIP. Rien n'est envoyé sur internet.">
 <meta name="color-scheme" content="dark">
 <title>Renommer son document — S.I</title>
 <link rel="icon" href="../assets/img/favicon.png">
 <link rel="stylesheet" href="../css/site.css">
 </head>
 <body>
+<a class="skip" href="#r-nom">Aller au formulaire</a>
 <header class="entete"><div class="wrap bar">
   <a class="marque" href="../index.html" aria-label="Accueil"><img class="logo" src="../assets/img/logo_si_128.png" alt="" width="40" height="40">
     <span><b>S.I — Sciences de l'Ingénieur</b><span>Première · 2026-2027</span></span></a>
   <nav class="navp" aria-label="Navigation principale"><a href="../index.html#ressources">Ressources</a><a href="../index.html#sequences">Séquences</a><a class="on" href="../index.html#outils">Outils</a></nav>
 </div></header>
 
-<main class="page-simple" id="contenu">
+<main class="page-outil" id="contenu">
   <p class="fil"><a href="../index.html">Accueil</a> › <a href="../index.html#outils">Outils</a> › Renommer son document</p>
-  <h1>Renommer son document</h1>
-  <p>Un document rendu doit s'appeler <b>NOM_Prenom_Activite.pdf</b> : ton nom en majuscules, ton prénom, le nom de l'activité, séparés par des tirets bas, <b>sans accent ni espace</b>. Tape tes informations : le nom de fichier à utiliser s'affiche.</p>
+  <div class="outil-tete">
+    <span class="mono">T-01 · 1re SI</span>
+    <h1>Renommer son document</h1>
+    <p>Tes fichiers sont renommés au format <b class="code">NOM_Prenom_Activite</b>, sans accent ni espace, puis téléchargés : <b>un fichier</b> arrive directement renommé, <b>plusieurs fichiers</b> sont regroupés dans un ZIP.</p>
+    <p class="note">Dans les activités en ligne du site, le PDF exporté porte déjà le bon nom. Cet outil sert pour les <b>autres fichiers</b> : captures Tinkercad, classeur .ods, photos de tes feuilles…</p>
+  </div>
 
-  <form class="form" id="f" autocomplete="off">
-    <label>Nom <input type="text" id="nom" placeholder="ex. PAYET" maxlength="40"></label>
-    <label>Prénom <input type="text" id="prenom" placeholder="ex. Léa" maxlength="40"></label>
-    <label>Activité <input type="text" id="activite" list="activites" placeholder="ex. TD_Perceuse" maxlength="60">
-      <datalist id="activites"></datalist></label>
-    <label>Type de fichier <select id="ext"><option value="pdf">pdf (document exporté)</option><option value="json">json (travail en cours)</option><option value="ods">ods (classeur LibreOffice)</option><option value="xlsx">xlsx (classeur Excel)</option><option value="png">png (capture)</option></select></label>
-  </form>
-  <div class="resultat" aria-live="polite"><code id="res">NOM_Prenom_Activite.pdf</code><button type="button" class="btn jaune" id="copier">Copier</button></div>
-  <p class="note" id="msg"></p>
+  <div class="outil">
+    <div class="outil-g">
+      <!-- 1 · Identité -->
+      <section class="etape-o" aria-labelledby="h-e1" data-ref="R-01">
+        <h2 id="h-e1"><span class="num">01</span>Qui es-tu ?</h2>
+        <div class="champs">
+          <div class="champ"><label for="r-nom">Nom</label>
+            <input type="text" id="r-nom" placeholder="ex. PAYET" maxlength="40" autocomplete="family-name" spellcheck="false" aria-describedby="r-nom-aide" required>
+            <small id="r-nom-aide">Obligatoire</small></div>
+          <div class="champ"><label for="r-prenom">Prénom</label>
+            <input type="text" id="r-prenom" placeholder="ex. Léa" maxlength="40" autocomplete="given-name" spellcheck="false" aria-describedby="r-prenom-aide" required>
+            <small id="r-prenom-aide">Obligatoire</small></div>
+        </div>
+      </section>
 
-  <h2>Renommer un fichier sous Windows</h2>
-  <ol class="etapes">
-    <li>Ouvre l'<b>Explorateur de fichiers</b> et va dans le dossier <b>Téléchargements</b> (ou là où tu as enregistré ton fichier).</li>
-    <li>Clique une fois sur le fichier pour le sélectionner, puis appuie sur la touche <b>F2</b> (ou clic droit › <b>Renommer</b>).</li>
-    <li>Colle le nom copié ci-dessus (<b>Ctrl + V</b>). Ne touche pas à l'extension (<b>.pdf</b>) si elle est affichée.</li>
-    <li>Valide avec <b>Entrée</b>, puis dépose le fichier sur le <a href="#" id="lien-nuage">Nuage de la classe</a>.</li>
-  </ol>
-  <p class="note">Sur Mac : sélectionne le fichier, appuie sur <b>Entrée</b> pour renommer. Dans les activités en ligne de ce site, le nom correct est proposé automatiquement au moment de l'export PDF.</p>
+      <!-- 2 · Travail -->
+      <section class="etape-o" aria-labelledby="h-e2" data-ref="R-02">
+        <h2 id="h-e2"><span class="num">02</span>Quel travail ?</h2>
+        <div class="champs">
+          <div class="champ"><label for="r-type">Type de travail</label>
+            <select id="r-type" aria-describedby="r-type-aide"></select>
+            <small id="r-type-aide">Choisis l'activité de la séquence ou un autre type.</small></div>
+          <div class="champ" id="r-autre-champ" hidden><label for="r-autre">Nom du travail</label>
+            <input type="text" id="r-autre" placeholder="ex. Mini projet" maxlength="40" spellcheck="false" aria-describedby="r-autre-aide">
+            <small id="r-autre-aide">Accents et espaces seront retirés.</small></div>
+          <div class="champ"><label for="r-precision">Précision <span class="opt">(facultatif)</span></label>
+            <input type="text" id="r-precision" placeholder="ex. Capture, Classeur, Q3" maxlength="30" spellcheck="false" aria-describedby="r-precision-aide">
+            <small id="r-precision-aide">Ajoutée à la fin du nom.</small></div>
+        </div>
+      </section>
+
+      <!-- 3 · Fichiers -->
+      <section class="etape-o" aria-labelledby="h-e3" data-ref="R-03">
+        <h2 id="h-e3"><span class="num">03</span>Tes fichiers</h2>
+        <div class="depose" id="r-depose">
+          <svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M14 34h-3a8 8 0 0 1-1-15.9A11 11 0 0 1 31 14a9 9 0 0 1 6 20h-3"/><path d="M24 40V22M17 29l7-7 7 7"/></svg>
+          <p><b>Glisse tes fichiers ici</b> ou</p>
+          <button type="button" class="btn" id="r-choisir">Choisir des fichiers</button>
+          <small>PDF, images, classeurs, documents, vidéos, 3D, code… · <span id="r-max">200 Mo</span> max par fichier</small>
+        </div>
+        <input type="file" id="r-fichiers" class="sr" multiple tabindex="-1" aria-hidden="true">
+        <div class="compteurs" id="r-compteurs" hidden>
+          <span class="cpt"><b id="r-nb-ok">0</b> valide(s)</span>
+          <span class="cpt ko" id="r-ko-bloc"><b id="r-nb-ko">0</b> refusé(s)</span>
+          <span class="cpt"><b id="r-poids">0 o</b></span>
+          <button type="button" class="lien-btn" id="r-vider">Tout vider</button>
+        </div>
+        <ul class="fichiers" id="r-liste" aria-label="Fichiers ajoutés"></ul>
+      </section>
+    </div>
+
+    <aside class="outil-d" aria-labelledby="h-e4">
+      <!-- 4 · Vérification + téléchargement -->
+      <section class="etape-o sortie" data-ref="R-04">
+        <h2 id="h-e4"><span class="num">04</span>Vérifie et télécharge</h2>
+        <p class="mono">Aperçu du nommage</p>
+        <div class="apercu" id="r-apercu" aria-live="polite"></div>
+        <div class="actions-o">
+          <button type="button" class="btn jaune" id="r-generer" disabled>Télécharger</button>
+          <button type="button" class="btn" id="r-reinit">Réinitialiser</button>
+        </div>
+        <p class="note" id="r-msg" role="status"></p>
+      </section>
+
+      <!-- 5 · Dépôt -->
+      <section class="etape-o" aria-labelledby="h-e5" data-ref="R-05">
+        <h2 id="h-e5"><span class="num">05</span>Prochaine étape : dépôt sur le Nuage</h2>
+        <ol class="etapes-o">
+          <li>Télécharge ton fichier (ou ton ZIP) renommé avec le bouton ci-dessus.</li>
+          <li>Ouvre le lien de dépôt de la classe.</li>
+          <li>Dépose le fichier tel quel, sans le renommer.</li>
+        </ol>
+        <a class="btn depot" id="r-depot" href="#" target="_blank" rel="noopener noreferrer"><img src="../assets/logos/nuage.png" alt="" width="22" height="22">Ouvrir le lien de dépôt</a>
+        <p class="note" id="r-depot-absent" hidden>Le lien de dépôt n'est pas encore disponible : demande-le à ton professeur.</p>
+      </section>
+    </aside>
+  </div>
+
+  <details class="manuel">
+    <summary>Renommer un fichier à la main (sans l'outil)</summary>
+    <ol class="etapes-o">
+      <li>Ouvre l'<b>Explorateur de fichiers</b> et va dans le dossier <b>Téléchargements</b>.</li>
+      <li>Sélectionne le fichier, puis appuie sur <b>F2</b> (ou clic droit › <b>Renommer</b>). Sur Mac : touche <b>Entrée</b>.</li>
+      <li>Écris le nom au format <b class="code">NOM_Prenom_Activite</b> sans toucher à l'extension (.pdf, .ods…), puis valide avec <b>Entrée</b>.</li>
+    </ol>
+  </details>
 </main>
 
 <footer class="pied"><div class="wrap">
   <span>© 2026 Henri Turpin · Lycée Jean-Claude Fruteau</span>
   <span><a href="../mentions.html">Mentions légales</a> · <a href="../mentions.html#credits">Crédits</a></span>
 </div></footer>
+<script src="../vendor/jszip.min.js"></script>
 <script src="../data/config.js"></script>
 <script src="../data/sequences.js"></script>
 <script src="../js/renommer.js"></script>
