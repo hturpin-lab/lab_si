@@ -10,7 +10,7 @@
 @font-face{font-family:"IBM Plex Sans";font-weight:600;font-display:swap;src:url(../assets/fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2")}
 @font-face{font-family:"IBM Plex Mono";font-weight:400;font-display:swap;src:url(../assets/fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2")}
 
-:root{--bleu:#1B4F8C;--fonce:#133B6B;--encre:#13263F;--cyan:#5CC8EC;--jaune:#FFC21A;--acier:#56677A;--brume:#EEF3F9;--brume2:#DDE8F6;--trait:#9fb2c9;--vert:#2E7D32;--rouge:#C62828;--orange:#B45309}
+:root{--bleu:#1B4F8C;--fonce:#083679;--vif:#2078eb;--encre:#13263F;--cyan:#2078eb;--jaune:#FFC21A;--acier:#56677A;--brume:#EEF3F9;--brume2:#DDE8F6;--trait:#9fb2c9;--vert:#2E7D32;--rouge:#C62828;--orange:#B45309}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:120px}
 body{margin:0;background:var(--brume);color:var(--encre);font:15px/1.5 "IBM Plex Sans","Segoe UI",system-ui,Arial,sans-serif;-webkit-text-size-adjust:100%}
@@ -38,7 +38,7 @@ a{color:var(--bleu)}
 .btn-bleu{background:var(--bleu);border-color:var(--bleu);color:#fff}
 .btn-bleu:hover{background:var(--fonce)}
 .btn-danger{border-color:rgba(255,255,255,.35)}
-.barre-2{background:#0f2f57;border-top:1px solid rgba(255,255,255,.12)}
+.barre-2{background:#013c85;border-top:1px solid rgba(32,120,235,.45)}
 .barre-2 .barre-in{padding:6px 16px;gap:6px 14px}
 .seg{display:inline-flex;border:1px solid rgba(255,255,255,.4);border-radius:8px;overflow:hidden}
 .seg button{font:600 13px/1.2 inherit;font-family:inherit;background:transparent;color:#fff;border:0;padding:6px 12px;cursor:pointer}
