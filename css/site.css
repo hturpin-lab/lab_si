@@ -17,7 +17,7 @@
   --bg2:#0b3f85;
   --panel:#043572;       /* panneaux, cartes, barres des tuiles */
   --panel2:#0a478f;
-  --vif:#2078eb;         /* bleu vif : remplissages, anneaux, progression, bordures */
+  --vif:#ffc21a;         /* bleu vif : remplissages, anneaux, progression, bordures */
   --line:rgb(32 120 235 / 71%);   /* lignes de plan (bleu vif à faible opacité) */
   --line2:rgba(32,120,235,.45);
   --ink:#f2f6fb;         /* blanc cassé */
