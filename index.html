@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="description" content="Site de la spécialité Sciences de l'Ingénieur (1re SI) : documents, activités à compléter en ligne, ressources et outils.">
+<meta name="color-scheme" content="dark">
+<title>S.I — Sciences de l'Ingénieur</title>
+<link rel="icon" href="assets/img/favicon.png">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<a class="skip" href="#sequences">Aller aux séquences</a>
+<header class="entete"><div class="wrap bar">
+  <a class="marque" href="index.html" aria-label="Accueil"><img class="logo" src="assets/img/logo_si_128.png" alt="" width="40" height="40">
+    <span><b>S.I — Sciences de l'Ingénieur</b><span id="sous-marque">Première · 2026-2027</span></span></a>
+  <nav class="navp" aria-label="Navigation principale"><a href="#ressources">Ressources</a><a href="#sequences">Séquences</a><a href="#outils">Outils</a></nav>
+</div></header>
+
+<div class="hero">
+  <div class="wrap">
+    <span class="mono">1re SI · <span id="hero-annee">2026-2027</span></span>
+    <h1>Comprendre<br>comment ça <em>marche</em>.</h1>
+    <p>Les documents de la spécialité, les activités à compléter en ligne et les outils pour rendre ton travail. Choisis ta séquence, travaille, enregistre, dépose.</p>
+    <a class="now" id="en-cours" href="#s3/activites"><i aria-hidden="true"></i><span class="mono" style="color:inherit">En cours · S3 Énergie</span></a>
+  </div>
+  <!-- Dessin de plan : traits qui se tracent, engrenages lents (désactivé si prefers-reduced-motion) -->
+  <svg class="plan" viewBox="0 0 520 300" aria-hidden="true" focusable="false">
+    <g class="eng" style="transform-origin:380px 150px"><circle cx="380" cy="150" r="78"/><circle cx="380" cy="150" r="30"/>
+      <path d="M380 60v12M380 228v12M290 150h12M458 150h12M316 86l9 9M435 205l9 9M316 214l9-9M435 95l9-9M347 70l5 11M408 219l5 11M300 183l11-5M449 117l11-5M300 117l11 5M449 183l11 5M347 230l5-11M408 81l5-11"/>
+      <circle cx="380" cy="150" r="90" stroke-dasharray="3 6"/></g>
+    <g class="eng eng2" style="transform-origin:262px 232px"><circle cx="262" cy="232" r="34"/><circle cx="262" cy="232" r="10"/>
+      <path d="M262 190v8M262 266v8M220 232h8M296 232h8M232 202l6 6M286 256l6 6M232 262l6-6M286 208l6-6"/></g>
+    <path class="trait" d="M30 40H250M30 40V260M30 260H250"/>
+    <path class="trait l2" d="M60 90h150v110H60zM60 90l150 110M210 90L60 200"/>
+    <path class="trait l3" d="M60 60v-14M210 60v-14M60 52h150M135 48v8M60 230h-14M60 90h-14M48 90v110"/>
+    <path class="trait l4" d="M300 40h190M490 40v220M300 260h190"/>
+    <text class="cote" x="123" y="44">150</text>
+    <text class="cote" x="24" y="150" transform="rotate(-90 36 150)">110</text>
+    <text class="cote" x="300" y="285">PLAN N° S3-01 · ÉCH. 1:2</text>
+  </svg>
+</div>
+
+<main class="wrap" id="contenu">
+  <!-- ===== 01 Ressources ===== -->
+  <section class="bloc" id="ressources" aria-labelledby="h-res">
+    <div class="sec-h"><span class="num">01</span><h2 id="h-res">Ressources</h2><span class="ref">liens externes</span></div>
+    <div class="res" id="tuiles-ressources"></div>
+  </section>
+
+  <!-- ===== 02 Séquences (documents en ligne) ===== -->
+  <section class="bloc" id="sequences" aria-labelledby="h-seq">
+    <div class="sec-h"><span class="num">02</span><h2 id="h-seq">Documents en ligne</h2><span class="ref">par séquence</span></div>
+    <div class="seq">
+      <nav class="rail" id="rail" aria-label="Séquences"></nav>
+      <div class="panel-s" id="panneau" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===== 03 Outils ===== -->
+  <section class="bloc" id="outils" aria-labelledby="h-out">
+    <div class="sec-h"><span class="num">03</span><h2 id="h-out">Outils</h2><span class="ref">pour rendre ton travail</span></div>
+    <div class="tools" id="tuiles-outils"></div>
+  </section>
+</main>
+
+<footer class="pied"><div class="wrap">
+  <span>© 2026 Henri Turpin · Lycée Jean-Claude Fruteau</span>
+  <span><a href="mentions.html">Mentions légales</a> · <a href="mentions.html#credits">Crédits</a></span>
+</div></footer>
+
+<script src="data/config.js"></script>
+<script src="data/sequences.js"></script>
+<script src="js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TD_Perceuse</title>
+<meta name="description" content="TD Perceuse interactif (1re SI) — fonctionne hors ligne ; aucune donnée n'est envoyée sur internet.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<link rel="icon" href="../assets/img/favicon.png">
+<style>
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-display:swap;src:url(../assets/fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:400;font-display:swap;src:url(../assets/fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:600;font-display:swap;src:url(../assets/fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2")}
+
+:root{--bleu:#1B4F8C;--fonce:#133B6B;--encre:#13263F;--cyan:#5CC8EC;--jaune:#FFC21A;--acier:#56677A;--brume:#EEF3F9;--brume2:#DDE8F6;--trait:#9fb2c9;--vert:#2E7D32;--rouge:#C62828;--orange:#B45309}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;background:var(--brume);color:var(--encre);font:15px/1.5 "IBM Plex Sans","Segoe UI",system-ui,Arial,sans-serif;-webkit-text-size-adjust:100%}
+sub,sup{font-size:70%;line-height:0}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 .12em;line-height:1.1;font-size:92%}
+.fr>span{padding:0 .2em;white-space:nowrap}.fr>span:first-child{border-bottom:1px solid currentColor}
+.fr sub{line-height:1}
+a{color:var(--bleu)}
+.print-only{display:none}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+/* ---------- Barre ---------- */
+.barre{position:sticky;top:0;z-index:20;background:var(--fonce);color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.barre-in{max-width:1320px;margin:0 auto;padding:8px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.marque{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;white-space:nowrap;font-family:"Barlow Condensed",Arial,sans-serif;letter-spacing:.03em;text-decoration:none;color:#fff}
+.marque img{width:28px;height:28px}
+.retour{font-size:13px;color:#fff;opacity:.9;text-decoration:none;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:6px 10px;white-space:nowrap}
+.retour:hover{opacity:1;background:rgba(255,255,255,.12)}
+@media print{.retour{display:none}}
+.marque small{font-weight:400;opacity:.85;font-size:13px}
+.marque-io{color:var(--jaune)}
+.actions{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.btn{font:600 13.5px/1.2 inherit;font-family:inherit;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff;border-radius:7px;padding:7px 11px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{background:rgba(255,255,255,.18)}
+.btn-jaune{background:var(--jaune);border-color:var(--jaune);color:var(--encre)}
+.btn-jaune:hover{background:#ffd34f}
+.btn-bleu{background:var(--bleu);border-color:var(--bleu);color:#fff}
+.btn-bleu:hover{background:var(--fonce)}
+.btn-danger{border-color:rgba(255,255,255,.35)}
+.barre-2{background:#0f2f57;border-top:1px solid rgba(255,255,255,.12)}
+.barre-2 .barre-in{padding:6px 16px;gap:6px 14px}
+.seg{display:inline-flex;border:1px solid rgba(255,255,255,.4);border-radius:8px;overflow:hidden}
+.seg button{font:600 13px/1.2 inherit;font-family:inherit;background:transparent;color:#fff;border:0;padding:6px 12px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--jaune);color:var(--encre)}
+.seg-lab{font-size:13px;opacity:.9}
+.etat{font-size:12.5px;opacity:.85;margin-left:auto}
+.prog-mini{flex:1 1 160px;max-width:260px;display:flex;align-items:center;gap:8px;font-size:12.5px}
+.prog-mini .piste{flex:1;height:8px;background:rgba(255,255,255,.2);border-radius:5px;overflow:hidden}
+.piste i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--jaune));transition:width .3s}
+/* ---------- Mise en page ---------- */
+.page{max-width:1320px;margin:0 auto;padding:16px;display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:18px;align-items:start}
+.feuille{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(19,38,63,.12);padding:22px 26px;min-width:0}
+.cote{position:sticky;top:112px;display:grid;gap:12px;max-height:calc(100vh - 124px);overflow:auto}
+.boite{background:#fff;border:1px solid var(--brume2);border-radius:10px;padding:12px 14px}
+.boite h2{font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--fonce);margin:0 0 8px}
+.prog{height:10px;background:var(--brume2);border-radius:6px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--bleu),var(--cyan));transition:width .3s}
+.prog-txt{font-size:13px;margin:6px 0 0}
+.som{list-style:none;margin:0;padding:0;font-size:13.5px}
+.som>li{margin:4px 0}.som a{text-decoration:none;color:var(--encre)}.som a:hover{text-decoration:underline}
+.som>li>a{font-weight:600;color:var(--fonce)}
+.som-q{list-style:none;margin:2px 0 4px;padding:0 0 0 8px;display:flex;flex-wrap:wrap;gap:3px 5px}
+.som-q a{display:inline-flex;align-items:center;gap:4px;padding:1px 7px;border:1px solid var(--brume2);border-radius:20px;font-size:12.5px;background:var(--brume)}
+.pt{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--acier);background:#fff;flex:none}
+[data-etat=partiel] .pt{background:linear-gradient(90deg,var(--acier) 50%,#fff 50%)}
+[data-etat=complet] .pt{background:var(--vert);border-color:var(--vert)}
+[data-etat=complet]{border-color:#a5cfa8!important}
+.som-det summary{cursor:pointer;list-style:none}.som-det summary::-webkit-details-marker{display:none}.som-det summary h2{display:inline}.som-det summary::after{content:" ▾";color:var(--acier)}.som-det:not([open]) summary::after{content:" ▸"}.som-det:not([open]) summary h2{margin:0}
+.legende{font-size:12px;color:var(--acier);margin:8px 0 0}
+.etapes{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.etapes li{display:grid;gap:4px;font-size:13px}
+.etapes .btn{justify-content:center}
+.boite .etapes .btn{white-space:normal;text-align:center}
+.petit{font-size:13px;color:var(--acier)}
+/* ---------- Cartouche ---------- */
+h1,h2{margin:0}
+.carto{display:grid;grid-template-columns:96px 1fr 300px;border:2px solid var(--bleu);border-radius:10px;overflow:hidden}
+.carto-g{background:var(--bleu);color:#fff;display:grid;place-content:center;text-align:center;padding:10px}
+.carto-g b{font-size:22px}.carto-g span{font-size:13px}
+.carto-m{padding:12px 16px;border-left:6px solid var(--jaune)}
+.carto-m h1{font-family:"Barlow Condensed",Arial,sans-serif;font-size:26px;letter-spacing:.03em;color:var(--fonce);text-transform:uppercase;letter-spacing:.02em;line-height:1.2}
+.carto-m p{margin:6px 0 0;color:var(--acier)}
+.carto-d{background:var(--brume);padding:10px 12px;display:grid;gap:6px;align-content:center}
+.ce{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--fonce);min-width:0}
+.ce>span{width:52px;flex:none}
+.ce-ligne{display:grid;grid-template-columns:1fr 1.25fr;gap:8px}
+.ce-ligne .ce>span{width:auto}
+.ce input{flex:1;min-width:0;font:15px/1.2 inherit;font-family:inherit;border:1px solid var(--trait);border-radius:6px;padding:5px 7px;background:#fff;color:var(--encre)}
+.maj{text-transform:uppercase}
+.version-imprimee{margin:4px 0 0;text-align:right;font-size:12px;color:var(--acier)}
+/* ---------- Encadrés, figures ---------- */
+.encadre{border:1.5px solid var(--bleu);border-radius:8px;padding:10px 14px;margin:12px 0;background:#fff}
+.encadre h2{font-size:14.5px;color:var(--bleu);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.encadre p{margin:6px 0}
+.tab-wrap{overflow-x:auto}
+.donnees{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.donnees td{border:1px solid #b8c6d8;padding:4px 8px}
+.donnees td:nth-child(odd){background:var(--brume)}
+.donnees td:nth-child(even){font-weight:700;text-align:center;white-space:nowrap}
+.donnees td.vide{background:#fff}
+figure{margin:10px 0;text-align:center}
+.svg-fig{width:100%;height:auto;display:block}
+.fig-ligne{display:grid;grid-template-columns:60% 1fr;gap:14px;align-items:center}
+.pouce{background:var(--brume)}.pouce p{font-size:13.5px;margin:4px 0}
+figcaption{font-size:13px;font-style:italic;color:var(--acier);margin-top:4px}
+.methode{font-size:14px;margin:8px 0 4px}
+.bandeau{background:var(--bleu);color:#fff;font-size:16px;padding:6px 12px;border-radius:7px;margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.bandeau span{font-weight:400;font-size:12.5px;opacity:.9}
+.cr{display:inline-block;font-size:12px;font-weight:600;color:var(--fonce);background:#fff6d9;border:1px dashed #d9a300;border-radius:20px;padding:1px 9px;margin:0 0 4px}
+/* ---------- Questions ---------- */
+.q{margin:10px 0;padding:8px 10px;border-left:4px solid var(--brume2);border-radius:0 8px 8px 0;background:#fbfcfe}
+.q-tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.q-lab{font-weight:700;color:#fff;background:var(--bleu);border-radius:6px;padding:1px 8px;font-size:14px}
+.bascule{display:inline-flex;border:1px solid var(--trait);border-radius:7px;overflow:hidden;font-size:12.5px}
+.bascule button{font:600 12.5px/1.2 inherit;font-family:inherit;border:0;background:#fff;color:var(--acier);padding:4px 10px;cursor:pointer}
+.bascule button[aria-pressed=true]{background:var(--fonce);color:#fff}
+.q-texte ol{margin:4px 0 0;padding-left:22px}.q-texte li{margin:2px 0}
+.q[data-m=bac] .ref,.q[data-m=ref] .bac{display:none}
+.q[data-m=ref]{border-left-color:var(--cyan)}
+.renvoi{font-size:13.5px;margin:2px 0 8px 14px;color:var(--acier)}
+/* ---------- Champs ---------- */
+.rep,.rep-e{font:15px/1.35 inherit;font-family:inherit;color:var(--encre)}
+.rep{border:1px solid var(--trait);border-radius:6px;padding:5px 7px;background:#fff;min-width:0;width:100%}
+.rep:focus{border-color:var(--bleu);background:#fffef6}
+.rep::placeholder{color:#8a97a6;font-style:italic}
+textarea.rep{resize:vertical;display:block;overflow:hidden;min-height:2.4em}
+.rep.a-verifier{border:2px dashed var(--orange);background:#fff8ef}
+.zone{margin:4px 0 10px 14px}
+.zone-lab{display:block;font-size:14px;margin:8px 0 4px}
+#q5-pb{margin-left:0}
+/* tableau */
+.rep3{width:100%;border-collapse:collapse;margin:8px 0 12px;font-size:14px}
+.rep3 th{background:var(--brume2);color:var(--fonce);font-size:12.5px;padding:6px;border:1px solid var(--trait);text-align:left}
+.rep3 td{border:1px solid var(--trait);padding:5px;vertical-align:middle}
+.rep3 td.c-q{background:var(--brume);font-weight:700;color:var(--bleu);text-align:center;width:46px;white-space:nowrap}
+.rep3 td.c-g{width:21%}
+.rep3 td:nth-child(3),.rep3 td:nth-child(4){width:24%}
+.resu{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.sym{white-space:nowrap;font-weight:600}
+.rep.val{flex:1 1 70px;width:70px}
+.rep.uni{flex:0 1 74px;width:74px}
+textarea.cel{min-height:2.3em}
+/* chaîne */
+.fig-chaine{text-align:left}
+.chaine{display:grid;gap:0;max-width:760px;margin:0 auto}
+.ch-bloc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;border:2px solid var(--bleu);border-radius:9px;background:var(--brume);padding:8px 10px}
+.ch-fn{background:var(--bleu);color:#fff;font-weight:700;font-size:13px;letter-spacing:.05em;border-radius:5px;padding:3px 9px;min-width:118px;text-align:center}
+.ch-fixe{font-weight:700;font-size:16px}
+.ch-c{display:inline-flex;align-items:center;gap:6px;font-size:13.5px}
+.ch-c>span{white-space:nowrap;color:var(--fonce);font-weight:600}
+.ch-c em{font-weight:400;color:var(--acier);font-size:12px}
+.ch-c .u{font-weight:600}
+.ch-comp{flex:1 1 220px}
+.rep.long{width:auto;flex:1;min-width:120px}
+.rep.court{width:86px}
+.rep.moyen{width:110px}
+.ch-lien{display:grid;grid-template-columns:44px 1fr;align-items:stretch;padding:2px 0}
+.ch-fleche{position:relative;margin:0 auto;width:4px;background:var(--encre)}
+.ch-fleche::after{content:"";position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);border:9px solid transparent;border-top:13px solid var(--encre);border-bottom:0}
+.ch-champs{display:flex;flex-wrap:wrap;gap:6px 18px;padding:8px 0 10px;align-items:center}
+.ch-en{flex:1 1 100%}
+.ch-g{display:flex;flex-wrap:wrap;gap:6px 10px;padding:4px 8px;border:1px dashed var(--trait);border-radius:7px}
+.ch-q9g>span{color:var(--acier)}
+/* à retenir */
+.retenir{background:#fff}
+.aide-ret{font-size:13px;color:var(--acier);margin:0 0 6px}
+.ret-grille{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px}
+.ret{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;font-size:14px}
+.plus{background:var(--brume)}
+.plus-g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.plus .zone{margin-left:0}
+.rendre{border-color:var(--jaune);border-width:2px;background:#fffbea}
+.rendre .etapes li{grid-template-columns:auto 1fr;align-items:center;gap:12px}
+.pied{max-width:1320px;margin:4px auto 24px;padding:0 16px;font-size:12.5px;color:var(--acier);text-align:center}
+/* ---------- Boîte de dialogue maison + message ---------- */
+.modal-fond{position:fixed;inset:0;background:rgba(19,38,63,.55);display:grid;place-items:center;z-index:50;padding:16px}
+.modal-fond[hidden]{display:none}
+.modal{background:#fff;border-radius:12px;max-width:420px;width:100%;padding:18px 20px;box-shadow:0 10px 40px rgba(0,0,0,.35);border-top:6px solid var(--rouge)}
+.modal h2{font-size:18px;color:var(--encre);margin-bottom:8px}
+.modal p{margin:0 0 14px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.modal .b2{font:600 14px/1.2 inherit;font-family:inherit;border-radius:7px;padding:8px 14px;cursor:pointer;border:1px solid var(--trait);background:#fff;color:var(--encre)}
+.modal .b2.rouge{background:var(--rouge);border-color:var(--rouge);color:#fff}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--encre);color:#fff;padding:10px 16px;border-radius:8px;z-index:60;font-size:14px;max-width:92vw;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.toast[hidden]{display:none}
+.aide-pdf{position:fixed;inset:0;z-index:55;background:rgba(19,38,63,.55);display:grid;place-items:center;padding:16px}
+.aide-pdf[hidden]{display:none}
+/* ---------- Écrans moyens / téléphone ---------- */
+@media screen and (max-width:1180px){
+  .page{grid-template-columns:1fr}
+  .cote{position:static;max-height:none;grid-template-columns:1fr 1fr;order:-1}
+  .cote .boite.b-rendre{display:none}
+}
+@media screen and (max-width:860px){
+  .barre{position:static}
+  .cote{grid-template-columns:1fr}
+  .carto{grid-template-columns:1fr}
+  .carto-g{grid-auto-flow:column;gap:10px;padding:6px;place-content:center;align-items:baseline}
+  .carto-m{border-left:0;border-top:5px solid var(--jaune)}
+  .fig-ligne,.plus-g,.ret-grille{grid-template-columns:1fr}
+  .feuille{padding:14px 12px}
+  .etat{margin-left:0;flex-basis:100%}
+  .actions{margin-left:0}
+}
+@media screen and (max-width:700px){
+  body{font-size:15px}
+  .page{padding:8px}
+  .rep3 thead{display:none}
+  .rep3,.rep3 tbody,.rep3 tr,.rep3 td{display:block;width:100%!important}
+  .rep3 tr{border:1px solid var(--trait);border-radius:8px;margin:0 0 10px;overflow:hidden}
+  .rep3 td{border:0;border-bottom:1px solid var(--brume2)}
+  .rep3 td.c-q{text-align:left;background:var(--bleu);color:#fff}
+  .rep3 td:not(.c-q)::before{content:attr(data-l);display:block;font-size:12px;color:var(--acier);font-weight:600;margin-bottom:2px}
+  .donnees,.donnees tbody,.donnees tr{display:block}
+  .donnees tr{display:grid;grid-template-columns:1fr auto}
+  .donnees td.vide{display:none}
+  .ret{grid-template-columns:1fr}
+  .zone{margin-left:0}
+  .rendre .etapes li{grid-template-columns:1fr}
+  .ch-fn{min-width:0}
+  .marque small{display:none}
+}
+/* ---------- Impression / PDF ---------- */
+@page{size:A4;margin:11mm 11mm 12mm}
+@media print{
+  html,body{background:#fff}
+  body{font-size:10pt;line-height:1.3;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .no-print,.barre,.cote,.pied,.toast,.modal-fond,.aide-pdf,.bascule,.cr{display:none!important}
+  .print-only{display:block}
+  .page{display:block;padding:0;max-width:none}
+  .feuille{box-shadow:none;border-radius:0;padding:0}
+  .carto{grid-template-columns:22mm 1fr 62mm;border-width:1.2pt;break-inside:avoid}
+  .carto-m h1{font-size:13pt}.carto-m p{font-size:9pt}
+  .carto-g b{font-size:15pt}.carto-g span{font-size:8.5pt}
+  .carto-d{padding:2mm 3mm;gap:1mm}
+  .ce{font-size:9pt}
+  .ce>span{width:13mm}
+  .encadre{padding:2mm 3mm;margin:2mm 0;break-inside:avoid}
+  .encadre h2{font-size:10pt}
+  .donnees{font-size:9pt}
+  .fig-ligne{grid-template-columns:62% 1fr;gap:3mm;break-inside:avoid}
+  .pouce p{font-size:8.5pt}
+  figcaption{font-size:8pt}
+  .bandeau{font-size:10.5pt;padding:1mm 3mm;margin:4mm 0 1.5mm;break-after:avoid}
+  .q{padding:0;margin:1.5mm 0;border:0;background:none;break-inside:avoid;display:grid;grid-template-columns:auto 1fr;gap:2mm;align-items:start}
+  .q-tete{margin:0}
+  .resu{flex-wrap:nowrap}
+  .resu .imp,.resu .imp.vide{min-width:9mm}
+  .resu .imp:first-of-type{flex:1}
+  .q-lab{background:none;color:var(--bleu);padding:0;font-size:10pt}
+  .rep3{font-size:9pt;margin:1.5mm 0 2mm;break-inside:auto}
+  .rep3 tr{break-inside:avoid}
+  .rep3 th{font-size:8pt;padding:1mm}
+  .rep3 td{padding:1mm 1.5mm}
+  .zone{margin:1mm 0 2mm 6mm}
+  .chaine{max-width:none}
+  .fig-chaine{break-inside:avoid}
+  .ch-bloc{padding:1.2mm 2mm;gap:1mm 4mm;border-width:1pt}
+  .ch-fn{font-size:8.5pt;min-width:25mm;padding:.5mm 2mm}
+  .ch-c{font-size:9pt}
+  .ch-champs{padding:1.2mm 0 2mm;gap:1mm 5mm}
+  .ch-g{padding:.5mm 2mm}
+  .ch-lien{grid-template-columns:10mm 1fr}
+  .ret-grille{gap:1mm 6mm}.ret{font-size:9pt;gap:2mm}
+  .plus-g{gap:4mm}
+  /* champs : on imprime le miroir (texte entier, sans ascenseur) */
+  .rep,.rep-e{display:none!important}
+  .imp{display:inline-block!important;min-width:18mm;min-height:4.6mm;border-bottom:.7pt dotted #555;white-space:pre-wrap;overflow-wrap:anywhere;color:#000;font-family:"Segoe Print","Comic Sans MS","Segoe UI",Arial,sans-serif;font-size:9.5pt;line-height:1.3;vertical-align:bottom}
+  .imp.bloc{display:block!important;width:100%;min-height:9mm}
+  .rep3 .imp.bloc{min-height:5mm}
+  .imp.vide{min-width:22mm}
+  .ce .imp{flex:1}
+  .version-imprimee{font-size:8.5pt}
+  .pied-imp{display:flex!important;justify-content:space-between;gap:6mm;margin-top:5mm;padding-top:1.5mm;border-top:.7pt solid #777;font-size:8pt;color:#333}
+  a{color:#000;text-decoration:none}
+}
+.imp{display:none}
+</style></head>
+<body>
+<header class="barre no-print">
+  <div class="barre-in">
+    <a class="marque" href="../index.html#s3/activites"><img src="../assets/img/logo_si_128.png" alt="">S.I<small> · TD Perceuse · 1re SI</small></a>
+    <a class="retour" href="../index.html#s3/activites">← Retour aux activités</a></span>
+    <nav class="actions" aria-label="Actions sur mon travail">
+      <button type="button" class="btn" id="btn-json">Enregistrer mon travail (.json)</button>
+      <button type="button" class="btn" id="btn-reprendre">Reprendre un travail</button>
+      <input type="file" id="fichier" accept=".json,application/json" hidden>
+      <button type="button" class="btn btn-jaune" data-action="pdf">Exporter en PDF</button>
+      <a class="btn" href="https://nuage07.apps.education.fr/index.php/s/tXLpRtew8nFFq7p" target="_blank" rel="noopener noreferrer">Déposer mon PDF</a>
+      <button type="button" class="btn btn-danger" id="btn-effacer">Tout effacer</button>
+    </nav>
+  </div>
+  <div class="barre-2"><div class="barre-in">
+    <span class="seg-lab">Version des questions :</span>
+    <span class="seg" id="seg-version" role="group" aria-label="Version de toutes les questions"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span>
+    <span class="prog-mini" aria-hidden="true"><span class="piste"><i></i></span><span class="prog-n">0 / 15</span></span>
+    <span class="etat" id="etat" role="status" aria-live="polite"></span>
+  </div></div>
+</header>
+<div class="page">
+<main class="feuille" id="contenu">
+
+<section class="carto" id="haut" aria-label="Cartouche">
+  <div class="carto-g"><b>1re SI</b><span>S3 · TD</span></div>
+  <div class="carto-m"><h1>Perceuse-visseuse : de la batterie au foret</h1><p>Puissance, rendement, vitesse, couple et pertes par effet Joule</p></div>
+  <div class="carto-d">
+    <label class="ce"><span>NOM</span><input type="text" id="e_nom" class="rep-e maj" data-eleve="nom" autocomplete="off" spellcheck="false" aria-label="Nom"></label>
+    <label class="ce"><span>Prénom</span><input type="text" id="e_prenom" class="rep-e" data-eleve="prenom" autocomplete="off" spellcheck="false" aria-label="Prénom"></label>
+    <div class="ce-ligne">
+      <label class="ce"><span>Classe</span><input type="text" id="e_classe" class="rep-e" data-eleve="classe" value="1SI" autocomplete="off" aria-label="Classe"></label>
+      <label class="ce"><span>Date</span><input type="date" id="e_date" class="rep-e" data-eleve="date" aria-label="Date"></label>
+    </div>
+  </div>
+</section>
+<p class="version-imprimee print-only">Version des questions : <b id="vlib">type bac</b></p>
+
+<section class="encadre" id="s0">
+  <h2>Situation</h2>
+  <p>Une perceuse-visseuse sans fil est alimentée par une batterie. On l'étudie à <b>puissance maximale</b>, en régime permanent : la gâchette commande un <b>variateur électronique</b> qui module l'énergie envoyée au moteur à courant continu ; celui-ci entraîne le mandrin par l'intermédiaire d'un <b>réducteur de vitesse</b> (figure 1). <i>Hypothèse : gâchette enfoncée à fond ; pertes du variateur et des fils négligées (rendement du variateur égal à 1).</i></p>
+  <p class="pb"><b>Problématique : quelle part de la puissance prélevée à la batterie arrive réellement au foret, et que devient le reste ?</b></p>
+  <div class="tab-wrap"><table class="donnees"><tr><td>Tension de la batterie</td><td>U = 24 V</td><td>Rapport de réduction (r = <span class='fr'><span>n<sub>f</sub></span><span>n<sub>m</sub></span></span>)</td><td>r = <span class='fr'><span>1</span><span>26</span></span></td></tr>
+  <tr><td>Courant absorbé par le moteur</td><td>I = 10 A</td><td>Rendement du moteur</td><td>η<sub>m</sub> = 0,89</td></tr>
+  <tr><td>Fréquence de rotation du moteur</td><td>n<sub>m</sub> = 2 670 tr/min</td><td>Rendement du réducteur</td><td>η<sub>r</sub> = 0,75</td></tr>
+  <tr><td>Résistance de l'induit du moteur</td><td>R = 0,20 Ω</td><td class="vide"></td><td class="vide"></td></tr></table></div>
+</section>
+<div class="fig-ligne"><figure class="fig-schema" id="fig1"><svg role='img' aria-label='Schéma de principe de la perceuse' class='svg-fig' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1100 292'>
+<defs>
+ <marker id='fl' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='8' markerHeight='8' orient='auto'><path d='M0 0 L10 5 L0 10 Z' fill='#13263F'/></marker>
+ <marker id='fp' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='7' markerHeight='7' orient='auto'><path d='M0 0 L10 5 L0 10 Z' fill='#56677A'/></marker>
+ <pattern id='hach' width='8' height='8' patternUnits='userSpaceOnUse' patternTransform='rotate(45)'><line x1='0' y1='0' x2='0' y2='8' stroke='#56677A' stroke-width='1.4'/></pattern>
+</defs>
+<rect width='1100' height='292' fill='white'/>
+<rect x='20' y='95' width='130' height='90' rx='8' fill='#EEF3F9' stroke='#1B4F8C' stroke-width='2.5'/>
+<line x1='60' y1='115' x2='60' y2='165' stroke='#13263F' stroke-width='3'/><line x1='75' y1='127' x2='75' y2='153' stroke='#13263F' stroke-width='6'/>
+<line x1='90' y1='115' x2='90' y2='165' stroke='#13263F' stroke-width='3'/><line x1='105' y1='127' x2='105' y2='153' stroke='#13263F' stroke-width='6'/>
+<text x='52' y='112' font-size='19' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>+</text>
+<text x='118' y='112' font-size='19' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>−</text>
+<text x='85' y='210' font-size='19' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Batterie</text>
+<text x='85' y='230' font-size='18' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>U = 24 V</text>
+<line x1='150' y1='115' x2='172' y2='115' stroke='#13263F' stroke-width='2.5'/><line x1='150' y1='165' x2='172' y2='165' stroke='#13263F' stroke-width='2.5'/>
+<rect x='172' y='95' width='90' height='90' rx='6' fill='#EEF3F9' stroke='#1B4F8C' stroke-width='2.5'/>
+<line x1='182' y1='175' x2='252' y2='105' stroke='#13263F' stroke-width='2'/>
+<text x='192' y='124' font-size='22' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>=</text>
+<text x='242' y='172' font-size='22' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>=</text>
+<text x='217' y='210' font-size='17' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Gâchette +</text>
+<text x='217' y='230' font-size='17' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>variateur</text>
+<text x='217' y='252' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>η ≈ 1</text>
+<polyline points='262,115 330,115' fill='none' stroke='#13263F' stroke-width='2.5' marker-end='url(#fl)'/>
+<polyline points='330,165 262,165' fill='none' stroke='#13263F' stroke-width='2.5'/>
+<text x='296' y='103' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>I = 10 A</text>
+<g transform='translate(100 0)'>
+<rect x='232' y='90' width='130' height='100' rx='6' fill='#EEF3F9' stroke='#1B4F8C' stroke-width='2.5'/>
+<circle cx='297' cy='140' r='30' fill='white' stroke='#13263F' stroke-width='2.5'/>
+<text x='297' y='147' font-size='22' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>M</text>
+<line x1='283' y1='158' x2='311' y2='158' stroke='#13263F' stroke-width='2'/>
+<text x='297' y='214' font-size='18' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Moteur à courant</text>
+<text x='297' y='235' font-size='18' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>continu</text>
+<text x='297' y='258' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>η = 0,89</text>
+<text x='297' y='280' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>R = 0,20 Ω</text>
+<line x1='362' y1='140' x2='430' y2='140' stroke='#13263F' stroke-width='5'/>
+<path d='M392 120 A 10 20 0 1 1 392 160' fill='none' stroke='#13263F' stroke-width='2' marker-end='url(#fl)'/>
+<text x='425' y='78' font-size='17' text-anchor='end' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>n<tspan baseline-shift='sub' font-size='70%'>m</tspan> = 2 670 tr/min</text>
+<rect x='430' y='28' width='210' height='207' rx='8' fill='white' stroke='#1B4F8C' stroke-width='2.5' stroke-dasharray='8 5'/>
+<line x1='430' y1='140' x2='490' y2='140' stroke='#13263F' stroke-width='4'/>
+<rect x='473.0' y='126' width='14' height='28' fill='#EEF3F9' stroke='#13263F' stroke-width='2'/>
+<line x1='470' y1='82' x2='600' y2='82' stroke='#13263F' stroke-width='4'/>
+<rect x='473.0' y='38' width='14' height='88' fill='#EEF3F9' stroke='#13263F' stroke-width='2'/>
+<rect x='563.0' y='68' width='14' height='28' fill='#EEF3F9' stroke='#13263F' stroke-width='2'/>
+<rect x='563.0' y='96' width='14' height='88' fill='#EEF3F9' stroke='#13263F' stroke-width='2'/>
+<line x1='560' y1='140' x2='690' y2='140' stroke='#13263F' stroke-width='5'/>
+<text x='535' y='258' font-size='18' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Réducteur</text>
+<text x='535' y='276' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>r = 1/26 ; η = 0,75</text>
+<path d='M650 120 A 10 20 0 1 1 650 160' fill='none' stroke='#13263F' stroke-width='2' marker-end='url(#fl)'/>
+<polygon points='690,112 760,124 760,156 690,168' fill='#EEF3F9' stroke='#1B4F8C' stroke-width='2.5'/>
+<text x='725' y='192' font-size='17' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Mandrin</text>
+<rect x='760' y='131' width='190' height='18' fill='url(#hach)' stroke='#13263F' stroke-width='2'/>
+<polygon points='950,131 975,140 950,149' fill='white' stroke='#13263F' stroke-width='2'/>
+<text x='865' y='180' font-size='18' text-anchor='middle' font-weight='bold' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>Foret</text>
+<text x='865' y='200' font-size='17' text-anchor='middle' font-weight='normal' font-style='normal' fill='#13263F' font-family='Liberation Sans, Arial, sans-serif'>n<tspan baseline-shift='sub' font-size='70%'>f</tspan> = ?</text>
+</g></svg><figcaption>Figure 1 – Schéma de principe : batterie, gâchette et variateur, moteur, réducteur, mandrin et foret.</figcaption></figure>
+  <section class="encadre pouce"><h2>Coups de pouce</h2>
+   <p><b>CP1</b> — 1 tour = 2π rad et 1 min = 60 s : pour passer de tr/min à rad/s, multiplier par 2π puis diviser par 60.</p>
+   <p><b>CP2</b> — Un rendement est toujours inférieur à 1 : la puissance de sortie d'un constituant est plus petite que celle d'entrée.</p>
+   <p><b>CP3</b> — Un réducteur réduit la vitesse : n<sub>f</sub> doit être bien plus petite que n<sub>m</sub>. Vérifier ensuite que P<sub>f</sub> = C<sub>f</sub> × ω<sub>f</sub>.</p>
+   <p>La Fiche Énergie de la séance 1 est autorisée.</p></section></div>
+<p class="methode"><b>Méthode :</b> chaque calcul se fait en 3 temps : <b>relation littérale → application numérique → résultat avec unité</b>. Calculatrice autorisée.</p>
+
+<h2 class="bandeau" id="s1">1 — Chaîne de puissance <span>SI-ANA-03 · SI-MOD-02</span></h2>
+<div class="q" id="q-Q1" data-qid="Q1" data-m="bac"><div class="q-tete"><span class="q-lab">Q1</span><span class="bascule no-print" role="group" aria-label="Version de la question Q1"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Compléter</b> la chaîne de puissance de la perceuse (figure 2) : <b>indiquer</b> le composant qui réalise chaque fonction (distribuer, convertir, transmettre), la nature de l'énergie et les grandeurs effort / flux sur chaque lien, puis les rendements.</div><div class="ref"><b>Complète</b> la figure 2 en 4 étapes :<ol><li>Dans chaque bloc vide, <b>écris</b> le <b>composant</b> : gâchette + variateur, moteur ou réducteur + mandrin (aide : figure 1).</li><li>Au-dessus de chaque flèche, <b>écris</b> le <b>type d'énergie</b> : électrique ou mécanique de rotation.</li><li>Sur chaque flèche, <b>écris</b> les <b>2 grandeurs</b> : énergie électrique → <b>U</b> (effort) et <b>I</b> (flux) ; rotation → <b>C</b> (couple, effort) et <b>ω</b> (vitesse, flux).</li><li>Dans chaque bloc, <b>recopie</b> le <b>rendement η</b> donné sur la figure 1.</li></ol></div></div></div>
+<figure class="fig-chaine"><div class="chaine" role="group" aria-label="Chaîne de puissance à compléter"><div class="ch-bloc fixe"><span class="ch-fn">ALIMENTER</span><span class="ch-fixe">Batterie</span></div><div class="ch-lien"><span class="ch-fleche" aria-hidden="true"></span><div class="ch-champs"><label class="ch-c ch-en"><span>énergie</span><input type="text" class="rep long" id="ch_lien1_energie" data-champ="ch_lien1_energie" data-q="Q1" aria-label="Nature de l'énergie sur le lien 1" autocomplete="off" spellcheck="false"></label><div class="ch-g"><label class="ch-c"><span>effort</span><input type="text" class="rep court" id="ch_lien1_effort" data-champ="ch_lien1_effort" data-q="Q1" aria-label="effort sur le lien 1" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien1_effort_valeur" data-champ="ch_lien1_effort_valeur" data-q="Q9g" aria-label="Valeur de effort sur le lien 1" autocomplete="off" spellcheck="false"></label></div><div class="ch-g"><label class="ch-c"><span>flux</span><input type="text" class="rep court" id="ch_lien1_flux" data-champ="ch_lien1_flux" data-q="Q1" aria-label="flux sur le lien 1" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien1_flux_valeur" data-champ="ch_lien1_flux_valeur" data-q="Q9g" aria-label="Valeur de flux sur le lien 1" autocomplete="off" spellcheck="false"></label></div></div></div><div class="ch-bloc"><span class="ch-fn">DISTRIBUER</span><label class="ch-c ch-comp"><span>composant</span><input type="text" class="rep long" id="ch_bloc1_composant" data-champ="ch_bloc1_composant" data-q="Q1" aria-label="Composant qui réalise la fonction DISTRIBUER" autocomplete="off" spellcheck="false"></label><label class="ch-c"><span>η =</span><input type="text" class="rep court" id="ch_bloc1_eta" data-champ="ch_bloc1_eta" data-q="Q1" aria-label="Rendement du bloc DISTRIBUER" autocomplete="off" spellcheck="false"></label></div><div class="ch-lien"><span class="ch-fleche" aria-hidden="true"></span><div class="ch-champs"><label class="ch-c ch-en"><span>énergie</span><input type="text" class="rep long" id="ch_lien2_energie" data-champ="ch_lien2_energie" data-q="Q1" aria-label="Nature de l'énergie sur le lien 2" autocomplete="off" spellcheck="false"></label><div class="ch-g"><label class="ch-c"><span>effort</span><input type="text" class="rep court" id="ch_lien2_effort" data-champ="ch_lien2_effort" data-q="Q1" aria-label="effort sur le lien 2" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien2_effort_valeur" data-champ="ch_lien2_effort_valeur" data-q="Q9g" aria-label="Valeur de effort sur le lien 2" autocomplete="off" spellcheck="false"></label></div><div class="ch-g"><label class="ch-c"><span>flux</span><input type="text" class="rep court" id="ch_lien2_flux" data-champ="ch_lien2_flux" data-q="Q1" aria-label="flux sur le lien 2" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien2_flux_valeur" data-champ="ch_lien2_flux_valeur" data-q="Q9g" aria-label="Valeur de flux sur le lien 2" autocomplete="off" spellcheck="false"></label></div></div></div><div class="ch-bloc"><span class="ch-fn">CONVERTIR</span><label class="ch-c ch-comp"><span>composant</span><input type="text" class="rep long" id="ch_bloc2_composant" data-champ="ch_bloc2_composant" data-q="Q1" aria-label="Composant qui réalise la fonction CONVERTIR" autocomplete="off" spellcheck="false"></label><label class="ch-c"><span>η =</span><input type="text" class="rep court" id="ch_bloc2_eta" data-champ="ch_bloc2_eta" data-q="Q1" aria-label="Rendement du bloc CONVERTIR" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>pertes <em>(Q9 g)</em></span><input type="text" inputmode="decimal" class="rep num court" id="ch_bloc2_pertes" data-champ="ch_bloc2_pertes" data-q="Q9g" aria-label="Pertes du bloc CONVERTIR" autocomplete="off" spellcheck="false"><span class="u">W</span></label></div><div class="ch-lien"><span class="ch-fleche" aria-hidden="true"></span><div class="ch-champs"><label class="ch-c ch-en"><span>énergie</span><input type="text" class="rep long" id="ch_lien3_energie" data-champ="ch_lien3_energie" data-q="Q1" aria-label="Nature de l'énergie sur le lien 3" autocomplete="off" spellcheck="false"></label><div class="ch-g"><label class="ch-c"><span>effort</span><input type="text" class="rep court" id="ch_lien3_effort" data-champ="ch_lien3_effort" data-q="Q1" aria-label="effort sur le lien 3" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien3_effort_valeur" data-champ="ch_lien3_effort_valeur" data-q="Q9g" aria-label="Valeur de effort sur le lien 3" autocomplete="off" spellcheck="false"></label></div><div class="ch-g"><label class="ch-c"><span>flux</span><input type="text" class="rep court" id="ch_lien3_flux" data-champ="ch_lien3_flux" data-q="Q1" aria-label="flux sur le lien 3" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien3_flux_valeur" data-champ="ch_lien3_flux_valeur" data-q="Q9g" aria-label="Valeur de flux sur le lien 3" autocomplete="off" spellcheck="false"></label></div></div></div><div class="ch-bloc"><span class="ch-fn">TRANSMETTRE</span><label class="ch-c ch-comp"><span>composant</span><input type="text" class="rep long" id="ch_bloc3_composant" data-champ="ch_bloc3_composant" data-q="Q1" aria-label="Composant qui réalise la fonction TRANSMETTRE" autocomplete="off" spellcheck="false"></label><label class="ch-c"><span>η =</span><input type="text" class="rep court" id="ch_bloc3_eta" data-champ="ch_bloc3_eta" data-q="Q1" aria-label="Rendement du bloc TRANSMETTRE" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>pertes <em>(Q9 g)</em></span><input type="text" inputmode="decimal" class="rep num court" id="ch_bloc3_pertes" data-champ="ch_bloc3_pertes" data-q="Q9g" aria-label="Pertes du bloc TRANSMETTRE" autocomplete="off" spellcheck="false"><span class="u">W</span></label></div><div class="ch-lien"><span class="ch-fleche" aria-hidden="true"></span><div class="ch-champs"><label class="ch-c ch-en"><span>énergie</span><input type="text" class="rep long" id="ch_lien4_energie" data-champ="ch_lien4_energie" data-q="Q1" aria-label="Nature de l'énergie sur le lien 4" autocomplete="off" spellcheck="false"></label><div class="ch-g"><label class="ch-c"><span>effort</span><input type="text" class="rep court" id="ch_lien4_effort" data-champ="ch_lien4_effort" data-q="Q1" aria-label="effort sur le lien 4" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien4_effort_valeur" data-champ="ch_lien4_effort_valeur" data-q="Q9g" aria-label="Valeur de effort sur le lien 4" autocomplete="off" spellcheck="false"></label></div><div class="ch-g"><label class="ch-c"><span>flux</span><input type="text" class="rep court" id="ch_lien4_flux" data-champ="ch_lien4_flux" data-q="Q1" aria-label="flux sur le lien 4" autocomplete="off" spellcheck="false"></label><label class="ch-c ch-q9g"><span>valeur <em>(Q9 g)</em></span><input type="text" class="rep moyen" id="ch_lien4_flux_valeur" data-champ="ch_lien4_flux_valeur" data-q="Q9g" aria-label="Valeur de flux sur le lien 4" autocomplete="off" spellcheck="false"></label></div></div></div><div class="ch-bloc fixe"><span class="ch-fn">AGIR</span><span class="ch-fixe">Foret</span></div></div><figcaption>Figure 2 – Chaîne de puissance, de la batterie (en haut) au foret (en bas) : sur chaque lien, l'effort et le flux. Les cases « valeur » et « pertes » servent à la question Q9 g.</figcaption></figure>
+
+<h2 class="bandeau" id="s2">2 — Puissances et rendement <span>SI-ANA-02</span></h2>
+<span class="cr no-print" title="Où réutiliser ce travail dans ton compte rendu (Labrio)">→ partie Résultats du compte rendu</span>
+<div class="q" id="q-Q2" data-qid="Q2" data-m="bac"><div class="q-tete"><span class="q-lab">Q2</span><span class="bascule no-print" role="group" aria-label="Version de la question Q2"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Calculer</b> la puissance électrique P<sub>abs</sub> absorbée par le moteur.</div><div class="ref">La batterie donne au moteur une tension U = 24 V et un courant I = 10 A. <b>Calcule</b> la puissance électrique avec <b>P<sub>abs</sub> = U × I</b>.</div></div></div><div class="q" id="q-Q3" data-qid="Q3" data-m="bac"><div class="q-tete"><span class="q-lab">Q3</span><span class="bascule no-print" role="group" aria-label="Version de la question Q3"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Déterminer</b> la puissance mécanique utile P<sub>um</sub> disponible sur l'arbre du moteur.</div><div class="ref">Le moteur ne transforme que 89 % de ce qu'il reçoit (η<sub>m</sub> = 0,89). <b>Calcule</b> <b>P<sub>um</sub> = η<sub>m</sub> × P<sub>abs</sub></b>.</div></div></div><div class="q" id="q-Q4" data-qid="Q4" data-m="bac"><div class="q-tete"><span class="q-lab">Q4</span><span class="bascule no-print" role="group" aria-label="Version de la question Q4"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>En déduire</b> la puissance mécanique P<sub>f</sub> disponible au niveau du foret.</div><div class="ref">Le réducteur garde 75 % de la puissance qu'il reçoit (η<sub>r</sub> = 0,75). <b>Calcule</b> <b>P<sub>f</sub> = η<sub>r</sub> × P<sub>um</sub></b>.</div></div></div><div class="q" id="q-Q5" data-qid="Q5" data-m="bac"><div class="q-tete"><span class="q-lab">Q5</span><span class="bascule no-print" role="group" aria-label="Version de la question Q5"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Calculer</b> le rendement global η<sub>g</sub> de la perceuse et <b>vérifier</b> qu'il est égal au produit des rendements des constituants. <b>Répondre</b> à la problématique.</div><div class="ref">Le rendement global compare ce qui arrive au foret à ce qui sort de la batterie : <b>η<sub>g</sub> = <span class='fr'><span>P<sub>f</sub></span><span>P<sub>abs</sub></span></span></b>. <b>Calcule-le</b>, puis <b>vérifie</b> que η<sub>m</sub> × η<sub>r</sub> donne le même nombre. <b>Écris</b> le résultat en %.</div></div></div>
+<div class="tab-wrap"><table class="rep3" aria-label="Tableau de réponses Q2 à Q5"><thead><tr><th>Q</th><th>Grandeur</th><th>Relation littérale</th><th>Application numérique</th><th>Résultat avec unité</th></tr></thead><tbody><tr><td class="c-q" data-l="Question">Q2</td><td class="c-g" data-l="Grandeur">Puissance absorbée par le moteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q2_relation" data-champ="Q2_relation" data-q="Q2" aria-label="Q2 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q2_application" data-champ="Q2_application" data-q="Q2" aria-label="Q2 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">P<sub>abs</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q2_valeur" data-champ="Q2_valeur" data-q="Q2" aria-label="Q2 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q2_unite" data-champ="Q2_unite" data-q="Q2" aria-label="Q2 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q3</td><td class="c-g" data-l="Grandeur">Puissance utile du moteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q3_relation" data-champ="Q3_relation" data-q="Q3" aria-label="Q3 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q3_application" data-champ="Q3_application" data-q="Q3" aria-label="Q3 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">P<sub>um</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q3_valeur" data-champ="Q3_valeur" data-q="Q3" aria-label="Q3 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q3_unite" data-champ="Q3_unite" data-q="Q3" aria-label="Q3 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q4</td><td class="c-g" data-l="Grandeur">Puissance au foret</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q4_relation" data-champ="Q4_relation" data-q="Q4" aria-label="Q4 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q4_application" data-champ="Q4_application" data-q="Q4" aria-label="Q4 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">P<sub>f</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q4_valeur" data-champ="Q4_valeur" data-q="Q4" aria-label="Q4 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q4_unite" data-champ="Q4_unite" data-q="Q4" aria-label="Q4 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q5</td><td class="c-g" data-l="Grandeur">Rendement global</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q5_relation" data-champ="Q5_relation" data-q="Q5" aria-label="Q5 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q5_application" data-champ="Q5_application" data-q="Q5" aria-label="Q5 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">η<sub>g</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q5_valeur" data-champ="Q5_valeur" data-q="Q5" aria-label="Q5 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q5_unite" data-champ="Q5_unite" data-q="Q5" aria-label="Q5 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr></tbody></table></div>
+<div class="zone" id="q5-pb"><label class="zone-lab" for="Q5_problematique"><b>Q5</b> — Réponse à la problématique</label><span class="cr no-print" title="Où réutiliser ce travail dans ton compte rendu (Labrio)">→ partie Conclusion du compte rendu</span><textarea class="rep auto " rows="2" id="Q5_problematique" data-champ="Q5_problematique" data-q="Q5" aria-label="Q5 réponse à la problématique" autocomplete="off" spellcheck="false" placeholder="Quelle part de la puissance arrive au foret ?"></textarea></div>
+
+<h2 class="bandeau" id="s3">3 — Vitesses et couple <span>SI-MOD-02 · SI-ANA-02</span></h2>
+<span class="cr no-print" title="Où réutiliser ce travail dans ton compte rendu (Labrio)">→ partie Résultats du compte rendu</span>
+<div class="q" id="q-Q6" data-qid="Q6" data-m="bac"><div class="q-tete"><span class="q-lab">Q6</span><span class="bascule no-print" role="group" aria-label="Version de la question Q6"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Déterminer</b> la fréquence de rotation n<sub>f</sub> du foret, en tr/min.</div><div class="ref">Le réducteur fait tourner le foret <b>26 fois moins vite</b> que le moteur (r = <span class='fr'><span>1</span><span>26</span></span>). <b>Calcule</b> <b>n<sub>f</sub> = <span class='fr'><span>n<sub>m</sub></span><span>26</span></span></b>.</div></div></div><div class="q" id="q-Q7" data-qid="Q7" data-m="bac"><div class="q-tete"><span class="q-lab">Q7</span><span class="bascule no-print" role="group" aria-label="Version de la question Q7"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Exprimer</b> puis <b>calculer</b> les vitesses angulaires ω<sub>m</sub> du moteur et ω<sub>f</sub> du foret, en rad/s.</div><div class="ref">Pour calculer un couple, la vitesse doit être en <b>rad/s</b>. 1 tour = 2π rad et 1 min = 60 s, donc <b>ω = <span class='fr'><span>2π × n</span><span>60</span></span></b>. <b>Calcule</b> : a) ω<sub>m</sub> avec n<sub>m</sub> ; b) ω<sub>f</sub> avec n<sub>f</sub> (résultat de Q6).</div></div></div><div class="q" id="q-Q8" data-qid="Q8" data-m="bac"><div class="q-tete"><span class="q-lab">Q8</span><span class="bascule no-print" role="group" aria-label="Version de la question Q8"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>En déduire</b> le couple C<sub>f</sub> disponible sur le foret.</div><div class="ref">En rotation, <b>P = C × ω</b>, donc <b>C = <span class='fr'><span>P</span><span>ω</span></span></b>. <b>Calcule</b> le couple du foret : <b>C<sub>f</sub> = <span class='fr'><span>P<sub>f</sub></span><span>ω<sub>f</sub></span></span></b> (unité : N·m).</div></div></div>
+<div class="tab-wrap"><table class="rep3" aria-label="Tableau de réponses Q6 à Q8"><thead><tr><th>Q</th><th>Grandeur</th><th>Relation littérale</th><th>Application numérique</th><th>Résultat avec unité</th></tr></thead><tbody><tr><td class="c-q" data-l="Question">Q6</td><td class="c-g" data-l="Grandeur">Fréquence de rotation du foret</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q6_relation" data-champ="Q6_relation" data-q="Q6" aria-label="Q6 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q6_application" data-champ="Q6_application" data-q="Q6" aria-label="Q6 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">n<sub>f</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q6_valeur" data-champ="Q6_valeur" data-q="Q6" aria-label="Q6 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q6_unite" data-champ="Q6_unite" data-q="Q6" aria-label="Q6 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q7 a</td><td class="c-g" data-l="Grandeur">Vitesse angulaire du moteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q7a_relation" data-champ="Q7a_relation" data-q="Q7" aria-label="Q7 a relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q7a_application" data-champ="Q7a_application" data-q="Q7" aria-label="Q7 a application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">ω<sub>m</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q7a_valeur" data-champ="Q7a_valeur" data-q="Q7" aria-label="Q7 a résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q7a_unite" data-champ="Q7a_unite" data-q="Q7" aria-label="Q7 a unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q7 b</td><td class="c-g" data-l="Grandeur">Vitesse angulaire du foret</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q7b_relation" data-champ="Q7b_relation" data-q="Q7" aria-label="Q7 b relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q7b_application" data-champ="Q7b_application" data-q="Q7" aria-label="Q7 b application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">ω<sub>f</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q7b_valeur" data-champ="Q7b_valeur" data-q="Q7" aria-label="Q7 b résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q7b_unite" data-champ="Q7b_unite" data-q="Q7" aria-label="Q7 b unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">Q8</td><td class="c-g" data-l="Grandeur">Couple sur le foret</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q8_relation" data-champ="Q8_relation" data-q="Q8" aria-label="Q8 relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q8_application" data-champ="Q8_application" data-q="Q8" aria-label="Q8 application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">C<sub>f</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q8_valeur" data-champ="Q8_valeur" data-q="Q8" aria-label="Q8 résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q8_unite" data-champ="Q8_unite" data-q="Q8" aria-label="Q8 unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr></tbody></table></div>
+
+<h2 class="bandeau" id="s4">4 — Bilan des pertes et effet Joule <span>SI-ANA-02 · SI-MOD-13</span></h2>
+<span class="cr no-print" title="Où réutiliser ce travail dans ton compte rendu (Labrio)">→ partie Exploitation / analyse du compte rendu</span>
+<div class="q" id="q-Q9" data-qid="Q9" data-m="bac"><div class="q-tete"><span class="q-lab">Q9</span><span class="bascule no-print" role="group" aria-label="Version de la question Q9"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Établir</b> le bilan des pertes de la perceuse. L'induit du moteur, de résistance R, est le siège de pertes par effet Joule P<sub>J</sub> = R × I<sup>2</sup> ; les autres pertes du moteur sont dues aux frottements et au circuit magnétique. <b>Compléter</b> le tableau ci-dessous (a à d).</div><div class="ref">Une <b>perte = puissance qui entre − puissance qui sort</b>. <b>Remplis</b> le tableau ligne par ligne : a) pertes du moteur ; b) pertes du réducteur ; c) le courant chauffe le fil du moteur (R = 0,20 Ω) : <b>P<sub>J</sub> = R × I<sup>2</sup></b>, attention : I au carré ; d) le reste des pertes du moteur = a − c.</div></div></div>
+<div class="tab-wrap"><table class="rep3" aria-label="Tableau de réponses Q9 a à d"><thead><tr><th>Q</th><th>Grandeur</th><th>Relation littérale</th><th>Application numérique</th><th>Résultat avec unité</th></tr></thead><tbody><tr><td class="c-q" data-l="Question">a</td><td class="c-g" data-l="Grandeur">Pertes dans le moteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q9a_relation" data-champ="Q9a_relation" data-q="Q9" aria-label="a relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q9a_application" data-champ="Q9a_application" data-q="Q9" aria-label="a application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">p<sub>m</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q9a_valeur" data-champ="Q9a_valeur" data-q="Q9" aria-label="a résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q9a_unite" data-champ="Q9a_unite" data-q="Q9" aria-label="a unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">b</td><td class="c-g" data-l="Grandeur">Pertes dans le réducteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q9b_relation" data-champ="Q9b_relation" data-q="Q9" aria-label="b relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q9b_application" data-champ="Q9b_application" data-q="Q9" aria-label="b application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">p<sub>r</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q9b_valeur" data-champ="Q9b_valeur" data-q="Q9" aria-label="b résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q9b_unite" data-champ="Q9b_unite" data-q="Q9" aria-label="b unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">c</td><td class="c-g" data-l="Grandeur">Pertes par effet Joule dans l'induit</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q9c_relation" data-champ="Q9c_relation" data-q="Q9" aria-label="c relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q9c_application" data-champ="Q9c_application" data-q="Q9" aria-label="c application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">P<sub>J</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q9c_valeur" data-champ="Q9c_valeur" data-q="Q9" aria-label="c résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q9c_unite" data-champ="Q9c_unite" data-q="Q9" aria-label="c unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr><tr><td class="c-q" data-l="Question">d</td><td class="c-g" data-l="Grandeur">Autres pertes du moteur</td><td data-l="Relation littérale"><textarea class="rep auto cel" rows="1" id="Q9d_relation" data-champ="Q9d_relation" data-q="Q9" aria-label="d relation littérale" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Application numérique"><textarea class="rep auto cel" rows="1" id="Q9d_application" data-champ="Q9d_application" data-q="Q9" aria-label="d application numérique" autocomplete="off" spellcheck="false"></textarea></td><td data-l="Résultat avec unité"><span class="resu"><span class="sym">p<sub>autres</sub> =</span><input type="text" inputmode="decimal" class="rep num val" id="Q9d_valeur" data-champ="Q9d_valeur" data-q="Q9" aria-label="d résultat (nombre)" autocomplete="off" spellcheck="false" placeholder="nombre"><input type="text" class="rep uni" id="Q9d_unite" data-champ="Q9d_unite" data-q="Q9" aria-label="d unité" autocomplete="off" spellcheck="false" placeholder="unité" list="unites"></span></td></tr></tbody></table></div>
+<div class="q" id="q-Q9e" data-qid="Q9e" data-m="bac"><div class="q-tete"><span class="q-lab">e)</span><span class="bascule no-print" role="group" aria-label="Version de la question Q9 e)"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Vérifier</b> la conservation de la puissance (P<sub>f</sub> + p<sub>m</sub> + p<sub>r</sub> = P<sub>abs</sub>). <b>Identifier</b> le constituant le plus dissipatif.</div><div class="ref"><b>Additionne</b> P<sub>f</sub> + p<sub>m</sub> + p<sub>r</sub> : tu dois retrouver P<sub>abs</sub> = 240 W. Quel composant perd le plus de puissance : le moteur ou le réducteur ?</div></div></div><div class="zone"><textarea class="rep auto " rows="3" id="Q9e_reponse" data-champ="Q9e_reponse" data-q="Q9e" aria-label="Q9 e) réponse" autocomplete="off" spellcheck="false" placeholder="Ta réponse rédigée…"></textarea></div>
+<div class="q" id="q-Q9f" data-qid="Q9f" data-m="bac"><div class="q-tete"><span class="q-lab">f)</span><span class="bascule no-print" role="group" aria-label="Version de la question Q9 f)"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac">Sous quelle forme l'énergie perdue est-elle dissipée ? <b>Indiquer</b> deux conséquences pour l'utilisateur.</div><div class="ref">L'énergie perdue devient de la <b>chaleur</b>. Qu'est-ce que cela change pour la perceuse et pour la batterie ? <b>Donne</b> 2 conséquences.</div></div></div><span class="cr no-print" title="Où réutiliser ce travail dans ton compte rendu (Labrio)">→ partie Conclusion du compte rendu</span><div class="zone"><textarea class="rep auto " rows="3" id="Q9f_reponse" data-champ="Q9f_reponse" data-q="Q9f" aria-label="Q9 f) réponse" autocomplete="off" spellcheck="false" placeholder="Ta réponse rédigée…"></textarea></div>
+<div class="q" id="q-Q9g" data-qid="Q9g" data-m="bac"><div class="q-tete"><span class="q-lab">g)</span><span class="bascule no-print" role="group" aria-label="Version de la question Q9 g)"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Reporter</b> les valeurs numériques et les pertes sur la chaîne de puissance (figure 2).</div><div class="ref"><b>Écris</b> sur la figure 2 : les valeurs de U, I, C et ω, puis les pertes du moteur et du réducteur.</div></div></div><p class="renvoi no-print">→ Complète les cases <b>valeur</b> et <b>pertes</b> de la <a href="#s1">figure 2</a>.</p>
+
+<section class="encadre retenir" id="s5"><h2>À retenir</h2><p class="aide-ret no-print">Écris la relation correspondante.</p><div class="ret-grille"><label class="ret">Puissance électrique :<input type="text" class="rep ret-c" id="retenir_0" data-champ="retenir_0" data-q="RET" aria-label="À retenir : Puissance électrique" autocomplete="off" spellcheck="false"></label><label class="ret">Puissance mécanique de rotation :<input type="text" class="rep ret-c" id="retenir_1" data-champ="retenir_1" data-q="RET" aria-label="À retenir : Puissance mécanique de rotation" autocomplete="off" spellcheck="false"></label><label class="ret">Rendement :<input type="text" class="rep ret-c" id="retenir_2" data-champ="retenir_2" data-q="RET" aria-label="À retenir : Rendement" autocomplete="off" spellcheck="false"></label><label class="ret">Rendement global d'une chaîne :<input type="text" class="rep ret-c" id="retenir_3" data-champ="retenir_3" data-q="RET" aria-label="À retenir : Rendement global d'une chaîne" autocomplete="off" spellcheck="false"></label><label class="ret">Pertes :<input type="text" class="rep ret-c" id="retenir_4" data-champ="retenir_4" data-q="RET" aria-label="À retenir : Pertes" autocomplete="off" spellcheck="false"></label><label class="ret">Pertes par effet Joule :<input type="text" class="rep ret-c" id="retenir_5" data-champ="retenir_5" data-q="RET" aria-label="À retenir : Pertes par effet Joule" autocomplete="off" spellcheck="false"></label><label class="ret">De tr/min en rad/s :<input type="text" class="rep ret-c" id="retenir_6" data-champ="retenir_6" data-q="RET" aria-label="À retenir : De tr/min en rad/s" autocomplete="off" spellcheck="false"></label><label class="ret">Réducteur de rapport r :<input type="text" class="rep ret-c" id="retenir_7" data-champ="retenir_7" data-q="RET" aria-label="À retenir : Réducteur de rapport r" autocomplete="off" spellcheck="false"></label></div></section>
+
+<section class="encadre plus" id="s6"><h2>Pour aller plus loin</h2><div class="plus-g"><div><div class="q" id="q-Q10a" data-qid="Q10a" data-m="bac"><div class="q-tete"><span class="q-lab">Q10 a)</span><span class="bascule no-print" role="group" aria-label="Version de la question Q10 a)"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac"><b>Calculer</b> le couple utile C<sub>m</sub> du moteur.</div><div class="ref">Couple du moteur : <b>C<sub>m</sub> = <span class='fr'><span>P<sub>um</sub></span><span>ω<sub>m</sub></span></span></b>.</div></div></div><div class="zone"><textarea class="rep auto " rows="2" id="Q10a_reponse" data-champ="Q10a_reponse" data-q="Q10a" aria-label="Q10 a) réponse" autocomplete="off" spellcheck="false" placeholder="Ta réponse rédigée…"></textarea></div></div><div><div class="q" id="q-Q10b" data-qid="Q10b" data-m="bac"><div class="q-tete"><span class="q-lab">Q10 b)</span><span class="bascule no-print" role="group" aria-label="Version de la question Q10 b)"><button type="button" data-v="bac" aria-pressed="true">Type bac</button><button type="button" data-v="ref" aria-pressed="false">Reformulée</button></span></div><div class="q-texte"><div class="bac">Le réducteur divise la vitesse par 26. <b>Déterminer</b> le facteur de multiplication du couple et <b>justifier</b> qu'il diffère de 26.</div><div class="ref"><b>Calcule</b> <span class='fr'><span>C<sub>f</sub></span><span>C<sub>m</sub></span></span>. Trouves-tu 26 ? <b>Explique</b> pourquoi (pense aux pertes du réducteur).</div></div></div><div class="zone"><textarea class="rep auto " rows="2" id="Q10b_reponse" data-champ="Q10b_reponse" data-q="Q10b" aria-label="Q10 b) réponse" autocomplete="off" spellcheck="false" placeholder="Ta réponse rédigée…"></textarea></div></div></div></section>
+
+<section class="encadre rendre no-print" id="s7"><h2>Rendre mon travail</h2><ol class="etapes"><li><button type="button" class="btn btn-jaune" data-action="pdf">1 · Enregistrer en PDF</button><span>Dans la fenêtre d'impression, choisis <b>« Enregistrer au format PDF »</b> comme destination.</span></li><li><a class="btn btn-bleu" href="https://nuage07.apps.education.fr/index.php/s/tXLpRtew8nFFq7p" target="_blank" rel="noopener noreferrer">2 · Déposer mon PDF sur le Nuage</a><span>Dépose le fichier PDF dans le dossier des 1SI.</span></li></ol>
+<p class="petit">Garde aussi une copie modifiable : bouton <b>Enregistrer mon travail (.json)</b> (pour reprendre plus tard avec <b>Reprendre un travail</b>).</p></section>
+
+<footer class="pied-imp print-only"><span>Dépôt des 1SI : https://nuage07.apps.education.fr/index.php/s/tXLpRtew8nFFq7p</span><span>S.I — Sciences de l'Ingénieur · TD_Perceuse</span></footer>
+
+</main>
+<aside class="cote no-print" aria-label="Sommaire et progression">
+  <div class="boite"><h2>Progression</h2>
+    <div class="prog" id="prog-barre" role="progressbar" aria-label="Questions remplies" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0"><i></i></div>
+    <p class="prog-txt"><b class="prog-n">0 / 15</b> questions remplies</p>
+    <p class="legende"><span class="pt" style="display:inline-block"></span> à faire · <span class="pt" style="display:inline-block;background:linear-gradient(90deg,#56677A 50%,#fff 50%)"></span> en cours · <span class="pt" style="display:inline-block;background:#2E7D32;border-color:#2E7D32"></span> remplie</p>
+  </div>
+  <details class="boite som-det" id="som-det" open><summary><h2>Sommaire</h2></summary><nav aria-label="Sommaire"><ul class="som"><li><a href="#s0">Situation et données</a></li><li><a href="#s1">1 — Chaîne de puissance</a><ul class="som-q"><li><a href="#q-Q1" data-etat-q="Q1"><span class="pt" aria-hidden="true"></span>Q1</a></li></ul></li><li><a href="#s2">2 — Puissances et rendement</a><ul class="som-q"><li><a href="#q-Q2" data-etat-q="Q2"><span class="pt" aria-hidden="true"></span>Q2</a></li><li><a href="#q-Q3" data-etat-q="Q3"><span class="pt" aria-hidden="true"></span>Q3</a></li><li><a href="#q-Q4" data-etat-q="Q4"><span class="pt" aria-hidden="true"></span>Q4</a></li><li><a href="#q-Q5" data-etat-q="Q5"><span class="pt" aria-hidden="true"></span>Q5</a></li></ul></li><li><a href="#s3">3 — Vitesses et couple</a><ul class="som-q"><li><a href="#q-Q6" data-etat-q="Q6"><span class="pt" aria-hidden="true"></span>Q6</a></li><li><a href="#q-Q7" data-etat-q="Q7"><span class="pt" aria-hidden="true"></span>Q7</a></li><li><a href="#q-Q8" data-etat-q="Q8"><span class="pt" aria-hidden="true"></span>Q8</a></li></ul></li><li><a href="#s4">4 — Bilan des pertes</a><ul class="som-q"><li><a href="#q-Q9" data-etat-q="Q9"><span class="pt" aria-hidden="true"></span>Q9 a–d</a></li><li><a href="#q-Q9e" data-etat-q="Q9e"><span class="pt" aria-hidden="true"></span>Q9 e)</a></li><li><a href="#q-Q9f" data-etat-q="Q9f"><span class="pt" aria-hidden="true"></span>Q9 f)</a></li><li><a href="#q-Q9g" data-etat-q="Q9g"><span class="pt" aria-hidden="true"></span>Q9 g)</a></li></ul></li><li><a href="#s5">À retenir</a><ul class="som-q"></ul></li><li><a href="#s6">Pour aller plus loin</a><ul class="som-q"><li><a href="#q-Q10a" data-etat-q="Q10a"><span class="pt" aria-hidden="true"></span>Q10 a)</a></li><li><a href="#q-Q10b" data-etat-q="Q10b"><span class="pt" aria-hidden="true"></span>Q10 b)</a></li></ul></li><li><a href="#s7">Rendre mon travail</a></li></ul></nav></details>
+  <div class="boite b-rendre"><h2>Rendre mon travail</h2><ol class="etapes"><li><button type="button" class="btn btn-jaune" data-action="pdf">1 · Enregistrer en PDF</button><span>Dans la fenêtre d'impression, choisis <b>« Enregistrer au format PDF »</b> comme destination.</span></li><li><a class="btn btn-bleu" href="https://nuage07.apps.education.fr/index.php/s/tXLpRtew8nFFq7p" target="_blank" rel="noopener noreferrer">2 · Déposer mon PDF sur le Nuage</a><span>Dépose le fichier PDF dans le dossier des 1SI.</span></li></ol></div>
+</aside>
+</div>
+<p class="pied no-print">S.I — Sciences de l'Ingénieur · tes réponses restent dans ce navigateur : rien n'est envoyé sur internet. <a href="../mentions.html">Mentions légales</a></p>
+
+<div class="modal-fond" id="boite-effacer" role="dialog" aria-modal="true" aria-labelledby="eff-titre" hidden>
+  <div class="modal"><h2 id="eff-titre">Tout effacer ?</h2><p>Toutes tes réponses, ton nom et tes choix de version seront supprimés de ce navigateur. Un fichier .json déjà enregistré n'est pas touché.</p>
+  <div class="modal-actions"><button type="button" class="b2" id="eff-non" data-defaut>Annuler</button><button type="button" class="b2 rouge" id="eff-oui">Oui, tout effacer</button></div></div>
+</div>
+<div class="aide-pdf" id="boite-pdf" role="dialog" aria-modal="true" aria-labelledby="pdf-titre" hidden>
+  <div class="modal" style="border-top-color:var(--jaune)"><h2 id="pdf-titre">Enregistrer en PDF</h2>
+  <p>Dans la fenêtre qui va s'ouvrir :</p>
+  <ol style="margin:0 0 14px;padding-left:20px"><li>Destination : choisis <b>« Enregistrer au format PDF »</b> (pas une imprimante).</li><li>Dans « Plus de paramètres », décoche <b>En-têtes et pieds de page</b>.</li><li>Clique sur <b>Enregistrer</b> : le nom proposé est <b id="pdf-nom">NOM_Prenom_TD_Perceuse</b>.</li></ol>
+  <p>Ensuite : <b>Déposer mon PDF</b> sur le Nuage.</p>
+  <div class="modal-actions"><button type="button" class="b2" id="pdf-non">Annuler</button><button type="button" class="b2" id="pdf-oui" data-defaut style="background:var(--jaune);border-color:var(--jaune)">Ouvrir la fenêtre d'impression</button></div></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<datalist id="unites"><option value="W"><option value="kW"><option value="V"><option value="A"><option value="Ω"><option value="%"><option value="tr/min"><option value="rad/s"><option value="N·m"><option value="sans unité"></datalist>
+<script src="../data/config.js"></script>
+<script src="../js/td_perceuse.js"></script>
+</body></html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="description" content="Outil pour nommer correctement un document à rendre : NOM_Prenom_Activite.pdf.">
+<meta name="color-scheme" content="dark">
+<title>Renommer son document — S.I</title>
+<link rel="icon" href="../assets/img/favicon.png">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<header class="entete"><div class="wrap bar">
+  <a class="marque" href="../index.html" aria-label="Accueil"><img class="logo" src="../assets/img/logo_si_128.png" alt="" width="40" height="40">
+    <span><b>S.I — Sciences de l'Ingénieur</b><span>Première · 2026-2027</span></span></a>
+  <nav class="navp" aria-label="Navigation principale"><a href="../index.html#ressources">Ressources</a><a href="../index.html#sequences">Séquences</a><a class="on" href="../index.html#outils">Outils</a></nav>
+</div></header>
+
+<main class="page-simple" id="contenu">
+  <p class="fil"><a href="../index.html">Accueil</a> › <a href="../index.html#outils">Outils</a> › Renommer son document</p>
+  <h1>Renommer son document</h1>
+  <p>Un document rendu doit s'appeler <b>NOM_Prenom_Activite.pdf</b> : ton nom en majuscules, ton prénom, le nom de l'activité, séparés par des tirets bas, <b>sans accent ni espace</b>. Tape tes informations : le nom de fichier à utiliser s'affiche.</p>
+
+  <form class="form" id="f" autocomplete="off">
+    <label>Nom <input type="text" id="nom" placeholder="ex. PAYET" maxlength="40"></label>
+    <label>Prénom <input type="text" id="prenom" placeholder="ex. Léa" maxlength="40"></label>
+    <label>Activité <input type="text" id="activite" list="activites" placeholder="ex. TD_Perceuse" maxlength="60">
+      <datalist id="activites"></datalist></label>
+    <label>Type de fichier <select id="ext"><option value="pdf">pdf (document exporté)</option><option value="json">json (travail en cours)</option><option value="ods">ods (classeur LibreOffice)</option><option value="xlsx">xlsx (classeur Excel)</option><option value="png">png (capture)</option></select></label>
+  </form>
+  <div class="resultat" aria-live="polite"><code id="res">NOM_Prenom_Activite.pdf</code><button type="button" class="btn jaune" id="copier">Copier</button></div>
+  <p class="note" id="msg"></p>
+
+  <h2>Renommer un fichier sous Windows</h2>
+  <ol class="etapes">
+    <li>Ouvre l'<b>Explorateur de fichiers</b> et va dans le dossier <b>Téléchargements</b> (ou là où tu as enregistré ton fichier).</li>
+    <li>Clique une fois sur le fichier pour le sélectionner, puis appuie sur la touche <b>F2</b> (ou clic droit › <b>Renommer</b>).</li>
+    <li>Colle le nom copié ci-dessus (<b>Ctrl + V</b>). Ne touche pas à l'extension (<b>.pdf</b>) si elle est affichée.</li>
+    <li>Valide avec <b>Entrée</b>, puis dépose le fichier sur le <a href="#" id="lien-nuage">Nuage de la classe</a>.</li>
+  </ol>
+  <p class="note">Sur Mac : sélectionne le fichier, appuie sur <b>Entrée</b> pour renommer. Dans les activités en ligne de ce site, le nom correct est proposé automatiquement au moment de l'export PDF.</p>
+</main>
+
+<footer class="pied"><div class="wrap">
+  <span>© 2026 Henri Turpin · Lycée Jean-Claude Fruteau</span>
+  <span><a href="../mentions.html">Mentions légales</a> · <a href="../mentions.html#credits">Crédits</a></span>
+</div></footer>
+<script src="../data/config.js"></script>
+<script src="../data/sequences.js"></script>
+<script src="../js/renommer.js"></script>
+</body>
+</html>
