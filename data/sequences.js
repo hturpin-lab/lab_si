@@ -14,7 +14,6 @@ window.SI_SEQUENCES = [
     debut: "2026-08-20", fin: "2026-09-10", etat: "fait", competences: ["SI-ANA-01", "SI-ANA-03"],
     cours: [
       { id: "s1_cours", titre: "Cours — Analyse fonctionnelle et SysML", sous: "Cas d'utilisation, exigences, blocs (BDD / IBD), séquence, états : les diagrammes à connaître", pdf: "docs/S1_Cours_Analyse_fonctionnelle_SysML.pdf", drive: "" },
-      { id: "s1_competences", titre: "Grille des compétences évaluées — S1", sous: "Critères d'évaluation et niveaux 0 · 1/3 · 2/3 · 3/3", pdf: "docs/S1_Competences_Evaluees.pdf", drive: "" }
     ],
     seances: [
       { n: 1, date: "2026-08-20", titre: "Lire les diagrammes SysML d'un système", activites: [

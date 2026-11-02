@@ -38,7 +38,7 @@ a{color:var(--bleu)}
 .btn-bleu{background:var(--bleu);border-color:var(--bleu);color:#fff}
 .btn-bleu:hover{background:var(--fonce)}
 .btn-danger{border-color:rgba(255,255,255,.35)}
-.barre-2{background:#013c85;border-top:1px solid rgba(32,120,235,.45)}
+.barre-2{background:#043572;border-top:1px solid rgba(32,120,235,.45)}
 .barre-2 .barre-in{padding:6px 16px;gap:6px 14px}
 .seg{display:inline-flex;border:1px solid rgba(255,255,255,.4);border-radius:8px;overflow:hidden}
 .seg button{font:600 13px/1.2 inherit;font-family:inherit;background:transparent;color:#fff;border:0;padding:6px 12px;cursor:pointer}

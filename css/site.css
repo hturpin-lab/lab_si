@@ -15,10 +15,10 @@
 :root{
   --bg:#083679;          /* fond : bleu profond (palette Florence, 2/11) */
   --bg2:#0b3f85;
-  --panel:#013c85;       /* panneaux, cartes, barres des tuiles */
+  --panel:#043572;       /* panneaux, cartes, barres des tuiles */
   --panel2:#0a478f;
   --vif:#2078eb;         /* bleu vif : remplissages, anneaux, progression, bordures */
-  --line:rgba(32,120,235,.22);   /* lignes de plan (bleu vif à faible opacité) */
+  --line:rgb(32 120 235 / 71%);   /* lignes de plan (bleu vif à faible opacité) */
   --line2:rgba(32,120,235,.45);
   --ink:#f2f6fb;         /* blanc cassé */
   --muted:#b4c4da;       /* gris-bleu clair : 5,9:1 sur --panel */
