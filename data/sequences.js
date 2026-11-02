@@ -12,10 +12,67 @@
 window.SI_SEQUENCES = [
   { id: "s1", num: "S1", court: "Analyse fonctionnelle", titre: "Analyser le besoin et l'organisation d'un produit",
     debut: "2026-08-20", fin: "2026-09-10", etat: "fait", competences: ["SI-ANA-01", "SI-ANA-03"],
-    cours: [], seances: [], evaluations: [] },
+    cours: [
+      { id: "s1_cours", titre: "Cours — Analyse fonctionnelle et SysML", sous: "Cas d'utilisation, exigences, blocs (BDD / IBD), séquence, états : les diagrammes à connaître", pdf: "docs/S1_Cours_Analyse_fonctionnelle_SysML.pdf", drive: "" },
+      { id: "s1_competences", titre: "Grille des compétences évaluées — S1", sous: "Critères d'évaluation et niveaux 0 · 1/3 · 2/3 · 3/3", pdf: "docs/S1_Competences_Evaluees.pdf", drive: "" }
+    ],
+    seances: [
+      { n: 1, date: "2026-08-20", titre: "Lire les diagrammes SysML d'un système", activites: [
+        { id: "td1_vae_sysml", titre: "TD 1 — Vélo à assistance électrique (SysML)", sous: "Cas d'utilisation, exigences, BDD, IBD, chaîne d'énergie et d'information", duree: "", ligne: "activites/td1_vae_sysml.html", pdf: "docs/S1_TD1_VAE_SysML.pdf", drive: "" }
+      ] },
+      { n: 2, date: "2026-08-25", titre: "Modèle SysML d'un portail automatisé", activites: [
+        { id: "td_sysml_portail", titre: "TD — SysML du portail automatisé Avidsen", sous: "Lire un modèle SysML complet : contexte, cas d'utilisation, exigences, blocs", duree: "", ligne: "activites/td_sysml_portail.html", pdf: "docs/S1_TD_SysML_Portail.pdf", drive: "" }
+      ] },
+      { n: 3, date: "2026-08-27", titre: "Analyse fonctionnelle de systèmes du laboratoire (1)", activites: [
+        { id: "act_af_barriere", titre: "Activité — Barrière SYMPACT", sous: "Cas d'utilisation, source d'énergie, chaîne de puissance, flux, diagramme d'états", duree: "", ligne: "activites/act_af_barriere.html", pdf: "docs/S1_Act_AF_Barriere.pdf", drive: "" },
+        { id: "act_af_portail", titre: "Activité — Portail solaire Avidsen", sous: "Cas d'utilisation, exigences, blocs internes, flux, algorigramme", duree: "", ligne: "activites/act_af_portail.html", pdf: "docs/S1_Act_AF_Portail.pdf", drive: "" }
+      ] },
+      { n: 4, date: "2026-09-01", titre: "Analyse fonctionnelle de systèmes du laboratoire (2)", activites: [
+        { id: "act_af_berceuse", titre: "Activité — Berceuse MOBY CREA", sous: "Cas d'utilisation, énergie, exigences et composants, flux, diagramme d'états", duree: "", ligne: "activites/act_af_berceuse.html", pdf: "docs/S1_Act_AF_Berceuse.pdf", drive: "" },
+        { id: "act_af_hemomixer", titre: "Activité — Hemo-mixer", sous: "Cas d'utilisation, énergie, exigences et composants, chaîne de puissance, flux", duree: "", ligne: "activites/act_af_hemomixer.html", pdf: "docs/S1_Act_AF_Hemomixer.pdf", drive: "" }
+      ] },
+      { n: 5, date: "2026-09-03", titre: "Analyse fonctionnelle de systèmes du laboratoire (3)", activites: [
+        { id: "act_af_pilote", titre: "Activité — Pilote automatique de bateau", sous: "Cas d'utilisation, énergie, composants, chaîne de puissance, flux, diagramme d'états", duree: "", ligne: "activites/act_af_pilote.html", pdf: "docs/S1_Act_AF_Pilote.pdf", drive: "" },
+        { id: "act_af_tondeuse", titre: "Activité — Robot tondeuse", sous: "Cas d'utilisation, énergie, blocs internes, exigences, algorithme", duree: "", ligne: "activites/act_af_tondeuse.html", pdf: "docs/S1_Act_AF_Tondeuse.pdf", drive: "" }
+      ] },
+      { n: 6, date: "2026-09-08", titre: "Télescope automatisé", activites: [
+        { id: "tp_astrolab", titre: "TP — Télescope ASTROLAB", sous: "Cas d'utilisation, énergie, chaîne de puissance, exigences et composants, blocs internes", duree: "", ligne: "activites/tp_astrolab.html", pdf: "docs/S1_TP_Astrolab.pdf", drive: "" }
+      ] },
+      { n: 7, date: "2026-09-10", titre: "Évaluation sommative", activites: [] }
+    ],
+    evaluations: [
+      { type: "P", titre: "Prérequis", date: "2026-08-20", duree: "15 min", info: "QCM sur la plateforme de la classe au début de la séquence. Pas de note : un repère.", competences: ["SI-ANA-01"] },
+      { type: "F", titre: "Formative", date: "2026-09-01", duree: "30 min", info: "QCM sur la plateforme de la classe : lecture des diagrammes SysML. Sert à te situer avant la sommative.", competences: ["SI-ANA-01", "SI-ANA-03"] },
+      { type: "S", titre: "Sommative", date: "2026-09-10", duree: "1 h", info: "Sur table. Note /20 + niveau par compétence (0, 1/3, 2/3, 3/3) selon la grille S1. Sujet non publié ici.", competences: ["SI-ANA-01", "SI-ANA-03"] },
+      { type: "D", titre: "Devoir S1-S2 — Portail coulissant autonome", date: "2026-09-15", duree: "2 h", info: "Devoir surveillé commun aux séquences 1 et 2 : analyse SysML et comportement d'un portail coulissant. Note /20 + grille par compétences. Sujet et corrigé non publiés ici.", competences: ["SI-ANA-01", "SI-MOD-04"] }
+    ] },
   { id: "s2", num: "S2", court: "Comportement", titre: "Traduire un comportement séquentiel",
     debut: "2026-09-17", fin: "2026-10-08", etat: "fait", competences: ["SI-MOD-04"],
-    cours: [], seances: [], evaluations: [] },
+    cours: [
+      { id: "s2_td1_cours", titre: "Algorithmes et algorigrammes — symboles et structures", sous: "Pages 1 à 3 du TD 1 : définitions, symboles normalisés, structures linéaire / alternative / répétitive, erreurs à éviter", pdf: "docs/S2_TD1_Algorithme_Algorigramme.pdf", drive: "" },
+      { id: "s2_td2_cours", titre: "Diagramme d'états — notions et exemple", sous: "Pages 1 et 2 du TD 2 : états, actions entry / do / exit, transitions, exemple de la borne de recharge", pdf: "docs/S2_TD2_Diagramme_Etats.pdf", drive: "" }
+    ],
+    seances: [
+      { n: 1, date: "2026-09-17", titre: "Algorithmes et algorigrammes", activites: [
+        { id: "td1_algorigramme", titre: "TD 1 — Algorithme et algorigramme", sous: "Portail automatique, porte de magasin, portail SET, tondeuse : compléter et traduire", duree: "", ligne: "activites/td1_algorigramme.html", pdf: "docs/S2_TD1_Algorithme_Algorigramme.pdf", drive: "" }
+      ] },
+      { n: 2, date: "2026-09-22", titre: "Diagramme d'états", activites: [
+        { id: "td2_diagramme_etats", titre: "TD 2 — Diagramme d'états", sous: "Barrière Sympact, pilote de bateau, Hemomixer, berceuse : du diagramme à l'algorithme", duree: "", ligne: "activites/td2_diagramme_etats.html", pdf: "docs/S2_TD2_Diagramme_Etats.pdf", drive: "" }
+      ] },
+      { n: 3, date: "2026-09-24", titre: "Simulation d'un diagramme d'états (Simulink / Stateflow)", activites: [
+        { id: "act_diagramme_etats_simulink", titre: "Activité — Diagramme d'états sous Simulink", sous: "LED clignotante, interrupteur, radar de recul, 4 LED, feu tricolore", duree: "", ligne: "activites/act_diagramme_etats_simulink.html", pdf: "docs/S2_Act_Diagramme_Etats_Simulink.pdf", drive: "" }
+      ] },
+      { n: 4, date: "2026-09-29", titre: "Évaluation formative et poursuite des activités", activites: [] },
+      { n: 5, date: "2026-10-01", titre: "Poursuite des activités", activites: [] },
+      { n: 6, date: "2026-10-06", titre: "Synthèse", activites: [] },
+      { n: 7, date: "2026-10-08", titre: "Évaluation sommative", activites: [] }
+    ],
+    evaluations: [
+      { type: "D", titre: "Devoir S1-S2 — Portail coulissant autonome", date: "2026-09-15", duree: "2 h", info: "Devoir surveillé commun aux séquences 1 et 2 : analyse SysML et comportement d'un portail coulissant. Note /20 + grille par compétences. Sujet et corrigé non publiés ici.", competences: ["SI-ANA-01", "SI-MOD-04"] },
+      { type: "P", titre: "Prérequis", date: "2026-09-17", duree: "15 min", info: "QCM sur la plateforme de la classe au début de la séquence. Pas de note : un repère.", competences: ["SI-MOD-04"] },
+      { type: "F", titre: "Formative", date: "2026-09-29", duree: "30 min", info: "QCM sur la plateforme de la classe : structures algorithmiques et diagrammes d'états.", competences: ["SI-MOD-04"] },
+      { type: "S", titre: "Sommative", date: "2026-10-08", duree: "1 h", info: "Sur table. Note /20 + niveau par compétence (0, 1/3, 2/3, 3/3). Sujet non publié ici.", competences: ["SI-MOD-04"] }
+    ] },
   { id: "s3", num: "S3", court: "Énergie", titre: "Énergie, puissance, rendement",
     debut: "2026-10-27", fin: "2026-11-19", etat: "en-ligne",
     competences: ["SI-ANA-02", "SI-ANA-03", "SI-MOD-02", "SI-MOD-03", "SI-MOD-13"],

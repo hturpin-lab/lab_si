@@ -314,3 +314,31 @@ h3.exo{font-family:"Barlow Condensed",Arial,sans-serif;font-size:19px;color:var(
   .retour{display:none}
   .fig-img{border:0}
 }
+
+/* ---------- diagramme à réaliser (draw.io + capture collée) ---------- */
+.diag h2 .q-lab{display:inline-block;background:var(--bleu);color:#fff;border-radius:4px;padding:0 6px;margin-right:4px;font-size:12.5px;letter-spacing:0}
+.diag-consigne{margin:4px 0 8px}
+.diag-outils{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:8px 0}
+.diag-outils .btn{white-space:nowrap}
+.depot{border:2px dashed var(--acier,#56677A);border-radius:8px;padding:12px 14px;margin:8px 0 4px;background:#F7FAFD;cursor:pointer;outline:none;min-height:64px}
+.depot:focus{border-color:var(--bleu);box-shadow:0 0 0 3px rgba(27,79,140,.18)}
+.depot.survol{border-color:var(--jaune,#FFC21A);background:#FFF8DC}
+.depot.plein{border-style:solid;background:#fff;cursor:default}
+.depot .depot-vide{font-size:14px;color:#13263F}
+.depot .depot-vide small{color:var(--acier,#56677A)}
+.depot [hidden]{display:none!important}
+.depot-img{margin:0;text-align:center}
+.depot-img img{max-width:100%;max-height:520px;border:1px solid #CBD5E1;border-radius:4px;background:#fff}
+.depot-img figcaption{font-size:13px;margin-top:4px}
+button.lien{background:none;border:0;padding:0;color:var(--bleu);text-decoration:underline;cursor:pointer;font:inherit}
+.vide-papier{font-size:9pt;color:#555;font-style:italic;margin:2mm 0}
+@media print{
+  .diag{break-inside:avoid}
+  .depot{border:.7pt solid #777;background:#fff;padding:3mm;min-height:40mm}
+  .depot.plein{min-height:0}
+  .depot-img img{max-height:150mm;border:0}
+  .depot [hidden]{display:none!important}
+}
+pre.algo{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13.5px;white-space:pre-wrap;background:#F3F6FA;border-left:3px solid var(--bleu);padding:8px 12px;margin:6px 0;border-radius:4px}
+.diag .q{margin-top:4px}
+@media print{pre.algo{font-size:9pt;background:#f4f4f4}}

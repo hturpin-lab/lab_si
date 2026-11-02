@@ -129,6 +129,25 @@
       b.items.map(function (t, k) { return "<tr><td>" + fmt(t) + "</td>" + ["non", "apeupres", "oui"].map(function (v) { return '<td><input type="radio" name="auto_' + k + '" value="' + v + '" class="rep-radio" data-champ="auto_' + k + '" data-q="AUTO" aria-label="' + esc(t.replace(/<[^>]+>/g, "")) + " : " + v + '"></td>'; }).join("") + "</tr>"; }).join("") +
       "</tbody></table></section>";
   }
+  function bDiagramme(b) {
+    /* b : {id, q, titre, consigne (html), figure {src, alt, legende, largeur}, drawio (chemin), drawioTitre, lab, cr, hors}
+       L'élève dessine (draw.io ou papier) puis colle / glisse une capture : stockée en dataURL JPEG dans la sauvegarde. */
+    var q = b.q || b.id, id = (b.id && b.q) ? b.id : (q + "_diagramme");
+    var h = '<section class="encadre diag" id="diag-' + esc(q) + '"><h2>' + fmt(b.titre || "Diagramme à réaliser") + "</h2>";
+    if (b.bac) h += bQ({ id: q, lab: b.lab || q, bac: b.bac, ref: b.ref, nom: b.nom, hors: b.hors, cr: b.cr });
+    else if (b.lab) { QUESTIONS.push(q); NOMQ[q] = b.nom || b.lab; LIB[q] = b.lab; if (SOMMAIRE.length && !b.hors) SOMMAIRE[SOMMAIRE.length - 1].qs.push(q); }
+    if (b.consigne) h += '<div class="diag-consigne">' + fmt(b.consigne) + "</div>";
+    if (b.figure) h += bFigure(b.figure);
+    h += '<div class="diag-outils no-print">' + (b.drawio ? '<a class="btn btn-bleu" href="' + esc(b.drawio) + '" download>' + esc(b.drawioTitre || "Télécharger le fichier draw.io de départ") + "</a>" : "") +
+      '<span class="petit">Ouvre-le sur <b>app.diagrams.net</b> (ou l\'application draw.io), dessine, puis <b>exporte une image</b> (Fichier › Exporter › PNG) ou fais une capture d\'écran. Tu peux aussi dessiner sur papier et photographier.</span></div>';
+    h += '<div class="depot" tabindex="0" role="button" data-depot="' + esc(id) + '" aria-label="Zone pour coller ou déposer l\'image de ton diagramme">' +
+      '<input type="hidden" class="rep img" id="' + esc(id) + '" data-champ="' + esc(id) + '" data-q="' + esc(q) + '" aria-label="' + esc(b.lab || "Diagramme") + ' image">' +
+      '<div class="depot-vide no-print"><b>Colle ici ta capture</b> (clique dans la zone puis Ctrl+V), <b>glisse</b> une image, ou <button type="button" class="lien" data-choisir="' + esc(id) + '">choisis un fichier</button>.<br><small>PNG ou JPG, réduite automatiquement (≈ 1,5 Mo max.). L\'image est imprimée dans ton PDF.</small></div>' +
+      '<input type="file" accept="image/*" data-fichier="' + esc(id) + '" hidden>' +
+      '<figure class="depot-img" hidden><img alt="Capture de ton diagramme"><figcaption class="no-print"><span class="petit">Diagramme collé.</span> <button type="button" class="lien" data-retirer="' + esc(id) + '">Retirer l\'image</button></figcaption></figure>' +
+      '<p class="depot-papier print-only vide-papier">Diagramme réalisé sur papier (joint) ou non rendu.</p></div></section>';
+    return h;
+  }
   function bEtapes(b) { return '<ol class="etapes-num">' + b.items.map(function (t) { return "<li>" + fmt(t) + "</li>"; }).join("") + "</ol>"; }
   function bHtml(b) { return fmt(b.html); }
   function rendre(b) {
@@ -136,7 +155,7 @@
       case "encadre": return bEncadre(b); case "donnees": return bDonnees(b); case "figure": return bFigure(b); case "ligne": return bLigne(b);
       case "bandeau": return bBandeau(b); case "q": return bQ(b); case "tableau3": return bTableau3(b); case "grille": return bGrille(b);
       case "zone": return bZone(b); case "trous": return bTrous(b); case "retenir": return bRetenir(b); case "autoeval": return bAutoeval(b);
-      case "etapes": return bEtapes(b); case "html": return bHtml(b); case "methode": return '<p class="methode">' + fmt(b.html) + "</p>";
+      case "etapes": return bEtapes(b); case "html": return bHtml(b); case "diagramme": return bDiagramme(b); case "methode": return '<p class="methode">' + fmt(b.html) + "</p>";
       case "cr": return cr(b.partie);
       default: return "";
     }
@@ -160,7 +179,7 @@
       '<label class="ce"><span>Date</span><input type="date" id="e_date" class="rep-e" data-eleve="date" aria-label="Date"></label></div></div></section>' +
       '<p class="version-imprimee print-only">Version des questions : <b id="vlib">type bac</b></p>';
     var rendreSec = '<section class="encadre rendre no-print" id="rendre"><h2>Rendre mon travail</h2>' + RENDRE + '<p class="petit">Garde aussi une copie modifiable : bouton <b>Enregistrer mon travail (.json)</b> (pour reprendre plus tard avec <b>Reprendre un travail</b>).</p></section>';
-    var pied = '<footer class="pied-imp print-only"><span>' + (NUAGE ? "Dépôt de la classe : " + esc(NUAGE) : "") + "</span><span>S.I — Sciences de l'Ingénieur · " + esc(A.fichier) + "</span></footer>";
+    var pied = '<footer class="pied-imp print-only"><span>' + (NUAGE ? "Dépôt de la classe : " + esc(NUAGE) : "") + "</span><span>" + esc(A.fichier) + " · © Henri Turpin · Lycée Jean-Claude Fruteau · Sciences de l'Ingénieur</span></footer>";
 
     document.body.innerHTML =
       '<header class="barre no-print"><div class="barre-in">' +
@@ -198,11 +217,12 @@
     if (p) p = p.charAt(0).toUpperCase() + p.slice(1);
     return (n || "NOM") + "_" + (p || "Prenom") + "_" + A.fichier;
   }
-  function majTitre() { document.title = nomFichier(); }
+  function majTitre() { document.title = nomFichier(); if (typeof majPiedImp === "function" && stylePied) majPiedImp(); }
 
   /* miroirs pour l'impression */
   function creerMiroirs() {
     champs.concat(eleves).forEach(function (el) {
+      if (el.classList.contains("img")) return;
       var s = document.createElement("span"); s.className = "imp" + (el.tagName === "TEXTAREA" ? " bloc" : ""); s.setAttribute("aria-hidden", "true");
       el.parentNode.insertBefore(s, el.nextSibling); el._imp = s;
     });
@@ -242,7 +262,8 @@
   }
   function toutRafraichir() {
     champs.concat(eleves).forEach(function (x) { majMiroir(x); if (x.tagName === "TEXTAREA") autoTaille(x); if (x.classList.contains("num")) verifNombre(x); });
-    majVersionGlobale(); majProgression(); majTitre();
+    $$("[data-depot]").forEach(function (d) { afficherImage(d.getAttribute("data-depot")); });
+    majVersionGlobale(); majProgression(); majTitre(); majPiedImp();
   }
   function sauver() {
     if (!stockage) return;
@@ -308,6 +329,75 @@
   }
   function imprimer() { fermerBoite("#boite-pdf"); sauver(); majTitre(); toutRafraichir(); setTimeout(function () { window.print(); }, 60); }
 
+  /* pied de page imprimé sur chaque page (navigateurs qui gèrent les boîtes de marge @page : Chrome, Edge) */
+  var stylePied = document.createElement("style"); document.head.appendChild(stylePied);
+  function majPiedImp() {
+    var el = ($("#e_nom").value.trim().toUpperCase() + " " + $("#e_prenom").value.trim()).trim();
+    var t = (A.fichier + " · © Henri Turpin · Lycée Jean-Claude Fruteau" + (el ? " · " + el : "")).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+    stylePied.textContent = '@page{@bottom-center{content:"' + t + '";font-family:"IBM Plex Sans",Arial,sans-serif;font-size:7.5pt;color:#56677A}}';
+  }
+
+  /* images de diagrammes (collées / glissées / choisies) */
+  var depotActif = null;
+  function depotDe(id) { return $('[data-depot="' + id + '"]'); }
+  function afficherImage(id) {
+    var inp = $("#" + id), d = depotDe(id); if (!inp || !d) return;
+    var fig = $(".depot-img", d), v = inp.value;
+    fig.hidden = !v; if (v) $("img", fig).src = v; else $("img", fig).removeAttribute("src"); $(".depot-vide", d).hidden = !!v; $(".depot-papier", d).hidden = !!v; d.classList.toggle("plein", !!v);
+  }
+  function compresser(fichier, cb) {
+    var lr = new FileReader();
+    lr.onload = function () {
+      var im = new Image();
+      im.onload = function () {
+        var max = 1600, q = 0.85, w = im.naturalWidth, h = im.naturalHeight, k = Math.min(1, max / Math.max(w, h)), out;
+        for (var essai = 0; essai < 6; essai++) {
+          var c = document.createElement("canvas"); c.width = Math.max(1, Math.round(w * k)); c.height = Math.max(1, Math.round(h * k));
+          var g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0, c.width, c.height);
+          out = c.toDataURL("image/jpeg", q);
+          if (out.length <= 1500000) break;
+          k *= 0.8; q = Math.max(0.6, q - 0.08);
+        }
+        cb(out);
+      };
+      im.onerror = function () { message("Ce fichier n'est pas une image lisible."); };
+      im.src = lr.result;
+    };
+    lr.readAsDataURL(fichier);
+  }
+  function poserImage(id, fichier) {
+    if (!fichier || !/^image\//.test(fichier.type)) { message("Colle ou dépose une image (PNG, JPG…)."); return; }
+    compresser(fichier, function (dataUrl) {
+      var inp = $("#" + id); inp.value = dataUrl; afficherImage(id); majProgression(); sauverBientot();
+      message("Image ajoutée (" + Math.round(dataUrl.length / 1024) + " ko). Elle sera imprimée dans ton PDF.");
+    });
+  }
+  function imageDepuis(dt) {
+    if (!dt) return null;
+    var fs = dt.files ? Array.prototype.slice.call(dt.files) : [];
+    if (!fs.length && dt.items) Array.prototype.forEach.call(dt.items, function (it) { if (it.kind === "file") { var f = it.getAsFile(); if (f) fs.push(f); } });
+    return fs.filter(function (f) { return /^image\//.test(f.type); })[0] || null;
+  }
+  $$("[data-depot]").forEach(function (d) {
+    var id = d.getAttribute("data-depot");
+    d.addEventListener("click", function (ev) { if (!ev.target.closest("button,a,img")) { depotActif = id; d.focus(); } });
+    d.addEventListener("focus", function () { depotActif = id; });
+    d.addEventListener("paste", function (ev) { var f = imageDepuis(ev.clipboardData); if (f) { ev.preventDefault(); ev.stopPropagation(); poserImage(id, f); } });
+    d.addEventListener("dragover", function (ev) { ev.preventDefault(); d.classList.add("survol"); });
+    d.addEventListener("dragleave", function () { d.classList.remove("survol"); });
+    d.addEventListener("drop", function (ev) { ev.preventDefault(); d.classList.remove("survol"); var f = imageDepuis(ev.dataTransfer); if (f) poserImage(id, f); else message("Dépose une image (PNG, JPG…)."); });
+    $('[data-fichier="' + id + '"]').addEventListener("change", function () { poserImage(id, this.files[0]); this.value = ""; });
+    $('[data-choisir="' + id + '"]').addEventListener("click", function () { $('[data-fichier="' + id + '"]').click(); });
+    $('[data-retirer="' + id + '"]').addEventListener("click", function () { $("#" + id).value = ""; afficherImage(id); majProgression(); sauverBientot(); message("Image retirée."); });
+  });
+  document.addEventListener("paste", function (ev) {
+    var t = ev.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+    var f = imageDepuis(ev.clipboardData); if (!f) return;
+    var cible = depotActif;
+    if (!cible) { var libre = $$("[data-depot]").filter(function (d) { return !$("#" + d.getAttribute("data-depot")).value; })[0] || $$("[data-depot]")[0]; cible = libre ? libre.getAttribute("data-depot") : null; }
+    if (cible) { ev.preventDefault(); poserImage(cible, f); }
+  });
+
   /* branchements */
   creerMiroirs();
   champs.concat(eleves).forEach(function (el) {
@@ -328,7 +418,7 @@
   $("#pdf-oui").addEventListener("click", imprimer);
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") { ["#boite-effacer", "#boite-pdf"].forEach(function (id) { if (!$(id).hidden) fermerBoite(id); }); } });
   $$(".modal-fond,.aide-pdf").forEach(function (f) { f.addEventListener("click", function (ev) { if (ev.target === f) fermerBoite("#" + f.id); }); });
-  window.addEventListener("beforeprint", function () { majTitre(); champs.concat(eleves).forEach(majMiroir); });
+  window.addEventListener("beforeprint", function () { majTitre(); majPiedImp(); champs.concat(eleves).forEach(majMiroir); });
   window.addEventListener("resize", function () { clearTimeout(window._rt); window._rt = setTimeout(function () { $$("textarea.rep").forEach(autoTaille); }, 150); });
 
   /* démarrage : reprise automatique */

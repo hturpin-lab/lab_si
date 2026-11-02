@@ -115,7 +115,8 @@
       (CFG.drive && s.etat === "en-ligne" ? '<a class="tag" href="' + esc(CFG.drive) + '" target="_blank" rel="noopener noreferrer">' + icoDrive() + "Dossier Drive des PDF</a>" : "") + "</div>";
     if (s.etat === "en-ligne") h += '<div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="' + pr.tot + '" aria-valuenow="' + pr.faites + '" aria-label="Avancement de la séquence"><i data-w="' + pr.pc + '"></i></div><span class="prog-txt">séance ' + Math.min(pr.faites + (pr.faites < pr.tot ? 1 : 0), pr.tot) + " / " + pr.tot + "</span>";
     if (s.etat === "bientot") { h += '<p class="vide" style="margin-top:16px">Séquence à venir : les documents seront mis en ligne au moment voulu.</p>'; p.innerHTML = h; return; }
-    if (s.etat === "fait") { h += '<p class="vide" style="margin-top:16px">Séquence terminée. Ses ressources seront ajoutées ici plus tard.</p>'; p.innerHTML = h; return; }
+    if (s.etat === "fait" && !s.cours.length && !s.seances.length && !s.evaluations.length) { h += '<p class="vide" style="margin-top:16px">Séquence terminée. Ses ressources seront ajoutées ici plus tard.</p>'; p.innerHTML = h; return; }
+    if (s.etat === "fait") h += '<p class="note" style="margin-top:10px">Séquence terminée : ses documents restent consultables ici pour réviser.</p>';
     h += '<div class="tabs" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" id="tab-' + t[0] + '" aria-selected="' + (t[0] === onglet) + '" aria-controls="pan-' + t[0] + '" data-onglet="' + t[0] + '">' + t[1] + "</button>"; }).join("") + "</div>";
     h += '<div role="tabpanel" id="pan-' + onglet + '" aria-labelledby="tab-' + onglet + '">' + (onglet === "cours" ? ongletCours(s) : onglet === "evaluations" ? ongletEvaluations(s) : ongletActivites(s)) + "</div>";
     p.innerHTML = h;
