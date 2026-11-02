@@ -67,7 +67,7 @@ h1,h2,h3,h4{font-family:var(--titre);margin:0;letter-spacing:.01em;font-weight:7
 
 /* ===== Bandeau ===== */
 .hero{position:relative;min-height:340px;overflow:hidden;border-bottom:1px solid var(--line2)}
-.hero::before{content:"";position:absolute;inset:0;background:url(../assets/img/si_duo_navy.jpg) center 35%/cover no-repeat;opacity:.55;filter:grayscale(1) brightness(1.15)}
+.hero::before{content:"";position:absolute;inset:0;background:url(../assets/img/si_duo_navy.jpg) center 35%/cover no-repeat;opacity:1}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 16%,rgba(8,54,121,.72) 52%,rgba(32,120,235,.38)),linear-gradient(0deg,rgba(32,120,235,.28),rgba(32,120,235,.28))}
 .hero .wrap{position:relative;z-index:1;min-height:340px;display:flex;flex-direction:column;justify-content:center;gap:12px;padding-top:34px;padding-bottom:34px}
 .hero h1{font-size:clamp(40px,6vw,64px);line-height:.95;font-weight:700;text-transform:uppercase;max-width:640px}
