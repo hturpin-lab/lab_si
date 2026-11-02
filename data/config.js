@@ -23,7 +23,7 @@ window.SI_CONFIG = {
   tinkercad: "https://www.tinkercad.com",
   castor: "https://concours.castor-informatique.fr",
   algorea: "https://algorea.org",
-  metice: "",                      /* ENT Métice de l'académie : à compléter (vide = « bientôt ») */
+  metice: "https://hubix.ac-reunion.fr/",   /* ENT de l'académie (Hubix) ; vide = tuile « bientôt » */
 
   /* Outils */
   labrio: "https://hturpin-lab.github.io/compte-rendu-tp/?theme=si&verrou=1",

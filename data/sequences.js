@@ -44,16 +44,17 @@ window.SI_SEQUENCES = [
         { id: "td2_transmission", titre: "TD 2 — Transmission", sous: "Rovio, télescope, Velux : trains d'engrenages", duree: "", ligne: "activites/td2_transmission.html", pdf: "docs/TD2_Transmission.pdf", drive: "" }
       ] },
       { n: 5, date: "2026-11-10", titre: "Chaînes de puissance de robots", activites: [
-        { id: "td_rovio", titre: "TD ROVIO", sous: "Robot mobile : chaîne de puissance", duree: "", ligne: "", pdf: "docs/TD_ROVIO.pdf", drive: "" },
-        { id: "td_bras_robot", titre: "TD Bras robot à vérin", sous: "Vérin, effort, puissance", duree: "", ligne: "", pdf: "docs/TD_Bras_Robot_Verin.pdf", drive: "" }
+        { id: "td_rovio", titre: "TD ROVIO", sous: "Robot mobile : chaîne de puissance", duree: "", ligne: "activites/td_rovio.html", pdf: "docs/TD_ROVIO.pdf", drive: "" },
+        { id: "td_bras_robot", titre: "TD Bras robot à vérin", sous: "Vérin, effort, puissance", duree: "", ligne: "activites/td_bras_robot.html", pdf: "docs/TD_Bras_Robot_Verin.pdf", drive: "" }
       ] },
       { n: 6, date: "2026-11-12", titre: "Portail automatique", activites: [
-        { id: "td_portail_set", titre: "TD Portail SET", sous: "Motorisation d'un portail coulissant", duree: "", ligne: "", pdf: "docs/TD_Portail_SET.pdf", drive: "" }
+        { id: "td_portail_set", titre: "TD Portail SET", sous: "Motorisation d'un portail coulissant", duree: "", ligne: "activites/td_portail_set.html", pdf: "docs/TD_Portail_SET.pdf", drive: "" }
       ] },
       { n: 7, date: "2026-11-17", titre: "Synthèse et entraînement", activites: [
-        { id: "exos_tondeuse", titre: "Exercices — Tondeuse et pilote automatique", sous: "Entraînement avant la sommative", duree: "", ligne: "", pdf: "docs/Exercices_Tondeuse_Pilote.pdf", drive: "" },
-        { id: "td_eolien", titre: "TD Éolien", sous: "Chaîne de puissance d'une éolienne", duree: "", ligne: "", pdf: "docs/TD_Eolien.pdf", drive: "" },
-        { id: "carte_mentale", titre: "Carte mentale S3", sous: "Synthèse de la séquence à compléter", duree: "", ligne: "", pdf: "docs/Carte_Mentale_S3.pdf", drive: "" }
+        { id: "exos_tondeuse", titre: "Exercices — Tondeuse et pilote automatique", sous: "Entraînement avant la sommative", duree: "", ligne: "activites/exos_tondeuse.html", pdf: "docs/Exercices_Tondeuse_Pilote.pdf", drive: "" },
+        { id: "td_eolien", titre: "TD Éolien", sous: "Chaîne de puissance d'une éolienne", duree: "", ligne: "activites/td_eolien.html", pdf: "docs/TD_Eolien.pdf", drive: "" },
+        { id: "carte_mentale", titre: "Carte mentale S3", sous: "Synthèse de la séquence à compléter (PDF, ou fichier draw.io modifiable)", duree: "", ligne: "", pdf: "docs/Carte_Mentale_S3.pdf", drive: "",
+          ressources: [{ titre: "Fichier draw.io", fichier: "docs/Carte_Mentale_S3.drawio" }] }
       ] },
       { n: 8, date: "2026-11-19", titre: "Évaluation sommative", activites: [] }
     ],

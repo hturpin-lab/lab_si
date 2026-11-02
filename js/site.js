@@ -27,23 +27,15 @@
   /* ---------- tuiles (ressources, outils) ---------- */
   function logo(cle, alt) {
     var l = (CFG.logos || {})[cle] || {}, badge = esc(l.badge || cle.slice(0, 3).toUpperCase());
-    if (!l.fichier) return '<span class="slogo"><b>' + badge + '</b></span>';
-    return '<span class="slogo img l-' + esc(cle) + '" data-badge="' + badge + '"><img src="' + esc(l.fichier) + '" alt="' + esc(alt) + '" loading="lazy"></span>';
+    if (!l.fichier) return '<span class="med"><b>' + badge + '</b></span>';
+    return '<span class="med l-' + esc(cle) + '" data-badge="' + badge + '"><img src="' + esc(l.fichier) + '" alt="' + esc(alt) + '" loading="lazy"></span>';
   }
   function tuile(o) {
-    if (o.liens) { /* tuile à plusieurs liens (ex. deux concours) */
-      var hh = '<div class="tile multi" data-ref="' + esc(o.ref) + '"><span class="ext">liens externes</span>' + logo(o.logo, o.titre + " (logo)");
-      hh += "<div><h3>" + esc(o.titre) + "</h3><p>" + esc(o.sous) + '</p><div class="liens">' + o.liens.map(function (l) {
-        return '<a class="tag" href="' + esc(l.href) + '" target="_blank" rel="noopener noreferrer">' + esc(l.t) + "</a>"; }).join("") + "</div></div></div>";
-      return hh;
-    }
-    var off = !o.href, href = off ? "#" : o.href, ext = /^https?:/.test(href);
-    var h = '<a class="tile' + (off ? " off" : "") + '" data-ref="' + esc(o.ref) + '" href="' + esc(href) + '"' +
-      (ext ? ' target="_blank" rel="noopener noreferrer"' : "") + (off ? ' aria-disabled="true" tabindex="-1"' : "") + ">";
-    if (ext) h += '<span class="ext">lien externe</span>';
-    h += logo(o.logo, o.titre + " (logo)");
-    h += "<div><h3>" + esc(o.titre) + "</h3><p>" + esc(off ? (o.off || "Bientôt") : o.sous) + "</p></div></a>";
-    return h;
+    var off = !o.href && !o.liens, href = off ? "#" : (o.href || "#"), ext = /^https?:/.test(href) || !!o.liens;
+    var corps = '<span class="bar" data-ref="' + esc(o.ref) + '"><span class="txt"><h3>' + esc(o.titre) + (ext ? '<span class="ext" title="lien externe" aria-label="(lien externe)">↗</span>' : "") + "</h3><p>" + esc(off ? (o.off || "Bientôt") : o.sous) + "</p>" +
+      (o.liens ? '<span class="liens">' + o.liens.map(function (l) { return '<a class="tag" href="' + esc(l.href) + '" target="_blank" rel="noopener noreferrer">' + esc(l.t) + "</a>"; }).join("") + "</span>" : "") + "</span></span>";
+    if (o.liens) return '<div class="tile multi" data-ref="' + esc(o.ref) + '">' + logo(o.logo, o.titre + " (logo)") + corps + "</div>";
+    return '<a class="tile' + (off ? " off" : "") + '" href="' + esc(href) + '"' + (ext ? ' target="_blank" rel="noopener noreferrer"' : "") + (off ? ' aria-disabled="true" tabindex="-1"' : "") + ">" + logo(o.logo, o.titre + " (logo)") + corps + "</a>";
   }
   function rendreTuiles() {
     var drive = CFG.drive || "#sequences";
@@ -51,7 +43,7 @@
       { ref: "R-01", logo: "documents", titre: "Documents en ligne", sous: CFG.drive ? "Les PDF de la classe sur le Drive" : "Les documents, séquence par séquence", href: drive },
       { ref: "R-02", logo: "tinkercad", titre: "Tinkercad", sous: "Circuits et 3D en ligne", href: CFG.tinkercad },
       { ref: "R-03", logo: "algorea", titre: "Concours Castor & Algoréa", sous: "Informatique et logique (France-ioi)", liens: [{ t: "Castor", href: CFG.castor }, { t: "Algoréa", href: CFG.algorea }] },
-      { ref: "R-04", logo: "metice", titre: "Métice", sous: "Espace numérique de travail", href: CFG.metice, off: "Lien à venir" }
+      { ref: "R-04", logo: "metice", titre: "Métice", sous: "ENT de l'académie — Hubix", href: CFG.metice, off: "Lien à venir" }
     ].map(tuile).join("");
     $("#tuiles-outils").innerHTML = [
       { ref: "T-01", logo: "renommer", titre: "Renommer son document", sous: "NOM_Prenom_Activite.pdf", href: "outils/renommer.html" },
@@ -59,10 +51,10 @@
       { ref: "T-03", logo: "labrio", titre: "Labrio — compte rendu", sous: "Rédiger un compte rendu de TP", href: CFG.labrio }
     ].map(tuile).join("");
     /* logo manquant → badge texte (jamais d'image cassée) */
-    Array.prototype.forEach.call(document.querySelectorAll(".slogo img"), function (img) {
-      img.addEventListener("error", function () { var s = img.parentNode; s.className = "slogo"; s.innerHTML = "<b>" + esc(s.getAttribute("data-badge")) + "</b>"; });
+    Array.prototype.forEach.call(document.querySelectorAll(".med img"), function (img) {
+      img.addEventListener("error", function () { var s = img.parentNode; s.className = "med"; s.innerHTML = "<b>" + esc(s.getAttribute("data-badge")) + "</b>"; });
     });
-    var ren = $('[data-ref="T-01"] .slogo'); if (ren) { ren.className = "slogo svg"; ren.innerHTML = '<svg viewBox="0 0 48 48" width="44" height="44" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 34h10l18-18-10-10L8 24z"/><path d="M22 10l10 10M8 40h32"/><path d="M30 38h6" stroke-dasharray="2 3"/></svg>'; }
+    var ren = $('.tile[href="outils/renommer.html"] .med'); if (ren) { ren.className = "med svg"; ren.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 34h10l18-18-10-10L8 24z"/><path d="M22 10l10 10M8 40h32"/><path d="M30 38h6" stroke-dasharray="2 3"/></svg>'; }
   }
 
   /* ---------- rail ---------- */
