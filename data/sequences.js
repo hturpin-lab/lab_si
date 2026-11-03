@@ -13,7 +13,8 @@ window.SI_SEQUENCES = [
   { id: "s1", num: "S1", court: "Analyse fonctionnelle", titre: "Analyser le besoin et l'organisation d'un produit",
     debut: "2026-08-20", fin: "2026-09-10", etat: "fait", competences: ["SI-ANA-01", "SI-ANA-03"],
     cours: [
-      { id: "s1_cours", titre: "Cours — Analyse fonctionnelle et SysML", sous: "Cas d'utilisation, exigences, blocs (BDD / IBD), séquence, états : les diagrammes à connaître", pdf: "docs/S1_Cours_Analyse_fonctionnelle_SysML.pdf", drive: "" },
+      { id: "s1_cours", titre: "Cours — Analyse fonctionnelle et SysML", sous: "Fiche de cours (4 pages) : système, cas d'utilisation, exigences, blocs (bdd / ibd) et flux, séquence, états", pdf: "docs/S1_Cours_Analyse_fonctionnelle_SysML.pdf", drive: "",
+        ressources: [{ titre: "Document d'origine (PDF)", fichier: "docs/S1_Cours_Analyse_fonctionnelle_SysML_origine.pdf" }] },
     ],
     seances: [
       { n: 1, date: "2026-08-20", titre: "Lire les diagrammes SysML d'un système", activites: [
@@ -48,8 +49,10 @@ window.SI_SEQUENCES = [
   { id: "s2", num: "S2", court: "Comportement", titre: "Traduire un comportement séquentiel",
     debut: "2026-09-17", fin: "2026-10-08", etat: "fait", competences: ["SI-MOD-04"],
     cours: [
-      { id: "s2_td1_cours", titre: "Algorithmes et algorigrammes — symboles et structures", sous: "Pages 1 à 3 du TD 1 : définitions, symboles normalisés, structures linéaire / alternative / répétitive, erreurs à éviter", pdf: "docs/S2_TD1_Algorithme_Algorigramme.pdf", drive: "" },
-      { id: "s2_td2_cours", titre: "Diagramme d'états — notions et exemple", sous: "Pages 1 et 2 du TD 2 : états, actions entry / do / exit, transitions, exemple de la borne de recharge", pdf: "docs/S2_TD2_Diagramme_Etats.pdf", drive: "" }
+      { id: "s2_cours_algo", titre: "Cours — Algorithmes et algorigrammes", sous: "Fiche de cours (2 pages) : définitions, symboles normalisés, règles de tracé, structures linéaire / alternative / Tant que / Pour, en Python", pdf: "docs/S2_Cours_Algorithmes_Algorigrammes.pdf", drive: "",
+        ressources: [{ titre: "Document d'origine (TD 1, p. 1 à 3)", fichier: "docs/S2_TD1_Algorithme_Algorigramme.pdf" }] },
+      { id: "s2_cours_etats", titre: "Cours — Diagramme d'états", sous: "Fiche de cours (2 pages) : états, transitions, entry / do / exit, conditions Stateflow, exemple de la borne de recharge", pdf: "docs/S2_Cours_Diagramme_Etats.pdf", drive: "",
+        ressources: [{ titre: "Document d'origine (TD 2, p. 1 et 2)", fichier: "docs/S2_TD2_Diagramme_Etats.pdf" }] }
     ],
     seances: [
       { n: 1, date: "2026-09-17", titre: "Algorithmes et algorigrammes", activites: [
