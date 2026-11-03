@@ -72,7 +72,14 @@
     if (d.ligne) h += '<a class="tag ligne" href="' + esc(d.ligne) + '">' + esc(texteLigne || "Faire en ligne") + "</a>";
     if (d.pdf) h += '<a class="tag" href="' + esc(d.pdf) + '" target="_blank" rel="noopener">' + ico("pdf") + "PDF</a>";
     if (d.drive) h += '<a class="tag" href="' + esc(d.drive) + '" target="_blank" rel="noopener noreferrer">' + icoDrive() + "Ouvrir sur le Drive</a>";
-    (d.ressources || []).forEach(function (r) { h += '<a class="tag" href="' + esc(r.fichier) + '" target="_blank" rel="noopener">' + esc(r.titre) + "</a>"; });
+    (d.ressources || []).forEach(function (r) {
+      /* fichiers à importer dans un logiciel (draw.io, classeur…) : téléchargement direct, pas d'ouverture dans le navigateur */
+      var aTelecharger = !/\.pdf$/i.test(r.fichier);
+      var nom = r.fichier.split("/").pop();
+      h += aTelecharger
+        ? '<a class="tag" href="' + esc(r.fichier) + '" download="' + esc(nom) + '" title="Télécharger ' + esc(nom) + '">⤓ ' + esc(r.titre) + "</a>"
+        : '<a class="tag" href="' + esc(r.fichier) + '" target="_blank" rel="noopener">' + esc(r.titre) + "</a>";
+    });
     if (!d.ligne && !d.pdf && !d.drive) h += '<span class="tag off">Bientôt</span>';
     return h;
   }
