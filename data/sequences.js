@@ -121,7 +121,45 @@ window.SI_SEQUENCES = [
       { type: "F", titre: "Formative", date: "2026-11-03", duree: "30 min", info: "QCM sur la plateforme de la classe (en salle, 2e heure). Sert à te situer avant la sommative : ton niveau par compétence est repris dans le bonus de progression.", competences: ["SI-ANA-02", "SI-MOD-02", "SI-MOD-03"] },
       { type: "S", titre: "Sommative", date: "2026-11-19", duree: "1 h", info: "Sur table. Note /20 sur Pronote + niveau par compétence (0, 1/3, 2/3, 3/3) + bonus de progression formative → sommative. Sujet non publié ici.", competences: ["SI-ANA-02", "SI-ANA-03", "SI-MOD-02", "SI-MOD-03", "SI-MOD-13"] }
     ] },
-  { id: "s4", num: "S4", court: "Information", titre: "Acquérir et transmettre l'information", debut: "2026-11-24", fin: "2026-12-15", etat: "bientot", competences: ["SI-MOD-09", "SI-ANA-09", "SI-EXP-07"], cours: [], seances: [], evaluations: [] },
+  { id: "s4", num: "S4", court: "Information", titre: "Acquérir et transmettre l'information",
+    debut: "2026-11-24", fin: "2026-12-15", etat: "bientot", competences: ["SI-MOD-09", "SI-ANA-09", "SI-EXP-07"],
+    cours: [
+      { id: "s4_c1", titre: "Cours C1 — Acquérir : capteurs et signaux", sous: "Fiche de cours (2 pages) : chaîne d'information, nature des signaux, capteur, signal périodique, numération, CAN", pdf: "docs/S4_Cours_C1_Acquerir.pdf", drive: "" },
+      { id: "s4_c2", titre: "Cours C2 — Communiquer : supports, protocoles, trames, débits", sous: "Fiche de cours (2 pages) : supports, bus et réseaux, trame, UART, encapsulation, débits, LoRa", pdf: "docs/S4_Cours_C2_Communiquer.pdf", drive: "" }
+    ],
+    seances: [
+      { n: 1, date: "2026-11-24", titre: "Capteurs et nature des signaux", activites: [
+        { id: "td1_capteurs_signaux", titre: "TD1 — Capteurs et signaux", sous: "Partie 1 : nature des signaux, caractéristique et sensibilité d'un inclinomètre", duree: "", ligne: "activites/td1_capteurs_signaux.html", pdf: "docs/S4_TD1_Capteurs_Signaux.pdf", drive: "" },
+        { id: "tp2_radar_recul", titre: "TP2 — Radar de recul (Tinkercad)", sous: "Partie A : temps de vol et distance avec un capteur à ultrasons", duree: "", ligne: "activites/tp2_radar_recul.html", pdf: "docs/S4_TP2_Radar_Recul.pdf", drive: "" }
+      ] },
+      { n: 2, date: "2026-11-26", titre: "Traiter l'alerte, CAN et numération", activites: [
+        { id: "tp2_radar_recul", titre: "TP2 — Radar de recul (Tinkercad)", sous: "Parties B et C : alerte du conducteur, numérisation d'une température", duree: "", ligne: "activites/tp2_radar_recul.html", pdf: "docs/S4_TP2_Radar_Recul.pdf", drive: "" },
+        { id: "td2_can_numeration", titre: "TD2 — CAN et numération", sous: "Bases 2, 10, 16 ; quantum ; inclinomètre numérisé", duree: "", ligne: "activites/td2_can_numeration.html", pdf: "docs/S4_TD2_CAN_Numeration.pdf", drive: "" }
+      ] },
+      { n: 3, date: "2026-12-01", titre: "Caractéristiques des signaux, MLI", activites: [
+        { id: "oscilloscope", titre: "Outil — Oscilloscope virtuel", sous: "Simulation à ouvrir dans un 2e onglet : calibres, base de temps, déclenchement, curseurs, signaux mystère", duree: "", ligne: "simulations/oscilloscope.html", texteLigne: "Ouvrir l'oscilloscope", pdf: "", drive: "" },
+        { id: "tp1_oscilloscope", titre: "TP1 — Mesurer à l'oscilloscope virtuel", sous: "Parties 1 à 3 : sinus, MLI, capteur à ultrasons", duree: "", ligne: "activites/tp1_oscilloscope.html", pdf: "docs/S4_TP1_Oscilloscope_Virtuel.pdf", drive: "" },
+        { id: "td1_capteurs_signaux", titre: "TD1 — Capteurs et signaux", sous: "Parties 2 et 3 : période, fréquence, rapport cyclique ; altimètre du drone", duree: "", ligne: "activites/td1_capteurs_signaux.html", pdf: "docs/S4_TD1_Capteurs_Signaux.pdf", drive: "" }
+      ] },
+      { n: 4, date: "2026-12-03", titre: "Protocole et trame", activites: [
+        { id: "tp1_oscilloscope", titre: "TP1 — Mesurer à l'oscilloscope virtuel", sous: "Partie 4 : une trame série UART à l'oscilloscope", duree: "", ligne: "activites/tp1_oscilloscope.html", pdf: "docs/S4_TP1_Oscilloscope_Virtuel.pdf", drive: "" },
+        { id: "td3_trames_debits", titre: "TD3 — Trames et débits : le télescope connecté", sous: "Partie A : décoder une trame UART", duree: "", ligne: "activites/td3_trames_debits.html", pdf: "docs/S4_TD3_Trames_Debits.pdf", drive: "" }
+      ] },
+      { n: 5, date: "2026-12-08", titre: "Supports, réseaux, encapsulation", activites: [
+        { id: "tp3_filius_reseau", titre: "TP3 — Réseau local avec Filius", sous: "Adresses IP et MAC, commutateur, serveur d'écho, routeur, encapsulation", duree: "", ligne: "activites/tp3_filius_reseau.html", pdf: "docs/S4_TP3_Filius_Reseau.pdf", drive: "" },
+        { id: "td3_trames_debits", titre: "TD3 — Trames et débits : le télescope connecté", sous: "Partie B : supports, protocole, encapsulation", duree: "", ligne: "activites/td3_trames_debits.html", pdf: "docs/S4_TD3_Trames_Debits.pdf", drive: "" }
+      ] },
+      { n: 6, date: "2026-12-10", titre: "Débits, LoRa, étude de cas", activites: [
+        { id: "td4_lora_citerne", titre: "TD4 — Une citerne connectée en LoRaWAN", sous: "Console d'exemple, décodage, débit utile, règle des 1 %", duree: "", ligne: "activites/td4_lora_citerne.html", pdf: "docs/S4_TD4_LoRa_Citerne.pdf", drive: "" },
+        { id: "td3_trames_debits", titre: "TD3 — Trames et débits : le télescope connecté", sous: "Partie C : choisir une liaison (étude de cas type E3C)", duree: "", ligne: "activites/td3_trames_debits.html", pdf: "docs/S4_TD3_Trames_Debits.pdf", drive: "" }
+      ] },
+      { n: 7, date: "2026-12-15", titre: "Évaluation sommative", activites: [] }
+    ],
+    evaluations: [
+      { type: "P", titre: "Prérequis", date: "2026-11-24", duree: "15 min", info: "QCM sur la plateforme de la classe : nature des signaux, binaire, octets, période et fréquence. Pas de note, un repère pour toi et pour moi.", competences: ["SI-MOD-09"] },
+      { type: "F", titre: "Formative", date: "2026-12-03", duree: "30 min", info: "QCM sur la plateforme : capteur, CAN, trames, débits, LoRa. Sert à te situer avant la sommative (bonus de progression).", competences: ["SI-MOD-09", "SI-ANA-09", "SI-EXP-07"] },
+      { type: "S", titre: "Sommative", date: "2026-12-15", duree: "1 h", info: "QCM sur la plateforme + exercice rédigé sur papier. Note /20 sur Pronote + niveau par compétence. Sujet non publié ici.", competences: ["SI-MOD-09", "SI-ANA-09", "SI-EXP-07"] }
+    ] },
   { id: "s5", num: "S5", court: "Chaîne de puissance", titre: "Chaîne de puissance électromécanique", debut: "2027-02-02", fin: "2027-02-18", etat: "bientot", competences: ["SI-MOD-03", "SI-ANA-13"], cours: [], seances: [], evaluations: [] },
   { id: "s6", num: "S6", court: "Mouvements", titre: "Modéliser les mouvements", debut: "2027-02-23", fin: "2027-03-16", etat: "bientot", competences: ["SI-MOD-06", "SI-MOD-07", "SI-MOD-15"], cours: [], seances: [], evaluations: [] },
   { id: "s7", num: "S7", court: "Transmission", titre: "Transmettre la puissance mécanique", debut: "2027-04-01", fin: "2027-04-29", etat: "bientot", competences: ["SI-MOD-02", "SI-MOD-03", "SI-ANA-02"], cours: [], seances: [], evaluations: [] },

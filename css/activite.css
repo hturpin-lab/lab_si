@@ -342,3 +342,7 @@ button.lien{background:none;border:0;padding:0;color:var(--bleu);text-decoration
 pre.algo{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13.5px;white-space:pre-wrap;background:#F3F6FA;border-left:3px solid var(--bleu);padding:8px 12px;margin:6px 0;border-radius:4px}
 .diag .q{margin-top:4px}
 @media print{pre.algo{font-size:9pt;background:#f4f4f4}}
+/* ---------- S4 : code Arduino / Python, console de réseau (ajout 05/11/2026) ---------- */
+pre.code{font:13px/1.4 "IBM Plex Mono",Consolas,monospace;background:#F7FAFD;border:1px solid var(--trait);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:pre;color:var(--encre);margin:6px 0}
+.console td,.console th{text-align:center}.console td.mono{font-family:"IBM Plex Mono",Consolas,monospace}
+.petit{font-size:13px;color:var(--acier)}

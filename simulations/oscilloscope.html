@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="description" content="Oscilloscope virtuel (1re SI) : calibres, base de temps, position, déclenchement, curseurs de mesure ; signaux sinus, carré, MLI, capteur à ultrasons, trame série UART. Fonctionne hors ligne ; aucune donnée n'est envoyée sur internet.">
+<title>Oscilloscope virtuel — S.I</title>
+<link rel="icon" href="../assets/img/favicon.png">
+<link rel="stylesheet" href="oscilloscope.css">
+</head>
+<body>
+<noscript><p style="padding:20px;font-family:sans-serif">Cet oscilloscope virtuel a besoin de JavaScript.</p></noscript>
+<header class="barre"><div class="barre-in">
+  <a class="marque" href="../index.html#s4/activites"><img src="../assets/img/favicon.png" alt="">S.I <small>1re SI · Simulation</small></a>
+  <h1>Oscilloscope virtuel</h1>
+  <a class="retour" href="../index.html#s4/activites">← Retour aux activités</a>
+</div></header>
+<main class="osc">
+  <section class="ecran-zone" aria-label="Écran de l'oscilloscope">
+    <div class="ecran-cadre">
+      <canvas id="ecran" width="1000" height="800" role="img" aria-label="Écran : 10 divisions horizontales, 8 divisions verticales"></canvas>
+      <div class="ecran-infos" id="infos"></div>
+    </div>
+    <div class="lecture" id="lecture" aria-live="polite"></div>
+    <p class="aide">Une valeur se lit en <b>nombre de carreaux × calibre</b>. Pour mesurer précisément, active les <b>curseurs</b> puis fais-les glisser sur l'écran (ou saisis leur position).</p>
+  </section>
+  <section class="reglages" aria-label="Réglages">
+    <fieldset class="bloc"><legend>Signal étudié</legend>
+      <label>Choix <select id="preset"></select></label>
+      <p class="petit" id="preset-info"></p>
+    </fieldset>
+    <fieldset class="bloc voie v1"><legend>Voie 1 (CH1, trait plein)</legend>
+      <label><input type="checkbox" id="ch1-on" checked> affichée</label>
+      <label>Calibre <select id="ch1-vdiv"></select></label>
+      <label>Position <input type="number" id="ch1-pos" step="0.2" min="-4" max="4" value="0"> div</label>
+      <div class="gen" id="gen1"></div>
+    </fieldset>
+    <fieldset class="bloc voie v2"><legend>Voie 2 (CH2, pointillés)</legend>
+      <label><input type="checkbox" id="ch2-on"> affichée</label>
+      <label>Calibre <select id="ch2-vdiv"></select></label>
+      <label>Position <input type="number" id="ch2-pos" step="0.2" min="-4" max="4" value="0"> div</label>
+      <div class="gen" id="gen2"></div>
+    </fieldset>
+    <fieldset class="bloc"><legend>Base de temps et déclenchement</legend>
+      <label>Base de temps <select id="tdiv"></select></label>
+      <label>Position horizontale <input type="number" id="hpos" step="0.2" min="0" max="9" value="1"> div</label>
+      <label>Source <select id="trig-src"><option value="1">CH1</option><option value="2">CH2</option></select></label>
+      <label>Niveau <input type="number" id="trig-niv" step="0.1" value="0.5"> V</label>
+      <label>Front <select id="trig-front"><option value="montant">montant ↗</option><option value="descendant">descendant ↘</option></select></label>
+    </fieldset>
+    <fieldset class="bloc"><legend>Curseurs de mesure</legend>
+      <label>Mode <select id="cur-mode"><option value="off">aucun</option><option value="t">temps (verticaux)</option><option value="v">tension (horizontaux)</option></select></label>
+      <label>Voie mesurée <select id="cur-voie"><option value="1">CH1</option><option value="2">CH2</option></select></label>
+      <label>Curseur A <input type="number" id="cur-a" step="0.05" value="2"> div</label>
+      <label>Curseur B <input type="number" id="cur-b" step="0.05" value="6"> div</label>
+    </fieldset>
+  </section>
+</main>
+<footer class="pied">Oscilloscope virtuel · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau · Sciences de l'Ingénieur. Signaux calculés dans le navigateur, aucune donnée envoyée.</footer>
+<script src="oscilloscope.js"></script>
+</body>
+</html>
