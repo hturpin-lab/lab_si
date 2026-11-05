@@ -98,8 +98,7 @@ window.SI_SEQUENCES = [
       ] },
       { n: 4, date: "2026-11-05", titre: "Transmettre le mouvement : rapport de réduction", activites: [
         { id: "td_servomoteur", titre: "TD Servomoteur", sous: "Train d'engrenages en cascade d'une voiture RC", duree: "25 min", ligne: "activites/td_servomoteur.html", pdf: "docs/TD_Servomoteur.pdf", drive: "" },
-        { id: "td_perceuse_transmission", titre: "TD Perceuse — Transmission", sous: "Motoréducteur à deux étages", duree: "", ligne: "activites/td_perceuse_transmission.html", pdf: "docs/TD_Perceuse_Transmission.pdf", drive: "",
-          ressources: [{ titre: "Partie C (PDF)", fichier: "docs/TD_Perceuse_Transmission_PartieC.pdf" }] },
+        { id: "td_perceuse_transmission", titre: "TD Perceuse — Transmission (partie C)", sous: "Roue et vis sans fin : motoréducteur à deux étages · à faire après le TD 2", duree: "20 min", ligne: "activites/td_perceuse_transmission.html", pdf: "docs/TD_Perceuse_Transmission_PartieC.pdf", drive: "" },
         { id: "td2_transmission", titre: "TD 2 — Transmission", sous: "Rovio, télescope, Velux : trains d'engrenages", duree: "", ligne: "activites/td2_transmission.html", pdf: "docs/TD2_Transmission.pdf", drive: "" }
       ] },
       { n: 5, date: "2026-11-10", titre: "Chaînes de puissance de robots", activites: [
