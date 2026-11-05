@@ -48,7 +48,8 @@
     $("#tuiles-outils").innerHTML = [
       { ref: "T-01", logo: "renommer", titre: "Renommer son document", sous: "NOM_Prenom_Activite.pdf", href: "outils/renommer.html" },
       { ref: "T-02", logo: "nuage", titre: "Rendre son travail", sous: "Dépôt sur le Nuage de la classe", href: CFG.nuage },
-      { ref: "T-03", logo: "labrio", titre: "Labrio — compte rendu", sous: "Rédiger un compte rendu de TP", href: CFG.labrio }
+      { ref: "T-03", logo: "labrio", titre: "Labrio — compte rendu", sous: "Rédiger un compte rendu de TP", href: CFG.labrio },
+      { ref: "T-04", logo: "oscillo", titre: "Oscilloscope virtuel", sous: "Mesurer des signaux en ligne", href: "simulations/oscilloscope.html" }
     ].map(tuile).join("");
     /* espace enseignant (comme le site STI2D) : lien de consultation des dépôts du Nuage */
     if (CFG.nuageAdmin) {
@@ -61,6 +62,7 @@
     Array.prototype.forEach.call(document.querySelectorAll(".med img"), function (img) {
       img.addEventListener("error", function () { var s = img.parentNode; s.className = "med"; s.innerHTML = "<b>" + esc(s.getAttribute("data-badge")) + "</b>"; });
     });
+    var osc = $('.tile[href="simulations/oscilloscope.html"] .med'); if (osc) { osc.className = "med svg"; osc.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="9" width="38" height="28" rx="2"/><path d="M5 23h38M24 9v28" stroke-dasharray="2 3" stroke-width="1.2"/><path d="M8 23c3-9 6-9 8 0s5 9 8 0 5-9 8 0 5 9 8 0"/><path d="M17 42h14"/></svg>'; }
     var ren = $('.tile[href="outils/renommer.html"] .med'); if (ren) { ren.className = "med svg"; ren.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 34h10l18-18-10-10L8 24z"/><path d="M22 10l10 10M8 40h32"/><path d="M30 38h6" stroke-dasharray="2 3"/></svg>'; }
   }
 

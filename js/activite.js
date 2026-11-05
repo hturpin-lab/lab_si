@@ -185,6 +185,7 @@
       '<header class="barre no-print"><div class="barre-in">' +
       '<a class="marque" href="../index.html#s3/activites">' + logo + "<span>S.I<small> · " + esc(A.court || A.fichier) + "</small></span></a>" +
       '<a class="retour" href="../index.html#' + esc(A.sequence || "s3") + '/activites">← Retour aux activités</a>' +
+      (A.oscilloscope ? '<a class="btn btn-osc" href="../simulations/oscilloscope.html' + (A.oscilloscope === true ? "" : "?signal=" + encodeURIComponent(A.oscilloscope)) + '" target="_blank" rel="noopener" title="Ouvre l\'oscilloscope virtuel dans un nouvel onglet">Ouvrir l\'oscilloscope ↗</a>' : "") +
       '<nav class="actions" aria-label="Actions sur mon travail"><button type="button" class="btn" id="btn-json">Enregistrer mon travail (.json)</button><button type="button" class="btn" id="btn-reprendre">Reprendre un travail</button><input type="file" id="fichier" accept=".json,application/json" hidden>' +
       '<button type="button" class="btn btn-jaune" data-action="pdf">Exporter en PDF</button>' + (NUAGE ? '<a class="btn" href="' + esc(NUAGE) + '" target="_blank" rel="noopener noreferrer">' + LOGO_NUAGE + 'Déposer mon PDF</a>' : "") +
       '<button type="button" class="btn btn-danger" id="btn-effacer">Tout effacer</button></nav></div>' +

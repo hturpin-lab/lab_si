@@ -2,6 +2,7 @@
    Généré par Sequence_S4_Information/sources/build_td.py depuis contenu_td.py. Contenu ÉLÈVE uniquement : aucun corrigé. */
 window.ACTIVITE = {
  "id": "td1_capteurs_signaux",
+ "oscilloscope": "td1",
  "fichier": "TD1_Capteurs_Signaux",
  "court": "TD1 Capteurs et signaux · 1re SI",
  "sequence": "s4",

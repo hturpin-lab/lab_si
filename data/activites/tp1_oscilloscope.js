@@ -2,6 +2,7 @@
    Généré par Sequence_S4_Information/sources/build_td.py depuis contenu_td.py. Contenu ÉLÈVE uniquement : aucun corrigé. */
 window.ACTIVITE = {
  "id": "tp1_oscilloscope",
+ "oscilloscope": "m1",
  "fichier": "TP1_Oscilloscope_Virtuel",
  "court": "TP1 Oscilloscope virtuel · 1re SI",
  "sequence": "s4",

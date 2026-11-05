@@ -165,3 +165,22 @@ window.SI_SEQUENCES = [
   { id: "s7", num: "S7", court: "Transmission", titre: "Transmettre la puissance mécanique", debut: "2027-04-01", fin: "2027-04-29", etat: "bientot", competences: ["SI-MOD-02", "SI-MOD-03", "SI-ANA-02"], cours: [], seances: [], evaluations: [] },
   { id: "s8", num: "S8", court: "Actions mécaniques", titre: "Modéliser les actions mécaniques", debut: "2027-05-20", fin: "2027-06-01", etat: "bientot", competences: ["SI-MOD-01", "SI-MOD-08"], cours: [], seances: [], evaluations: [] }
 ];
+
+/* ------------------------------------------------------------
+   ÉTAT AUTOMATIQUE DES SÉQUENCES (à la date du jour de l'élève)
+   - la séquence en cours (ou la dernière commencée) : « en ligne » ;
+   - celles d'avant : « faites » ; celles d'après : « bientôt ».
+   Plus besoin de republier le site pour changer d'état. Pour forcer
+   un état à la main, ajouter  etatForce: "fait" | "en-ligne" | "bientot".
+   ------------------------------------------------------------ */
+(function () {
+  var L = window.SI_SEQUENCES || [], d = new Date();
+  var j = d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  var cur = -1, i;
+  for (i = 0; i < L.length; i++) if (L[i].debut && j >= L[i].debut) cur = i;
+  if (cur < 0) cur = 0;
+  for (i = 0; i < L.length; i++) {
+    L[i].etat = L[i].etatForce || (i < cur ? "fait" : i === cur ? "en-ligne" : "bientot");
+  }
+})();
+

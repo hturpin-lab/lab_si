@@ -346,3 +346,8 @@ pre.algo{font-family:"IBM Plex Mono",Consolas,monospace;font-size:13.5px;white-s
 pre.code{font:13px/1.4 "IBM Plex Mono",Consolas,monospace;background:#F7FAFD;border:1px solid var(--trait);border-radius:8px;padding:10px 12px;overflow-x:auto;white-space:pre;color:var(--encre);margin:6px 0}
 .console td,.console th{text-align:center}.console td.mono{font-family:"IBM Plex Mono",Consolas,monospace}
 .petit{font-size:13px;color:var(--acier)}
+
+/* bouton « Ouvrir l'oscilloscope » (activités qui utilisent l'oscilloscope virtuel) */
+.btn-osc{border:1px solid #FFC21A;color:#FFC21A;background:transparent;font-weight:600;white-space:nowrap}
+.btn-osc:hover,.btn-osc:focus-visible{background:#FFC21A;color:#13263F}
+@media print{.btn-osc{display:none}}
