@@ -50,6 +50,13 @@
       { ref: "T-02", logo: "nuage", titre: "Rendre son travail", sous: "Dépôt sur le Nuage de la classe", href: CFG.nuage },
       { ref: "T-03", logo: "labrio", titre: "Labrio — compte rendu", sous: "Rédiger un compte rendu de TP", href: CFG.labrio }
     ].map(tuile).join("");
+    /* espace enseignant (comme le site STI2D) : lien de consultation des dépôts du Nuage */
+    if (CFG.nuageAdmin) {
+      var z = document.createElement("details");
+      z.className = "zone-enseignant";
+      z.innerHTML = '<summary>Espace enseignant</summary><a href="' + esc(CFG.nuageAdmin) + '" target="_blank" rel="noopener noreferrer">Consulter les dépôts — Nuage 1re SI</a>';
+      $("#tuiles-outils").insertAdjacentElement("afterend", z);
+    }
     /* logo manquant → badge texte (jamais d'image cassée) */
     Array.prototype.forEach.call(document.querySelectorAll(".med img"), function (img) {
       img.addEventListener("error", function () { var s = img.parentNode; s.className = "med"; s.innerHTML = "<b>" + esc(s.getAttribute("data-badge")) + "</b>"; });

@@ -326,3 +326,9 @@ footer.pied .wrap{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;ju
   .page-simple{padding:20px 16px 40px}
   .page-simple h1{font-size:32px}
 }
+
+/* espace enseignant (repliable, discret) */
+.zone-enseignant{margin:0 0 30px;border:1px dashed var(--line2);background:rgba(4,53,114,.45);padding:8px 14px;font-size:13px;color:var(--muted);max-width:420px}
+.zone-enseignant summary{cursor:pointer;font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.zone-enseignant summary:hover,.zone-enseignant summary:focus-visible{color:var(--ink)}
+.zone-enseignant a{display:inline-block;margin-top:8px;color:var(--cyan);text-decoration:underline}

@@ -14,6 +14,11 @@ window.SI_CONFIG = {
      et bouton « Déposer » des activités en ligne. */
   nuage: "https://nuage07.apps.education.fr/index.php/s/tXLpRtew8nFFq7p",
 
+  /* Lien de CONSULTATION du Nuage (réservé à l'enseignant) : affiché dans le petit
+     encadré repliable « Espace enseignant » sous les Outils, comme sur le site STI2D.
+     Vide : l'encadré n'apparaît pas. */
+  nuageAdmin: "https://nuage07.apps.education.fr/index.php/s/efB4zXxkQfDnpYp",
+
   /* Dossier Google Drive partagé contenant les PDF. Vide : la tuile
      « Documents en ligne » renvoie vers la liste des séquences du site ;
      rempli : un bouton « Dossier Drive » s'ajoute dans le panneau de séquence. */
