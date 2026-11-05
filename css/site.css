@@ -171,6 +171,11 @@ section.bloc{padding:34px 0 10px}
 .tag.off{opacity:.55;cursor:default;border-style:dashed}
 .tag .ico{height:15px;width:auto;flex:none;display:block}
 .act .liens .tag{align-self:flex-start}
+/* étapes : ordre de travail dans une séance (coin inférieur droit) */
+.act.avec-etape{padding-bottom:30px}
+.act .etape{position:absolute;right:0;bottom:0;font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;color:var(--muted);border-left:1px solid var(--line2);border-top:1px solid var(--line2);background:rgba(4,53,114,.6)}
+.act.now .etape{background:var(--accent);color:#13263F;border-color:var(--accent);font-size:12px}
+.act.now .etape.bonus{background:transparent;color:var(--accent);border-color:var(--accent);border-style:dashed}
 .liste{display:grid;gap:10px}
 .doc{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border:1px solid var(--line);padding:12px 14px;background:rgba(8,54,121,.55)}
 .doc h4{margin:0;font-family:var(--texte);font-size:15px;font-weight:600}

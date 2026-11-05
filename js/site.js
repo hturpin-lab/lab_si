@@ -94,10 +94,15 @@
   function ongletActivites(s) {
     var h = "", n = 0;
     s.seances.forEach(function (se) {
-      se.activites.forEach(function (a) {
+      var nbEtapes = se.activites.length;
+      se.activites.forEach(function (a, k) {
         n++;
         var now = se.date === JOUR;
-        h += '<div class="act' + (now ? " now" : "") + '"><div class="d"><b>' + jj(se.date) + "</b>" + mm(se.date) + "</div><div><h4>" + esc(a.titre) + "</h4><small>" + esc(a.sous) + (a.duree ? " · " + esc(a.duree) : "") + '</small><div class="liens">' + lienDoc(a) + "</div></div></div>";
+        /* ordre de travail dans la séance : étiquette « Étape k / N » dans le coin inférieur droit */
+        var etape = nbEtapes > 1
+          ? '<span class="etape' + (a.bonus ? " bonus" : "") + '" title="Ordre de travail dans la séance">' + (now && k === 0 ? "Commence ici · " : "") + "Étape " + (k + 1) + " / " + nbEtapes + (a.bonus ? " · si tu as fini" : "") + "</span>"
+          : "";
+        h += '<div class="act' + (now ? " now" : "") + (etape ? " avec-etape" : "") + '"><div class="d"><b>' + jj(se.date) + "</b>" + mm(se.date) + "</div><div><h4>" + esc(a.titre) + "</h4><small>" + esc(a.sous) + (a.duree ? " · " + esc(a.duree) : "") + '</small><div class="liens">' + lienDoc(a) + "</div></div>" + etape + "</div>";
       });
     });
     if (!n) return '<p class="vide">Les activités de cette séquence arriveront ici.</p>';
