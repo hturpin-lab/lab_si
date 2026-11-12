@@ -111,7 +111,7 @@
         var etape = nbEtapes > 1
           ? '<span class="etape' + (a.bonus ? " bonus" : "") + '" title="Ordre de travail dans la séance">' + (now && k === 0 ? "Commence ici · " : "") + "Étape " + (k + 1) + " / " + nbEtapes + (a.bonus ? " · si tu as fini" : "") + "</span>"
           : "";
-        h += '<div class="act' + (now ? " now" : "") + (etape ? " avec-etape" : "") + '"><div class="d"><b>' + jj(se.date) + "</b>" + mm(se.date) + "</div><div><h4>" + esc(a.titre) + "</h4><small>" + esc(a.sous) + (a.duree ? " · " + esc(a.duree) : "") + '</small><div class="liens">' + lienDoc(a, a.texteLigne) + "</div></div>" + etape + "</div>";
+        h += '<div class="act' + (now ? " now" : "") + (etape ? " avec-etape" : "") + '"><div class="d"><b>' + jj(se.date) + "</b>" + mm(se.date) + "</div><div><h4>" + esc(a.titre) + "</h4><small>" + esc(a.sous) + (a.duree ? " · " + esc(a.duree) : "") + '</small><div class="liens">' + lienDoc(a, a.texteLigne) + (aCorrige(s.id, a.id) ? boutonCorrige(true) : "") + "</div></div>" + etape + "</div>";
       });
     });
     if (!n) return '<p class="vide">Les activités de cette séquence arriveront ici.</p>';
@@ -121,7 +121,23 @@
     if (!s.evaluations.length) return '<p class="vide">Dates à venir.</p>';
     return '<div class="evals">' + s.evaluations.map(function (e) {
       return '<div class="eval"><div class="d act"><div class="d"><b>' + jj(e.date) + "</b>" + mm(e.date) + "</div></div><div><h4>" + esc(e.type) + " · " + esc(e.titre) + (e.duree ? " · " + esc(e.duree) : "") + "</h4><p>" + esc(e.info) + '</p><div class="comp">' + (e.competences || []).map(function (c) { return "<span>" + esc(c) + "</span>"; }).join("") + "</div></div></div>";
-    }).join("") + '</div><p class="note">Les sujets et corrigés ne sont pas publiés sur ce site.</p>';
+    }).join("") + '</div><p class="note">Les sujets ne sont pas publiés sur ce site ; les corrigés sont dans l\'onglet Corrections (Nuage, mot de passe donné en classe).</p>';
+  }
+  /* ---------- corrigés (Nuage protégé par mot de passe) ---------- */
+  var CORR = window.SI_CORRIGES || {};
+  function aCorrige(seqId, actId) { return (CORR[seqId] || []).some(function (c) { return c.activite === actId; }); }
+  function boutonCorrige(petit) {
+    return CFG.corriges
+      ? '<a class="tag corr" href="' + esc(CFG.corriges) + '" target="_blank" rel="noopener noreferrer" title="Dossier des corrigés sur le Nuage (mot de passe donné en classe)">&#128274; ' + (petit ? "Corrigé" : "Ouvrir les corrigés sur le Nuage") + "</a>"
+      : '<span class="tag off" title="Lien bientôt disponible">&#128274; ' + (petit ? "Corrigé" : "Corrigés") + " · bientôt</span>";
+  }
+  function ongletCorrections(s) {
+    var L = CORR[s.id] || [];
+    var h = '<div class="corr-intro"><p>Les <b>corrigés</b> sont rangés sur le <b>Nuage de la classe</b>, dans un dossier protégé par le <b>mot de passe donné en classe</b>. Ouvre le dossier de la séquence, puis celui de la séance, et choisis le corrigé de ton activité.</p><p>Conseil : fais d\'abord l\'activité seul(e), puis compare avec le corrigé et corrige-toi dans une autre couleur.</p>' + boutonCorrige(false) + "</div>";
+    if (!L.length) return h + '<p class="vide">Pas encore de corrigé publié pour cette séquence.</p>';
+    return h + '<div class="liste">' + L.map(function (c) {
+      return '<div class="doc"><div><h4>' + esc(c.titre) + "</h4><small>Sur le Nuage : " + esc(c.chemin) + "</small></div></div>";
+    }).join("") + "</div>";
   }
   function progression(s) {
     var tot = s.seances.length, faites = s.seances.filter(function (se) { return se.date <= JOUR; }).length;
@@ -129,7 +145,7 @@
   }
   function rendrePanneau(s, onglet) {
     var p = $("#panneau"), pr = progression(s);
-    var tabs = [["cours", "Cours"], ["activites", "Activités"], ["evaluations", "Évaluations"]];
+    var tabs = [["cours", "Cours"], ["activites", "Activités"], ["evaluations", "Évaluations"], ["corrections", "Corrections"]];
     var h = '<span class="mono">' + esc(s.num) + " · " + dateFr(s.debut) + " → " + dateFr(s.fin) + (s.seances.length ? " · " + s.seances.length + " séances" : "") + "</span>";
     h += "<h3>" + esc(s.titre) + "</h3>";
     h += '<div class="meta comp">' + (s.competences || []).map(function (c) { return "<span>" + esc(c) + "</span>"; }).join("") +
@@ -140,7 +156,7 @@
     if (s.etat === "fait" && !s.cours.length && !s.seances.length && !s.evaluations.length) { h += '<p class="vide" style="margin-top:16px">Séquence terminée. Ses ressources seront ajoutées ici plus tard.</p>'; p.innerHTML = h; return; }
     if (s.etat === "fait") h += '<p class="note" style="margin-top:10px">Séquence terminée : ses documents restent consultables ici pour réviser.</p>';
     h += '<div class="tabs" role="tablist">' + tabs.map(function (t) { return '<button type="button" role="tab" id="tab-' + t[0] + '" aria-selected="' + (t[0] === onglet) + '" aria-controls="pan-' + t[0] + '" data-onglet="' + t[0] + '">' + t[1] + "</button>"; }).join("") + "</div>";
-    h += '<div role="tabpanel" id="pan-' + onglet + '" aria-labelledby="tab-' + onglet + '">' + (onglet === "cours" ? ongletCours(s) : onglet === "evaluations" ? ongletEvaluations(s) : ongletActivites(s)) + "</div>";
+    h += '<div role="tabpanel" id="pan-' + onglet + '" aria-labelledby="tab-' + onglet + '">' + (onglet === "cours" ? ongletCours(s) : onglet === "evaluations" ? ongletEvaluations(s) : onglet === "corrections" ? ongletCorrections(s) : ongletActivites(s)) + "</div>";
     p.innerHTML = h;
     var i = $(".prog i", p); if (i) setTimeout(function () { i.style.width = i.getAttribute("data-w") + "%"; }, 50);
     Array.prototype.forEach.call(p.querySelectorAll("[data-onglet]"), function (b) {
@@ -151,7 +167,7 @@
   /* ---------- routage par ancre : #s3 ou #s3/activites ---------- */
   var ETAT = { seq: null, onglet: "activites" };
   function lireHash() {
-    var m = /^#(s\d)(?:\/(cours|activites|evaluations))?$/.exec(location.hash || "");
+    var m = /^#(s\d)(?:\/(cours|activites|evaluations|corrections))?$/.exec(location.hash || "");
     return m ? { seq: m[1], onglet: m[2] || null } : null;
   }
   function aller(seq, onglet, pousser) {

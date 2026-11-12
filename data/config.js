@@ -19,6 +19,11 @@ window.SI_CONFIG = {
      Vide : l'encadré n'apparaît pas. */
   nuageAdmin: "https://nuage07.apps.education.fr/index.php/s/efB4zXxkQfDnpYp",
 
+  /* Dossier Nuage des CORRIGÉS (protégé par le mot de passe donné en classe).
+     Même lien partout : onglet « Corrections » de chaque séquence et bouton
+     « Corrigé » des activités. Vide : les boutons affichent « bientôt ». */
+  corriges: "https://nuage07.apps.education.fr/index.php/s/7ysm2zdzeYjMstC",
+
   /* Dossier Google Drive partagé contenant les PDF. Vide : la tuile
      « Documents en ligne » renvoie vers la liste des séquences du site ;
      rempli : un bouton « Dossier Drive » s'ajoute dans le panneau de séquence. */

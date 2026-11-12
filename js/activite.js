@@ -185,6 +185,8 @@
       '<header class="barre no-print"><div class="barre-in">' +
       '<a class="marque" href="../index.html#s3/activites">' + logo + "<span>S.I<small> · " + esc(A.court || A.fichier) + "</small></span></a>" +
       '<a class="retour" href="../index.html#' + esc(A.sequence || "s3") + '/activites">← Retour aux activités</a>' +
+      (function () { var CO = window.SI_CORRIGES || {}, C = window.SI_CONFIG || {}, ok = Object.keys(CO).some(function (k) { return CO[k].some(function (c) { return c.activite === A.id; }); });
+        return ok && C.corriges ? '<a class="btn btn-corr" href="' + esc(C.corriges) + '" target="_blank" rel="noopener noreferrer" title="Corrigés sur le Nuage de la classe (mot de passe donné en classe)">&#128274; Corrigé</a>' : ""; })() +
       (A.oscilloscope ? '<a class="btn btn-osc" href="../simulations/oscilloscope.html' + (A.oscilloscope === true ? "" : "?signal=" + encodeURIComponent(A.oscilloscope)) + '" target="_blank" rel="noopener" title="Ouvre l\'oscilloscope virtuel dans un nouvel onglet">Ouvrir l\'oscilloscope ↗</a>' : "") +
       '<nav class="actions" aria-label="Actions sur mon travail"><button type="button" class="btn" id="btn-json">Enregistrer mon travail (.json)</button><button type="button" class="btn" id="btn-reprendre">Reprendre un travail</button><input type="file" id="fichier" accept=".json,application/json" hidden>' +
       '<button type="button" class="btn btn-jaune" data-action="pdf">Exporter en PDF</button>' + (NUAGE ? '<a class="btn" href="' + esc(NUAGE) + '" target="_blank" rel="noopener noreferrer">' + LOGO_NUAGE + 'Déposer mon PDF</a>' : "") +

@@ -332,3 +332,9 @@ footer.pied .wrap{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;ju
 .zone-enseignant summary{cursor:pointer;font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .zone-enseignant summary:hover,.zone-enseignant summary:focus-visible{color:var(--ink)}
 .zone-enseignant a{display:inline-block;margin-top:8px;color:var(--cyan);text-decoration:underline}
+
+/* corrigés (onglet Corrections + bouton des activités) */
+.corr-intro{border:1px solid var(--line2);background:rgba(4,53,114,.55);padding:12px 16px;margin-bottom:14px}
+.corr-intro p{margin:0 0 8px}
+.tag.corr{border-color:var(--accent);color:var(--ink)}
+.tag.corr:hover,.tag.corr:focus-visible{background:var(--accent);color:#13263F}

@@ -351,3 +351,8 @@ pre.code{font:13px/1.4 "IBM Plex Mono",Consolas,monospace;background:#F7FAFD;bor
 .btn-osc{border:1px solid #FFC21A;color:#FFC21A;background:transparent;font-weight:600;white-space:nowrap}
 .btn-osc:hover,.btn-osc:focus-visible{background:#FFC21A;color:#13263F}
 @media print{.btn-osc{display:none}}
+
+/* bouton « Corrigé » (Nuage protégé par mot de passe) */
+.btn-corr{border:1px solid rgba(255,255,255,.5);color:#fff;background:transparent;white-space:nowrap}
+.btn-corr:hover,.btn-corr:focus-visible{border-color:#FFC21A;color:#FFC21A}
+@media print{.btn-corr{display:none}}
