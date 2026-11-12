@@ -1,5 +1,69 @@
 /* Généré par outils/generer_corriges_js.py — ne pas modifier à la main. */
 window.SI_CORRIGES = {
+ "s1": [
+  {
+   "activite": "td1_vae_sysml",
+   "titre": "TD 1 — Vélo à assistance électrique (SysML)",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_1_20-08 › TD1_VAE_SysML_CORRIGE.pdf"
+  },
+  {
+   "activite": "td_sysml_portail",
+   "titre": "TD — SysML du portail automatisé Avidsen",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_2_25-08 › TD_SysML_Portail_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_barriere",
+   "titre": "Activité — Barrière SYMPACT",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_3_27-08 › Act_AF_Barriere_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_portail",
+   "titre": "Activité — Portail solaire Avidsen",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_3_27-08 › Act_AF_Portail_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_berceuse",
+   "titre": "Activité — Berceuse MOBY CREA",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_4_01-09 › Act_AF_Berceuse_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_hemomixer",
+   "titre": "Activité — Hemo-mixer",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_4_01-09 › Act_AF_Hemomixer_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_pilote",
+   "titre": "Activité — Pilote automatique de bateau",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_5_03-09 › Act_AF_Pilote_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_af_tondeuse",
+   "titre": "Activité — Robot tondeuse",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_5_03-09 › Act_AF_Tondeuse_CORRIGE.pdf"
+  },
+  {
+   "activite": "tp_astrolab",
+   "titre": "TP — Télescope ASTROLAB",
+   "chemin": "S1_Analyse_fonctionnelle › Seance_6_08-09 › TP_Astrolab_CORRIGE.pdf"
+  }
+ ],
+ "s2": [
+  {
+   "activite": "td1_algorigramme",
+   "titre": "TD 1 — Algorithme et algorigramme",
+   "chemin": "S2_Analyse_comportementale › Seance_1_17-09 › TD1_Algorigramme_CORRIGE.pdf"
+  },
+  {
+   "activite": "td2_diagramme_etats",
+   "titre": "TD 2 — Diagramme d'états",
+   "chemin": "S2_Analyse_comportementale › Seance_2_22-09 › TD2_Diagramme_Etats_CORRIGE.pdf"
+  },
+  {
+   "activite": "act_diagramme_etats_simulink",
+   "titre": "Activité — Diagramme d'états sous Simulink",
+   "chemin": "S2_Analyse_comportementale › Seance_3_24-09 › Act_Diagramme_Etats_Simulink_CORRIGE.pdf"
+  }
+ ],
  "s3": [
   {
    "activite": "act_types_energie",
