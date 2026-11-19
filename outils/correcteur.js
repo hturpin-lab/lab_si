@@ -467,13 +467,14 @@ function exporter() {
 }
 
 /* ---------- session ---------- */
-function etatSession() { return { app: "si-correcteur", version: 1, enregistre: new Date().toISOString(), decisions: S.decisions, cles: S.cles }; }
+/* les corrigés machine ne sont JAMAIS gardés (ni dans le navigateur, ni dans la session) : le professeur les recharge à chaque fois */
+function etatSession() { return { app: "si-correcteur", version: 2, enregistre: new Date().toISOString(), decisions: S.decisions }; }
 function sauverSession() { try { localStorage.setItem(CLE_SESSION, JSON.stringify(etatSession())); } catch (e) { } }
-function reprendre(j) { if (!j || j.app !== "si-correcteur") throw new Error("format"); S.decisions = j.decisions || {}; Object.assign(S.cles, j.cles || {}); recalculer(); }
+function reprendre(j) { if (!j || j.app !== "si-correcteur") throw new Error("format"); S.decisions = j.decisions || {}; recalculer(); }
 function telechargerSession() {
   const b = new Blob([JSON.stringify(etatSession(), null, 1)], { type: "application/json" }), a = document.createElement("a");
   a.href = URL.createObjectURL(b); a.download = "Session_correction_PRIVE.json"; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
-  message("Session enregistrée (décisions et corrigés, sans les PDF).");
+  message("Session enregistrée (tes décisions seulement : ni PDF, ni corrigé).");
 }
 
 /* ---------- divers ---------- */
@@ -512,6 +513,6 @@ document.addEventListener("dragover", e => e.preventDefault());
 document.addEventListener("drop", e => { e.preventDefault(); prof = 0; $("#depot").hidden = true; if (e.dataTransfer.files.length) ajouterFichiers(e.dataTransfer.files); });
 
 /* démarrage : reprise des décisions et corrigés gardés dans ce navigateur */
-try { const j = JSON.parse(localStorage.getItem(CLE_SESSION) || "null"); if (j) { S.decisions = j.decisions || {}; S.cles = j.cles || {}; } } catch (e) { }
+try { const j = JSON.parse(localStorage.getItem(CLE_SESSION) || "null"); if (j) S.decisions = j.decisions || {}; } catch (e) { }
 recalculer();
 window.__correcteur = S; /* pour les tests */
