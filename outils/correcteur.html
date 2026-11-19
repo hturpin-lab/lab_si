@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="robots" content="noindex">
+<title>Correcteur S.I — outil du professeur</title>
+<link rel="icon" href="../assets/img/logo_si_128.png">
+<link rel="stylesheet" href="correcteur.css">
+</head>
+<body>
+<header class="barre">
+  <div class="marque"><img src="../assets/img/logo_si_128.png" alt=""><span>Correcteur <b>S.I</b><small>outil du professeur · tout reste sur cet ordinateur</small></span></div>
+  <nav class="actions">
+    <label class="btn btn-jaune">Charger les PDF<input type="file" id="in-pdf" accept=".pdf,application/pdf" multiple hidden></label>
+    <label class="btn">Charger un dossier<input type="file" id="in-dossier" webkitdirectory multiple hidden></label>
+    <label class="btn">Corrigés machine (.json)<input type="file" id="in-cle" accept=".json" multiple hidden></label>
+    <button type="button" class="btn" id="btn-xlsx">Exporter (.xlsx)</button>
+    <button type="button" class="btn" id="btn-session">Sauvegarder la session</button>
+    <label class="btn">Reprendre une session<input type="file" id="in-session" accept=".json" hidden></label>
+    <button type="button" class="btn btn-danger" id="btn-vider">Tout vider</button>
+  </nav>
+</header>
+<div class="etat-bar"><span id="etat">Dépose les PDF des élèves et le ou les corrigés machine (.json) n'importe où sur la page.</span><span id="charge"></span></div>
+<nav class="onglets" role="tablist">
+  <button type="button" role="tab" data-o="rendus" aria-selected="true">1 · Rendus</button>
+  <button type="button" role="tab" data-o="correction">2 · Correction <span class="badge" id="bdg-doute" hidden></span></button>
+  <button type="button" role="tab" data-o="ressemblances">3 · Ressemblances</button>
+  <button type="button" role="tab" data-o="alertes">4 · Alertes <span class="badge rouge" id="bdg-alerte" hidden></span></button>
+  <button type="button" role="tab" data-o="synthese">5 · Synthèse</button>
+  <button type="button" role="tab" data-o="aide">Aide</button>
+</nav>
+<main>
+  <section id="o-rendus" class="onglet"></section>
+  <section id="o-correction" class="onglet" hidden>
+    <aside class="liste">
+      <div class="filtres">
+        <select id="f-act" aria-label="Activité"></select>
+        <label><input type="checkbox" id="f-doutes"> copies avec doutes seulement</label>
+      </div>
+      <ol id="liste-copies"></ol>
+    </aside>
+    <div class="revue" id="revue"><p class="vide">Choisis une copie dans la liste.</p></div>
+  </section>
+  <section id="o-ressemblances" class="onglet" hidden></section>
+  <section id="o-alertes" class="onglet" hidden></section>
+  <section id="o-synthese" class="onglet" hidden></section>
+  <section id="o-aide" class="onglet" hidden>
+    <div class="aide">
+      <h2>Mode d'emploi</h2>
+      <ol>
+        <li>Télécharge le dossier des rendus depuis le Nuage, puis dépose les PDF (ou le dossier) ici.</li>
+        <li>Charge le corrigé machine de chaque activité (fichiers <code>cle_….json</code>, gardés sur ton ordinateur : jamais sur le site).</li>
+        <li><b>Rendus</b> : qui a rendu quoi, doublons, PDF sans données.</li>
+        <li><b>Correction</b> : chaque question est proposée : <span class="pas ok">juste</span> <span class="pas demi">½ (formule juste / partiel)</span> <span class="pas ko">faux</span> <span class="pas nt">non traité</span> sont acceptées d'office (tu peux changer) ; <span class="pas doute">à trancher</span> attend ta décision. Clique 0, ½ ou 1 ; ajoute un commentaire si besoin.</li>
+        <li><b>Ressemblances</b> : 0 à 100 entre élèves, sur les réponses fausses ou personnelles (les réponses justes communes ne comptent pas).</li>
+        <li><b>Alertes</b> : texte collé, nom refusé, PDF ou fichier .json retouché.</li>
+        <li><b>Exporter</b> : classeur avec notes, détail, questions ratées, non faits, ressemblances et alertes. <b>Sauvegarder la session</b> garde tes décisions (sans les PDF) pour reprendre plus tard.</li>
+      </ol>
+      <p>Les PDF faits avant le 19/11/2026, imprimés autrement ou scannés n'ont pas de « Données de contrôle » : l'outil affiche alors la copie et toutes les questions sont « à trancher ».</p>
+      <p class="petit">Aucune donnée n'est envoyée sur internet : les PDF sont lus dans ce navigateur (bibliothèques pdf.js et SheetJS incluses dans le site). Les décisions sont gardées dans ce navigateur.</p>
+    </div>
+  </section>
+</main>
+<div class="visu" id="visu" hidden><div class="visu-barre"><b id="visu-titre"></b><button type="button" class="btn" id="visu-fermer">Fermer ✕</button></div><div id="visu-pages"></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+<div class="depot" id="depot" hidden>Dépose les PDF ou les corrigés (.json)</div>
+<script src="lib/xlsx.full.min.js"></script>
+<script src="../js/authenticite.js"></script>
+<script type="module" src="correcteur.js"></script>
+</body>
+</html>

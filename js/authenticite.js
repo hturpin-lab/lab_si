@@ -66,6 +66,8 @@
     ".auth-recap p{margin:1.5mm 0}.auth-recap table{border-collapse:collapse;width:100%;margin:2mm 0}" +
     ".auth-recap th,.auth-recap td{border:.6pt solid #888;padding:1mm 1.6mm;text-align:left;vertical-align:top}.auth-recap th{background:#EEF2F6;width:46%}" +
     ".auth-recap .alerte{color:#B71C1C;font-weight:700}.auth-recap .note{font-size:7.5pt;color:#444}" +
+    ".auth-data{margin-top:4mm;border-top:.6pt dashed #999;padding-top:1.5mm;break-inside:avoid}.auth-data p{font-size:7pt;color:#555;margin:0 0 1mm}" +
+    ".auth-data .l{font-family:'IBM Plex Mono','Courier New',monospace;font-size:6.2pt;line-height:1.2;white-space:nowrap;overflow:hidden;color:#444;letter-spacing:0}" +
     ".auth-refus{display:none}html.auth-bloque body>*{display:none!important}html.auth-bloque body>.auth-refus{display:block!important;font:14pt Arial,sans-serif;padding:20mm;color:#B71C1C}}";
 
   /* opts : { app, fichier, nom(), prenom(), reponses(), champs: [éléments], feuille: élément, message(txt) } */
@@ -118,7 +120,8 @@
       });
     });
 
-    function empreinte() { return sha256(stable({ id: A.id, auteur: A.auteur, reponses: opts.reponses() })).slice(0, 12).toUpperCase().replace(/(.{4})(?!$)/g, "$1-"); }
+    function sansImages(r) { var o = {}; Object.keys(r || {}).forEach(function (k) { o[k] = /^data:image\//.test(r[k]) ? "[image]" : r[k]; }); return o; }
+    function empreinte() { return sha256(stable({ id: A.id, auteur: A.auteur, reponses: sansImages(opts.reponses()) })).slice(0, 12).toUpperCase().replace(/(.{4})(?!$)/g, "$1-"); }
     function actifTotal() { return A.sessions.reduce(function (s, x) { return s + (x.actif_s || 0); }, 0); }
     function construireRecap(pdfIso) {
       var sa = A.saisie, tot = sa.tapes + sa.colles, pc = tot ? Math.round(100 * sa.colles / tot) : 0;
@@ -142,7 +145,19 @@
         "<table>" + lignes.map(function (l) { return "<tr><th>" + l[0] + "</th><td>" + l[1] + "</td></tr>"; }).join("") + "</table>" +
         (col.length ? "<p><b>Détail des collages de 20 caractères ou plus</b></p><table><tr><th style=\"width:30%\">Case</th><th style=\"width:20%\">Caractères</th><th>Moment</th></tr>" +
           col.map(function (c) { return "<tr><td>" + esc(c.champ) + "</td><td>" + c.car + (c.glisse ? " (glissé)" : "") + "</td><td>" + fr(c.t) + "</td></tr>"; }).join("") + "</table>" : "") +
+        blocDonnees(pdfIso) +
         '<p class="note">L\'empreinte est calculée à partir de l\'identifiant, de l\'auteur et des réponses : le professeur peut la recalculer depuis le fichier .json pour vérifier que ce PDF n\'a pas été modifié. Les collages comptent le texte copié depuis une autre page, un autre document ou une autre case.</p>';
+    }
+    function blocDonnees(pdfIso) { /* réponses case par case, lisibles par l'outil Correcteur du professeur */
+      var et = opts.etat ? opts.etat() : { reponses: opts.reponses() }, r = {}, sa = A.saisie;
+      r = sansImages(et.reponses);
+      var d = { v: 1, app: opts.app || "", f: opts.fichier, id: A.id, au: A.auteur, el: et.eleve || {}, cr: A.cree, pdf: pdfIso, r: r, ve: et.versions || {}, e: empreinte(),
+        st: { tp: sa.tapes, co: sa.colles, nc: sa.nb_collages, ac: Math.round(actifTotal()), se: A.sessions.length, rf: A.refus.length, cn: A.corrections_nom.length, js: A.json.nb, rp: A.reprises.length, sc: integre() ? 1 : 0 } };
+      var b = btoa(unescape(encodeURIComponent(JSON.stringify(d)))), L = [], i, N = 96;
+      for (i = 0; i < b.length; i += N) L.push(b.slice(i, i + N));
+      var crc = sha256(b).slice(0, 8);
+      return '<div class="auth-data"><p>Données de contrôle — lues automatiquement par l\'outil du professeur. Ne pas modifier.</p>' +
+        '<div class="l">SICTRL1 ' + L.length + ' ' + crc + '</div>' + L.map(function (x, k) { return '<div class="l">' + String(k + 1).padStart(3, "0") + "|" + x + '</div>'; }).join("") + '<div class="l">SICTRL-FIN</div></div>';
     }
     function bloquer(msg) {
       refus.textContent = "Impression refusée — " + msg;

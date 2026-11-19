@@ -8,7 +8,7 @@ var $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){re
 var champs=$$(".rep"), eleves=$$(".rep-e"), questions=$$(".q");
 var stockage=true, minuteur=null;
 /* attestation de travail (js/authenticite.js) */
-var AUTH=window.SI_AUTH?window.SI_AUTH({fichier:"TD_Perceuse",nom:function(){return $("#e_nom").value;},prenom:function(){return $("#e_prenom").value;},reponses:function(){return lireEtat(true).reponses;},champs:champs,feuille:$("#contenu")}):null;
+var AUTH=window.SI_AUTH?window.SI_AUTH({fichier:"TD_Perceuse",nom:function(){return $("#e_nom").value;},prenom:function(){return $("#e_prenom").value;},reponses:function(){return lireEtat(true).reponses;},etat:function(){return lireEtat(true);},app:APP,champs:champs,feuille:$("#contenu")}):null;
 
 function aujourdhui(){var d=new Date(),m=String(d.getMonth()+1).padStart(2,"0"),j=String(d.getDate()).padStart(2,"0");return d.getFullYear()+"-"+m+"-"+j;}
 function dateFr(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||"");return m?m[3]+"/"+m[2]+"/"+m[1]:(v||"");}

@@ -1,0 +1,90 @@
+/* ================== Correcteur S.I — feuille de style ================== */
+/* ---- polices et couleurs (palette Blueprint du site) ---- */
+@font-face{font-family:"IBM Plex Sans";font-weight:400;font-display:swap;src:url(../assets/fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:600;font-display:swap;src:url(../assets/fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-display:swap;src:url(../assets/fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:400;font-display:swap;src:url(../assets/fonts/ibm-plex-mono-latin-400-normal.woff2) format("woff2")}
+:root{--bleu:#0b3f85;--bleu2:#083679;--encre:#13263F;--acier:#56677A;--brume:#EEF2F6;--trait:#D5DEE8;--jaune:#FFC21A;
+  --vert:#2E7D32;--vert-f:#E6F4EA;--rouge:#C62828;--rouge-f:#FDECEA;--orange:#E07B00;--orange-f:#FFF3E0;--demi:#1565C0;--demi-f:#E3F0FC;--gris-f:#F1F3F5}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font:14px/1.45 "IBM Plex Sans","Segoe UI",Arial,sans-serif;color:var(--encre);background:#F6F8FB}
+button,select,input{font:inherit}
+code{font-family:"IBM Plex Mono",Consolas,monospace;font-size:.92em}
+/* ---- barre du haut ---- */
+.barre{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:8px 16px;background:var(--bleu2);color:#fff}
+.marque{display:flex;align-items:center;gap:10px;font-family:"Barlow Condensed",Arial,sans-serif;font-size:22px}
+.marque img{width:34px;height:34px}.marque small{display:block;font:12px "IBM Plex Sans",Arial,sans-serif;opacity:.8}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid #b9c6d6;border-radius:7px;background:#fff;color:var(--encre);cursor:pointer;font-size:13px;white-space:nowrap}
+.btn:hover{border-color:var(--bleu)}.btn-jaune{background:var(--jaune);border-color:var(--jaune);font-weight:600}
+.btn-danger{color:var(--rouge)}
+.etat-bar{display:flex;justify-content:space-between;gap:10px;padding:6px 16px;background:#fff;border-bottom:1px solid var(--trait);font-size:13px;color:var(--acier)}
+/* ---- onglets ---- */
+.onglets{display:flex;gap:2px;padding:8px 16px 0;background:#fff;border-bottom:2px solid var(--bleu)}
+.onglets button{border:1px solid var(--trait);border-bottom:0;background:var(--brume);padding:7px 14px;border-radius:7px 7px 0 0;cursor:pointer}
+.onglets button[aria-selected="true"]{background:var(--bleu);color:#fff;border-color:var(--bleu);font-weight:600}
+.badge{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:var(--orange);color:#fff;font-size:12px;text-align:center}
+.badge.rouge{background:var(--rouge)}
+main{padding:14px 16px}
+.onglet[hidden]{display:none!important}
+/* ---- tableaux ---- */
+table.t{border-collapse:collapse;background:#fff;font-size:13px}
+table.t th,table.t td{border:1px solid var(--trait);padding:4px 7px;text-align:left;vertical-align:top}
+table.t th{background:var(--brume);font-weight:600}
+table.t td.c{text-align:center}
+.cel-ok{background:var(--vert-f);color:var(--vert);font-weight:600}
+.cel-sb{background:var(--orange-f);color:var(--orange)}
+.cel-vide{color:#bbb}
+.rot th.r{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;padding:6px 3px;font-weight:500}
+h2{font-family:"Barlow Condensed",Arial,sans-serif;font-size:22px;color:var(--bleu);margin:4px 0 8px}
+h3{font-size:15px;margin:14px 0 6px;color:var(--bleu)}
+.petit{font-size:12px;color:var(--acier)}
+.vide{color:var(--acier);font-style:italic;padding:20px}
+.defil{overflow:auto;max-width:100%}
+/* ---- correction ---- */
+#o-correction{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+.liste{background:#fff;border:1px solid var(--trait);border-radius:8px;position:sticky;top:8px;max-height:calc(100vh - 140px);overflow:auto}
+.filtres{padding:8px;border-bottom:1px solid var(--trait);display:grid;gap:6px;position:sticky;top:0;background:#fff}
+#liste-copies{list-style:none;margin:0;padding:0}
+#liste-copies li{display:flex;justify-content:space-between;gap:6px;padding:6px 9px;border-bottom:1px solid var(--brume);cursor:pointer;font-size:13px}
+#liste-copies li:hover{background:var(--brume)}#liste-copies li.actif{background:#DCE8F7;font-weight:600}
+#liste-copies li .n{font-family:"IBM Plex Mono",monospace;font-size:12px;white-space:nowrap}
+#liste-copies li.groupe{background:var(--bleu);color:#fff;font-weight:600;cursor:default;position:sticky;top:0}
+.revue{min-width:0}
+.tete-copie{background:#fff;border:1px solid var(--trait);border-radius:8px;padding:10px 14px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.tete-copie .note{font-size:26px;font-weight:600;color:var(--bleu);font-family:"Barlow Condensed",Arial,sans-serif}
+.puce{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:var(--brume)}
+.puce.rouge{background:var(--rouge-f);color:var(--rouge);font-weight:600}.puce.orange{background:var(--orange-f);color:var(--orange);font-weight:600}
+.q{background:#fff;border:1px solid var(--trait);border-left:6px solid var(--trait);border-radius:8px;margin:0 0 10px;padding:8px 12px}
+.q.ok{border-left-color:var(--vert)}.q.ko{border-left-color:var(--rouge)}.q.demi{border-left-color:var(--demi)}.q.nt{border-left-color:#9aa5b1}.q.doute{border-left-color:var(--orange);background:#FFFBF4}
+.q-tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.q-tete b{font-size:15px}.q-tete .pts{margin-left:auto;display:flex;gap:4px;align-items:center}
+.pas{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;font-weight:600}
+.pas.ok{background:var(--vert-f);color:var(--vert)}.pas.ko{background:var(--rouge-f);color:var(--rouge)}.pas.demi{background:var(--demi-f);color:var(--demi)}
+.pas.nt{background:var(--gris-f);color:#666}.pas.doute{background:var(--orange-f);color:var(--orange)}
+.choix{border:1px solid #b9c6d6;background:#fff;border-radius:6px;padding:3px 10px;cursor:pointer;min-width:42px}
+.choix[aria-pressed="true"]{background:var(--bleu);border-color:var(--bleu);color:#fff;font-weight:600}
+.auto{font-size:11px;color:var(--acier)}
+table.champs{width:100%;border-collapse:collapse;margin-top:6px;font-size:13px;table-layout:fixed}
+table.champs th{font-weight:500;color:var(--acier);text-align:left;padding:3px 6px;border-bottom:1px solid var(--trait)}
+table.champs td{padding:4px 6px;border-bottom:1px solid var(--brume);vertical-align:top;overflow-wrap:anywhere}
+table.champs td.el{font-family:"IBM Plex Mono",Consolas,monospace;white-space:pre-wrap}
+table.champs td.att{color:var(--vert)}
+.v{font-weight:700}.v.ok{color:var(--vert)}.v.ko{color:var(--rouge)}.v.doute{color:var(--orange)}.v.vide{color:#aaa}
+.msg{display:block;font-size:12px;color:var(--rouge)}
+.comm{width:100%;margin-top:6px;border:1px solid var(--trait);border-radius:6px;padding:4px 7px;font-size:13px}
+.nav-copie{display:flex;gap:8px;justify-content:space-between;margin:8px 0 30px}
+/* ---- matrice ---- */
+.mat td.s{text-align:center;font-size:12px;min-width:26px;padding:3px 2px}
+.mat td.diag{background:#ddd}
+/* ---- visionneuse PDF ---- */
+.visu{position:fixed;inset:0;background:rgba(19,38,63,.85);z-index:50;overflow:auto;padding:10px}
+.visu-barre{display:flex;justify-content:space-between;align-items:center;color:#fff;position:sticky;top:0;padding:6px 4px;background:rgba(19,38,63,.95)}
+#visu-pages canvas{display:block;margin:10px auto;background:#fff;max-width:100%;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+/* ---- divers ---- */
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--encre);color:#fff;padding:10px 16px;border-radius:8px;z-index:60;max-width:92vw}
+.depot{position:fixed;inset:0;background:rgba(11,63,133,.85);color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;z-index:70;pointer-events:none}
+.aide{background:#fff;border:1px solid var(--trait);border-radius:8px;padding:14px 20px;max-width:900px}
+.aide li{margin:4px 0}
+@media (max-width:900px){#o-correction{grid-template-columns:1fr}.liste{position:static;max-height:300px}}
