@@ -7,6 +7,8 @@ var ITEMS=["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q9e", "Q9f", "
 var $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
 var champs=$$(".rep"), eleves=$$(".rep-e"), questions=$$(".q");
 var stockage=true, minuteur=null;
+/* attestation de travail (js/authenticite.js) */
+var AUTH=window.SI_AUTH?window.SI_AUTH({fichier:"TD_Perceuse",nom:function(){return $("#e_nom").value;},prenom:function(){return $("#e_prenom").value;},reponses:function(){return lireEtat(true).reponses;},champs:champs,feuille:$("#contenu")}):null;
 
 function aujourdhui(){var d=new Date(),m=String(d.getMonth()+1).padStart(2,"0"),j=String(d.getDate()).padStart(2,"0");return d.getFullYear()+"-"+m+"-"+j;}
 function dateFr(v){var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||"");return m?m[3]+"/"+m[2]+"/"+m[1]:(v||"");}
@@ -18,7 +20,7 @@ function nomFichier(){
   return (n||"NOM")+"_"+(p||"Prenom")+"_TD_Perceuse";
 }
 var stylePied=document.createElement("style");document.head.appendChild(stylePied);
-function majPiedImp(){var el=(($("#e_nom")||{value:""}).value.trim().toUpperCase()+" "+($("#e_prenom")||{value:""}).value.trim()).trim();var t=("TD_Perceuse · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau"+(el?" · "+el:"")).replace(/\\/g,"\\\\").replace(/"/g,'\\"');stylePied.textContent='@page{@bottom-center{content:"'+t+'";font-family:"IBM Plex Sans",Arial,sans-serif;font-size:7.5pt;color:#56677A}}';}
+function majPiedImp(){var el=(($("#e_nom")||{value:""}).value.trim().toUpperCase()+" "+($("#e_prenom")||{value:""}).value.trim()).trim();var t=("TD_Perceuse · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau"+(el?" · "+el:"")).replace(/\\/g,"\\\\").replace(/"/g,'\\"');var t2=AUTH?[AUTH.ligne(),AUTH.lignePdf()].filter(Boolean).join(" · ").replace(/\\/g,"\\\\").replace(/"/g,'\\"'):"";stylePied.textContent='@page{@bottom-center{content:"'+t+(t2?'\\A '+t2:"")+'";white-space:pre;font-family:"IBM Plex Sans",Arial,sans-serif;font-size:'+(t2?"6.5pt":"7.5pt")+';color:#56677A}}';}
 function majTitre(){document.title=nomFichier();majPiedImp();}
 
 /* ---- miroirs pour l'impression ---- */
@@ -50,18 +52,20 @@ function majVersionGlobale(){
 }
 
 /* ---- état ---- */
-function lireEtat(){
+function lireEtat(sansAuth){
   var e={app:APP,version:1,enregistre:new Date().toISOString(),eleve:{},versions:{},reponses:{}};
   eleves.forEach(function(el){e.eleve[el.dataset.eleve]=el.value;});
   questions.forEach(function(q){e.versions[q.dataset.qid]=q.dataset.m;});
   champs.forEach(function(el){if(el.value)e.reponses[el.dataset.champ]=el.value;});
+  if(AUTH&&!sansAuth)e.auth=AUTH.exporter();
   return e;
 }
-function appliquerEtat(e){
+function appliquerEtat(e,origine){
   e=e||{};var el=e.eleve||{},r=e.reponses||{},v=e.versions||{};
   eleves.forEach(function(x){var k=x.dataset.eleve;x.value=(typeof el[k]==="string")?el[k]:(k==="classe"?"1SI":k==="date"?aujourdhui():"");});
   questions.forEach(function(q){poserVersion(q,v[q.dataset.qid]==="ref"?"ref":"bac");});
   champs.forEach(function(x){x.value=(typeof r[x.dataset.champ]==="string")?r[x.dataset.champ]:"";});
+  if(AUTH)AUTH.charger(e.auth,origine||"nouveau");
   toutRafraichir();
 }
 function toutRafraichir(){
@@ -103,6 +107,7 @@ function majProgression(){
 
 /* ---- fichiers ---- */
 function telecharger(){
+  if(AUTH)AUTH.surJson();
   var e=lireEtat(), b=new Blob([JSON.stringify(e,null,2)],{type:"application/json"}), a=document.createElement("a");
   a.href=URL.createObjectURL(b);a.download=nomFichier()+".json";document.body.appendChild(a);a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500);
@@ -113,7 +118,7 @@ function ouvrirFichier(f){
   var lr=new FileReader();
   lr.onload=function(){
     try{var e=JSON.parse(lr.result);if(!e||e.app!==APP)throw new Error("format");
-      appliquerEtat(e);sauver();
+      appliquerEtat(e,"fichier");sauver();
       message("Travail repris : "+((e.eleve&&((e.eleve.nom||"")+" "+(e.eleve.prenom||"")).trim())||"sans nom")+".");}
     catch(err){message("Ce fichier n'est pas un travail « TD Perceuse » enregistré avec cet outil.");}
   };
@@ -126,15 +131,17 @@ var dernierFocus=null;
 function ouvrirBoite(id){dernierFocus=document.activeElement;var m=$(id);m.hidden=false;var b=$("[data-defaut]",m);if(b)b.focus();}
 function fermerBoite(id){$(id).hidden=true;if(dernierFocus&&dernierFocus.focus)dernierFocus.focus();}
 var tm=null;
-function message(t){var m=$("#toast");m.textContent=t;m.hidden=false;clearTimeout(tm);tm=setTimeout(function(){m.hidden=true;},4200);}
+function message(t,ms){var m=$("#toast");m.textContent=t;m.hidden=false;clearTimeout(tm);tm=setTimeout(function(){m.hidden=true;},ms||4200);}
 function toutEffacer(){
   try{localStorage.removeItem(CLE);}catch(err){}
-  appliquerEtat({eleve:{classe:"1SI",date:aujourdhui()}});
+  appliquerEtat({eleve:{classe:"1SI",date:aujourdhui()}},"efface");
   fermerBoite("#boite-effacer");message("Tout a été effacé.");window.scrollTo(0,0);
 }
 function lancerPdf(){
   if(!$("#e_nom").value.trim()||!$("#e_prenom").value.trim()){
     message("Écris d'abord ton NOM et ton prénom dans le cartouche.");$((!$("#e_nom").value.trim())?"#e_nom":"#e_prenom").focus();return;}
+  var refus=AUTH?AUTH.verifier():"";
+  if(refus){AUTH.noterRefus();sauver();message("Impression bloquée : "+refus,12000);return;}
   $("#pdf-nom").textContent=nomFichier()+".pdf";ouvrirBoite("#boite-pdf");
 }
 function imprimer(){fermerBoite("#boite-pdf");sauver();majTitre();toutRafraichir();setTimeout(function(){window.print();},60);}
@@ -144,7 +151,7 @@ creerMiroirs();
 champs.concat(eleves).forEach(function(el){
   el.addEventListener("input",function(){majMiroir(el);if(el.tagName==="TEXTAREA")autoTaille(el);if(el.classList.contains("num"))verifNombre(el);
     if(el.classList.contains("rep-e"))majTitre();majProgression();sauverBientot();});
-  el.addEventListener("change",function(){majMiroir(el);sauverBientot();});
+  el.addEventListener("change",function(){majMiroir(el);if(AUTH){if(el.classList.contains("rep-e"))AUTH.surNom();else AUTH.surReponse();}sauverBientot();});
 });
 questions.forEach(function(q){$$(".bascule button",q).forEach(function(b){b.addEventListener("click",function(){poserVersion(q,b.dataset.v);majVersionGlobale();sauverBientot();});});});
 $$("#seg-version button").forEach(function(b){b.addEventListener("click",function(){questions.forEach(function(q){poserVersion(q,b.dataset.v);});majVersionGlobale();toutRafraichir();sauverBientot();});});
@@ -159,14 +166,15 @@ $("#pdf-non").addEventListener("click",function(){fermerBoite("#boite-pdf");});
 $("#pdf-oui").addEventListener("click",imprimer);
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape"){["#boite-effacer","#boite-pdf"].forEach(function(id){if(!$(id).hidden)fermerBoite(id);});}});
 $$(".modal-fond,.aide-pdf").forEach(function(f){f.addEventListener("click",function(ev){if(ev.target===f)fermerBoite("#"+f.id);});});
-window.addEventListener("beforeprint",function(){majTitre();champs.concat(eleves).forEach(majMiroir);});
+window.addEventListener("beforeprint",function(){if(AUTH){AUTH.avantPdf();sauver();}majTitre();champs.concat(eleves).forEach(majMiroir);});
+window.addEventListener("afterprint",function(){document.documentElement.classList.remove("auth-bloque");});
 window.addEventListener("resize",function(){clearTimeout(window._rt);window._rt=setTimeout(function(){$$("textarea.rep").forEach(autoTaille);},150);});
 
 /* ---- démarrage : reprise automatique ---- */
 var e0=null;
 try{var brut=localStorage.getItem(CLE);if(brut)e0=JSON.parse(brut);}catch(err){stockage=false;}
-if(e0&&e0.app===APP){appliquerEtat(e0);etat("Travail repris automatiquement (sauvegarde de ce navigateur).");}
-else{appliquerEtat({eleve:{classe:"1SI",date:aujourdhui()}});etat(stockage?"Sauvegarde automatique activée.":"Sauvegarde automatique indisponible : pense à « Enregistrer mon travail (.json) ».");}
+if(e0&&e0.app===APP){appliquerEtat(e0,"navigateur");etat("Travail repris automatiquement (sauvegarde de ce navigateur).");}
+else{appliquerEtat({eleve:{classe:"1SI",date:aujourdhui()}},"nouveau");etat(stockage?"Sauvegarde automatique activée.":"Sauvegarde automatique indisponible : pense à « Enregistrer mon travail (.json) ».");}
 try{if(window.matchMedia&&window.matchMedia("(max-width:860px)").matches)$("#som-det").open=false;}catch(err){}
 if(!$("#e_date").value){$("#e_date").value=aujourdhui();majMiroir($("#e_date"));}
 })();
