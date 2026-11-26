@@ -30,7 +30,7 @@ window.SI_CONFIG = {
   drive: "",
 
   /* Ressources (tuiles du bloc supérieur) */
-  tinkercad: "https://www.tinkercad.com",
+  tinkercad: "https://www.tinkercad.com/joinclass/QXZMDHKNJ",
   castor: "https://concours.castor-informatique.fr",
   algorea: "https://algorea.org",
   metice: "https://hubix.ac-reunion.fr/",   /* ENT de l'académie (Hubix) ; vide = tuile « bientôt » */
