@@ -12,6 +12,12 @@
 "use strict";
 (function () {
   var SEL = "si-attestation-2026"; /* graine du sceau (détecte un .json retouché à la main) */
+  /* bibliothèques des QR codes (chargées tout de suite, en arrière-plan) */
+  var BASE = ((document.currentScript && document.currentScript.src) || "").replace(/[^\/]*$/, "");
+  ["lib/pako.min.js", "lib/qrcode.js"].forEach(function (f) {
+    if (!BASE || document.querySelector('script[data-si-lib="' + f + '"]')) return;
+    var sc = document.createElement("script"); sc.src = BASE + f; sc.async = true; sc.dataset.siLib = f; document.head.appendChild(sc);
+  });
 
   /* ---------- SHA-256 (synchrone, UTF-8) ---------- */
   function sha256(txt) {
@@ -68,6 +74,7 @@
     ".auth-recap .alerte{color:#B71C1C;font-weight:700}.auth-recap .note{font-size:7.5pt;color:#444}" +
     ".auth-data{margin-top:4mm;border-top:.6pt dashed #999;padding-top:1.5mm;break-inside:avoid}.auth-data p{font-size:7pt;color:#555;margin:0 0 1mm}" +
     ".auth-data .l{font-family:'IBM Plex Mono','Courier New',monospace;font-size:6.2pt;line-height:1.2;white-space:nowrap;overflow:hidden;color:#444;letter-spacing:0}" +
+    ".auth-qr-zone{display:flex;flex-wrap:wrap;gap:2mm;margin:1.5mm 0}.auth-qr-zone img{width:44mm;height:44mm;image-rendering:pixelated;image-rendering:crisp-edges}" +
     ".auth-refus{display:none}html.auth-bloque body>*{display:none!important}html.auth-bloque body>.auth-refus{display:block!important;font:14pt Arial,sans-serif;padding:20mm;color:#B71C1C}}";
 
   /* opts : { app, fichier, nom(), prenom(), reponses(), champs: [éléments], feuille: élément, message(txt) } */
@@ -148,15 +155,30 @@
         blocDonnees(pdfIso) +
         '<p class="note">L\'empreinte est calculée à partir de l\'identifiant, de l\'auteur et des réponses : le professeur peut la recalculer depuis le fichier .json pour vérifier que ce PDF n\'a pas été modifié. Les collages comptent le texte copié depuis une autre page, un autre document ou une autre case.</p>';
     }
-    function blocDonnees(pdfIso) { /* réponses case par case, lisibles par l'outil Correcteur du professeur */
-      var et = opts.etat ? opts.etat() : { reponses: opts.reponses() }, r = {}, sa = A.saisie;
-      r = sansImages(et.reponses);
-      var d = { v: 1, app: opts.app || "", f: opts.fichier, id: A.id, au: A.auteur, el: et.eleve || {}, cr: A.cree, pdf: pdfIso, r: r, ve: et.versions || {}, e: empreinte(),
+    function donneesObj(pdfIso) { /* réponses case par case, lisibles par l'outil Correcteur du professeur */
+      var et = opts.etat ? opts.etat() : { reponses: opts.reponses() }, sa = A.saisie;
+      return { v: 1, app: opts.app || "", f: opts.fichier, id: A.id, au: A.auteur, el: et.eleve || {}, cr: A.cree, pdf: pdfIso, r: sansImages(et.reponses), ve: et.versions || {}, e: empreinte(),
         st: { tp: sa.tapes, co: sa.colles, nc: sa.nb_collages, ac: Math.round(actifTotal()), se: A.sessions.length, rf: A.refus.length, cn: A.corrections_nom.length, js: A.json.nb, rp: A.reprises.length, sc: integre() ? 1 : 0 } };
+    }
+    function qrCodes(d) { /* mêmes données, compressées, en QR codes : lisibles même si le PDF est fait par une autre « imprimante » ou scanné */
+      if (!window.qrcode || !window.pako) return "";
+      try {
+        var raw = window.pako.deflateRaw(new TextEncoder().encode(JSON.stringify(d))), bin = "", i;
+        for (i = 0; i < raw.length; i += 4096) bin += String.fromCharCode.apply(null, raw.subarray(i, i + 4096));
+        var b = btoa(bin), crc = sha256(b).slice(0, 8), N = 320, P = [];
+        for (i = 0; i < b.length; i += N) P.push(b.slice(i, i + N));
+        return '<div class="auth-qr-zone">' + P.map(function (x, k) {
+          var q = window.qrcode(0, "M"); q.addData("SQ1|" + (k + 1) + "|" + P.length + "|" + crc + "|" + x); q.make();
+          return '<img alt="" src="' + q.createDataURL(6, 4) + '">';
+        }).join("") + "</div>";
+      } catch (e) { return ""; }
+    }
+    function blocDonnees(pdfIso) {
+      var d = donneesObj(pdfIso);
       var b = btoa(unescape(encodeURIComponent(JSON.stringify(d)))), L = [], i, N = 96;
       for (i = 0; i < b.length; i += N) L.push(b.slice(i, i + N));
       var crc = sha256(b).slice(0, 8);
-      return '<div class="auth-data"><p>Données de contrôle — lues automatiquement par l\'outil du professeur. Ne pas modifier.</p>' +
+      return '<div class="auth-data"><p>Données de contrôle — lues automatiquement par l\'outil du professeur. Ne pas modifier.</p>' + qrCodes(d) +
         '<div class="l">SICTRL1 ' + L.length + ' ' + crc + '</div>' + L.map(function (x, k) { return '<div class="l">' + String(k + 1).padStart(3, "0") + "|" + x + '</div>'; }).join("") + '<div class="l">SICTRL-FIN</div></div>';
     }
     function bloquer(msg) {
@@ -206,6 +228,7 @@
         api.dernierPdf = t; construireRecap(t); return "";
       },
       noterRefus: function () { if (A) { A.refus.push({ nom: (opts.nom().toUpperCase() + " " + opts.prenom()).trim(), t: iso() }); if (A.refus.length > 30) A.refus.shift(); } },
+      donnees: function () { return A && api.dernierPdf ? donneesObj(api.dernierPdf) : null; },
       lignePdf: function () { return A && api.dernierPdf ? "PDF créé le " + fr(api.dernierPdf) + " · empreinte " + empreinte() : ""; },
       empreinte: function () { return A ? empreinte() : ""; },
       _sha256: sha256, _stable: stable

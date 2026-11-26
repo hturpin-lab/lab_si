@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="robots" content="noindex">
 <title>Correcteur S.I — outil du professeur</title>
 <link rel="icon" href="../assets/img/logo_si_128.png">
@@ -67,6 +67,8 @@
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 <div class="depot" id="depot" hidden>Dépose les PDF ou les corrigés (.json)</div>
 <script src="lib/xlsx.full.min.js"></script>
+<script src="lib/pako.min.js"></script>
+<script src="lib/zxing-reader.js"></script>
 <script src="../js/authenticite.js"></script>
 <script type="module" src="correcteur.js"></script>
 </body>

@@ -142,8 +142,13 @@ function lancerPdf(){
     message("Écris d'abord ton NOM et ton prénom dans le cartouche.");$((!$("#e_nom").value.trim())?"#e_nom":"#e_prenom").focus();return;}
   var refus=AUTH?AUTH.verifier():"";
   if(refus){AUTH.noterRefus();sauver();message("Impression bloquée : "+refus,12000);return;}
-  $("#pdf-nom").textContent=nomFichier()+".pdf";ouvrirBoite("#boite-pdf");
+  if(window.SI_PDF){sauver();majTitre();toutRafraichir();
+    window.SI_PDF.lancer({feuille:$("#contenu"),nom:nomFichier()+".pdf",titre:nomFichier(),pied:textesPied,donnees:AUTH?AUTH.donnees:null,imprimer:ouvrirImpression,nuage:NUAGE});return;}
+  ouvrirImpression();
 }
+function ouvrirImpression(){$("#pdf-nom").textContent=nomFichier()+".pdf";ouvrirBoite("#boite-pdf");}
+function textesPied(){var el=(($("#e_nom")||{value:""}).value.trim().toUpperCase()+" "+($("#e_prenom")||{value:""}).value.trim()).trim();
+  return ["TD_Perceuse · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau"+(el?" · "+el:""),AUTH?[AUTH.ligne(),AUTH.lignePdf()].filter(Boolean).join(" · "):""];}
 function imprimer(){fermerBoite("#boite-pdf");sauver();majTitre();toutRafraichir();setTimeout(function(){window.print();},60);}
 
 /* ---- branchements ---- */

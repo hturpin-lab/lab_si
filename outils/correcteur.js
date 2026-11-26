@@ -141,6 +141,39 @@ function lireBloc(texte) {
   try { const d = JSON.parse(decodeURIComponent(escape(atob(b)))); return { etat: "ok", d }; }
   catch (e) { return { etat: "abime", msg: "décodage impossible" }; }
 }
+/* données jointes au PDF (export direct du site) */
+async function lirePieceJointe(doc) {
+  try {
+    const pj = await doc.getAttachments(); if (!pj) return null;
+    const e = Object.values(pj).find(x => /donnees_controle_SI\.json$/i.test(x.filename || ""));
+    return e ? JSON.parse(new TextDecoder().decode(e.content)) : null;
+  } catch (err) { return null; }
+}
+/* QR codes de la page d'attestation (PDF fait par une autre « imprimante », ou copie scannée) */
+async function lireQR(doc) {
+  const Z = window.ZXingWASM; if (!Z || !window.pako) return null;
+  if (!lireQR.pret) { Z.setZXingModuleOverrides({ locateFile: p => new URL("./lib/" + p, location.href).href }); lireQR.pret = true; }
+  const morceaux = {}; let total = 0, crc = "";
+  const complet = () => total && Object.keys(morceaux).length === total;
+  for (const sc of [2, 3]) {
+    for (let i = Math.max(1, doc.numPages - 1); i <= doc.numPages; i++) {
+      const p = await doc.getPage(i), vp = p.getViewport({ scale: sc }), cv = document.createElement("canvas");
+      cv.width = vp.width; cv.height = vp.height; const cx = cv.getContext("2d", { willReadFrequently: true });
+      cx.fillStyle = "#fff"; cx.fillRect(0, 0, cv.width, cv.height);
+      await p.render({ canvasContext: cx, viewport: vp }).promise;
+      let res = [];
+      try { res = await Z.readBarcodesFromImageData(cx.getImageData(0, 0, cv.width, cv.height), { formats: ["QRCode"], tryHarder: true, maxNumberOfSymbols: 40 }); } catch (e) { }
+      res.forEach(r => { const m = /^SQ1\|(\d+)\|(\d+)\|([0-9a-f]{8})\|(.+)$/s.exec(r.text || ""); if (m) { morceaux[+m[1]] = m[4]; total = +m[2]; crc = m[3]; } });
+    }
+    if (complet()) break;
+  }
+  if (!complet()) return total ? { etat: "abime", msg: "QR codes lus : " + Object.keys(morceaux).length + " / " + total } : null;
+  const b = Array.from({ length: total }, (_, k) => morceaux[k + 1]).join("");
+  if (AUTH.sha256(b).slice(0, 8) !== crc) return { etat: "abime", msg: "QR codes : contrôle de somme faux" };
+  try { const bin = atob(b), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return { etat: "ok", d: JSON.parse(new TextDecoder().decode(window.pako.inflateRaw(u))) }; }
+  catch (e) { return { etat: "abime", msg: "QR codes : décodage impossible" }; }
+}
 function empreinteDe(d) { return AUTH.sha256(AUTH.stable({ id: d.id, auteur: d.au, reponses: d.r })).slice(0, 12).toUpperCase().replace(/(.{4})(?!$)/g, "$1-"); }
 function devinerNom(texte, nomFichier) {
   const t = texte.slice(0, 3000);
@@ -170,7 +203,14 @@ async function ajouterFichiers(files) {
     const c = { fichier: f.name, chemin: f.webkitRelativePath || f.name, taille: f.size, file: f, etat: "", alertes: [] };
     try {
       const r = await lirePdf(f); c.pages = r.pages; c.texte = r.texte; c._doc = r.doc;
-      const b = lireBloc(r.texte); c.bloc = b.etat;
+      let b; const pj = await lirePieceJointe(r.doc);
+      if (pj) { b = { etat: "ok", d: pj }; c.source = "pièce jointe (export direct)"; }
+      else { b = lireBloc(r.texte); c.source = "texte du PDF"; }
+      if (b.etat !== "ok") {
+        $("#charge").textContent = "Lecture des QR codes : " + f.name;
+        const q = await lireQR(r.doc); if (q) { b = q; c.source = "QR codes"; }
+      }
+      c.bloc = b.etat;
       if (b.etat === "ok") {
         c.d = b.d; c.app = b.d.app; c.nom = b.d.el.nom || b.d.au.nom; c.prenom = b.d.el.prenom || b.d.au.prenom;
         c.empreinte = b.d.e; c.empOk = empreinteDe(b.d) === b.d.e;
@@ -330,7 +370,7 @@ function afficherCopie(id) {
   const k = S.cles[c.app], seulDoutes = $("#revue").dataset.seul === "1";
   let h = '<div class="tete-copie"><div><b style="font-size:18px">' + esc(joliNom(c.nom, c.prenom)) + "</b><br><span class=\"petit\">" + esc(k ? k.fichier : c.app) + " · " + esc(c.fichier) + "</span></div>" +
     '<div class="note">' + (c.note !== null ? frNb(c.note) + " / 20" : "—") + (c.provisoire ? ' <span class="petit">(provisoire : ' + c.nbDoute + " à trancher)</span>" : "") + "</div>" +
-    (c.d ? '<span class="puce">PDF du ' + esc(new Date(c.d.pdf).toLocaleString("fr-FR")) + "</span>" : '<span class="puce orange">sans données de contrôle</span>') +
+    (c.d ? '<span class="puce">PDF du ' + esc(new Date(c.d.pdf).toLocaleString("fr-FR")) + " · lu par " + esc(c.source || "") + "</span>" : '<span class="puce orange">sans données de contrôle</span>') +
     c.alertesAuto.map(a => '<span class="puce rouge">' + esc(a) + "</span>").join("") +
     '<button type="button" class="btn" data-voir="' + esc(c.id) + '">Voir le PDF</button>' +
     (!c.d ? '<span class="petit">Élève : <input id="m-nom" size="12" placeholder="NOM" value="' + esc(c.nom) + '"> <input id="m-prenom" size="10" placeholder="Prénom" value="' + esc(c.prenom) + '"> <select id="m-app">' + NOMS_ACT().map(k => '<option value="' + esc(k.app) + '"' + (k.app === c.app ? " selected" : "") + ">" + esc(k.fichier) + "</option>").join("") + '</select> <button type="button" class="btn" id="m-ok">Attribuer</button></span>' : "") +

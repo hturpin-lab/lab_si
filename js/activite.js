@@ -165,7 +165,7 @@
   function construire() {
     var corps = A.blocs.map(rendre).join("");
     var ITEMS = QUESTIONS.slice();
-    var RENDRE = '<ol class="etapes"><li><button type="button" class="btn btn-jaune" data-action="pdf">1 · Enregistrer en PDF</button><span>Dans la fenêtre d\'impression, choisis <b>« Enregistrer au format PDF »</b> comme destination.</span></li>' +
+    var RENDRE = '<ol class="etapes"><li><button type="button" class="btn btn-jaune" data-action="pdf">1 · Enregistrer en PDF</button><span>Patiente pendant la création du PDF (barre de progression), puis clique sur <b>« Enregistrer mon PDF »</b>.</span></li>' +
       (NUAGE ? '<li><a class="btn btn-bleu" href="' + esc(NUAGE) + '" target="_blank" rel="noopener noreferrer">' + LOGO_NUAGE + '2 · Déposer mon PDF sur le Nuage</a><span>Dépose le fichier PDF dans le dossier de la classe.</span></li>' : "") + "</ol>";
     var som = SOMMAIRE.map(function (s) {
       return '<li><a href="#' + esc(s.id) + '">' + fmt(s.titre) + "</a>" + (s.qs.length ? '<ul class="som-q">' + s.qs.map(function (q) { return '<li><a href="#q-' + esc(q) + '" data-etat-q="' + esc(q) + '"><span class="pt" aria-hidden="true"></span>' + esc(NOMQ[q]) + "</a></li>"; }).join("") + "</ul>" : "") + "</li>";
@@ -336,7 +336,17 @@
     if (!$("#e_nom").value.trim() || !$("#e_prenom").value.trim()) { message("Écris d'abord ton NOM et ton prénom dans le cartouche."); $((!$("#e_nom").value.trim()) ? "#e_nom" : "#e_prenom").focus(); return; }
     var refus = AUTH ? AUTH.verifier() : "";
     if (refus) { AUTH.noterRefus(); sauver(); message("Impression bloquée : " + refus, 12000); return; }
-    $("#pdf-nom").textContent = nomFichier() + ".pdf"; ouvrirBoite("#boite-pdf");
+    if (window.SI_PDF) { /* export direct : pas de fenêtre d'impression, données jointes au PDF */
+      sauver(); majTitre(); toutRafraichir();
+      window.SI_PDF.lancer({ feuille: $("#contenu"), nom: nomFichier() + ".pdf", titre: nomFichier(), pied: textesPied, donnees: AUTH ? AUTH.donnees : null, imprimer: ouvrirImpression, nuage: NUAGE });
+      return;
+    }
+    ouvrirImpression();
+  }
+  function ouvrirImpression() { $("#pdf-nom").textContent = nomFichier() + ".pdf"; ouvrirBoite("#boite-pdf"); }
+  function textesPied() {
+    var el = ($("#e_nom").value.trim().toUpperCase() + " " + $("#e_prenom").value.trim()).trim();
+    return [A.fichier + " · © Henri Turpin et Julie Turpin · Lycée Jean-Claude Fruteau" + (el ? " · " + el : ""), AUTH ? [AUTH.ligne(), AUTH.lignePdf()].filter(Boolean).join(" · ") : ""];
   }
   function imprimer() { fermerBoite("#boite-pdf"); sauver(); majTitre(); toutRafraichir(); setTimeout(function () { window.print(); }, 60); }
 
