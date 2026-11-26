@@ -145,12 +145,17 @@ window.SI_CORRIGES = {
   {
    "activite": "td1_capteurs_signaux",
    "titre": "TD1 — Capteurs et signaux",
-   "chemin": "S4_Information › Seance_1_24-11 › TD1_Capteurs_Signaux_CORRIGE.pdf"
+   "chemin": "S4_Information › Seance_1_24-11 › TD1_Capteurs_Signaux_Partie1_CORRIGE.pdf"
   },
   {
    "activite": "tp2_radar_recul",
    "titre": "TP2 — Radar de recul (Tinkercad)",
-   "chemin": "S4_Information › Seance_1_24-11 › TP2_Radar_Recul_CORRIGE.pdf"
+   "chemin": "S4_Information › Seance_1_24-11 › TP2_Radar_Recul_PartieA_CORRIGE.pdf"
+  },
+  {
+   "activite": "tp2_radar_recul",
+   "titre": "TP2 — Radar de recul (Tinkercad)",
+   "chemin": "S4_Information › Seance_2_26-11 › TP2_Radar_Recul_PartiesB-C_CORRIGE.pdf"
   },
   {
    "activite": "td2_can_numeration",
@@ -160,12 +165,22 @@ window.SI_CORRIGES = {
   {
    "activite": "tp1_oscilloscope",
    "titre": "TP1 — Mesurer à l'oscilloscope virtuel",
-   "chemin": "S4_Information › Seance_3_01-12 › TP1_Oscilloscope_Virtuel_CORRIGE.pdf"
+   "chemin": "S4_Information › Seance_3_01-12 › TP1_Oscilloscope_Virtuel_Parties1-3_CORRIGE.pdf"
+  },
+  {
+   "activite": "td1_capteurs_signaux",
+   "titre": "TD1 — Capteurs et signaux",
+   "chemin": "S4_Information › Seance_3_01-12 › TD1_Capteurs_Signaux_Parties2-3_CORRIGE.pdf"
+  },
+  {
+   "activite": "tp1_oscilloscope",
+   "titre": "TP1 — Mesurer à l'oscilloscope virtuel",
+   "chemin": "S4_Information › Seance_4_03-12 › TP1_Oscilloscope_Virtuel_Partie4_CORRIGE.pdf"
   },
   {
    "activite": "td3_trames_debits",
    "titre": "TD3 — Trames et débits : le télescope connecté",
-   "chemin": "S4_Information › Seance_4_03-12 › TD3_Trames_Debits_CORRIGE.pdf"
+   "chemin": "S4_Information › Seance_4_03-12 › TD3_Trames_Debits_PartieA_CORRIGE.pdf"
   },
   {
    "activite": "tp3_filius_reseau",
@@ -173,9 +188,19 @@ window.SI_CORRIGES = {
    "chemin": "S4_Information › Seance_5_08-12 › TP3_Filius_Reseau_CORRIGE.pdf"
   },
   {
+   "activite": "td3_trames_debits",
+   "titre": "TD3 — Trames et débits : le télescope connecté",
+   "chemin": "S4_Information › Seance_5_08-12 › TD3_Trames_Debits_PartieB_CORRIGE.pdf"
+  },
+  {
    "activite": "td4_lora_citerne",
    "titre": "TD4 — Une citerne connectée en LoRaWAN",
    "chemin": "S4_Information › Seance_6_10-12 › TD4_LoRa_Citerne_CORRIGE.pdf"
+  },
+  {
+   "activite": "td3_trames_debits",
+   "titre": "TD3 — Trames et débits : le télescope connecté",
+   "chemin": "S4_Information › Seance_6_10-12 › TD3_Trames_Debits_PartieC_CORRIGE.pdf"
   }
  ]
 };
